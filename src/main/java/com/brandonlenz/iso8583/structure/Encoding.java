@@ -1,8 +1,9 @@
 package com.brandonlenz.iso8583.structure;
 
-public enum encoding {
+public enum Encoding {
     ASCII,
     BCD,
+    BINARY,
     EBCDIC,
     HEXADECIMAL_ASCII,
     HEXADECIMAL_EBCDIC,
