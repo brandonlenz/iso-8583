@@ -1,4 +1,4 @@
-package com.brandonlenz.iso8583.definitions;
+package com.brandonlenz.iso8583.definitions.messages;
 
 import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
 import com.brandonlenz.iso8583.definitions.fields.FixedFieldDefinition;
@@ -10,35 +10,27 @@ import com.brandonlenz.iso8583.structure.Encoding;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseIso8583Definition implements MessageDefinition { //TODO: Rename
+public class SampleIso8583MessageDefinition extends Iso8583MessageDefinition {
 
     private static final Encoding NUMERIC_FIELD_ENCODING = Encoding.HEXADECIMAL_ASCII;
     private static final Encoding ALPHANUMERIC_FIELD_ENCODING = Encoding.HEXADECIMAL_ASCII;
     private static final Encoding BYTE_FIELD_ENCODING = Encoding.BINARY;
 
-    private final FieldDefinition messageTypeIndicatorDefinition = new FixedFieldDefinition(FieldName.MTI, 4, Encoding.BCD, ContentType.NUMERIC);
-    private final FieldDefinition primaryBitmapDefinition = new FixedFieldDefinition(FieldName.PRIMARY_BITMAP, 8, Encoding.BINARY, ContentType.BYTES);
-    private final List<FieldDefinition> fieldDefinitions = getBaseIso8583FieldDefitions();
-
-    public FieldDefinition getMessageTypeIndicator() {
-        return messageTypeIndicatorDefinition;
+    public SampleIso8583MessageDefinition() {
+        super(getSampleIso8583MessageTypeIndicatorDefinition(),
+              getSampleIso8583PrimaryBitmapDefinition(),
+              getSampleIso8583FieldDefinitions());
     }
 
-    public FieldDefinition getPrimaryBitmap() {
-        return primaryBitmapDefinition;
+    private static FieldDefinition getSampleIso8583MessageTypeIndicatorDefinition() {
+        return new FixedFieldDefinition(FieldName.MTI, 4, NUMERIC_FIELD_ENCODING, ContentType.NUMERIC);
     }
 
-    @Override
-    public List<FieldDefinition> getFieldDefinitions() {
-        return fieldDefinitions;
+    private static FieldDefinition getSampleIso8583PrimaryBitmapDefinition() {
+        return new FixedFieldDefinition(FieldName.PRIMARY_BITMAP, 8, BYTE_FIELD_ENCODING, ContentType.BYTES);
     }
 
-    @Override
-    public FieldDefinition getFieldDefinition(int fieldNumber) {
-        return fieldDefinitions.get(fieldNumber - 1); //TODO: Handle index out of bounds exception (Also create method to get by field name perhaps?
-    }
-
-    private static List<FieldDefinition> getBaseIso8583FieldDefitions() {
+    private static List<FieldDefinition> getSampleIso8583FieldDefinitions() {
         List<FieldDefinition> fieldDefinitions = new ArrayList<>();
 
         fieldDefinitions.add(new FixedFieldDefinition(  FieldName.SECONDARY_BITMAP,                             8,      BYTE_FIELD_ENCODING,            ContentType.BYTES));
