@@ -4,13 +4,14 @@ import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
 import com.brandonlenz.iso8583.definitions.messages.MessageDefinition;
 import com.brandonlenz.iso8583.fields.DataField;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Iso8583Message implements Message {
 
     private final Iso8583MessageDefinition definition;
-    private byte[] rawData;
     private DataField messageTypeIndicator;
     private DataField primaryBitmap;
     private List<DataField> dataFields;
@@ -28,7 +29,18 @@ public class Iso8583Message implements Message {
 
     @Override
     public byte[] getRawData() {
-        return rawData;
+        try(ByteArrayOutputStream bytes = new ByteArrayOutputStream()) {
+            bytes.write(messageTypeIndicator.getRawData());
+            bytes.write(primaryBitmap.getRawData());
+            for(DataField dataField : dataFields) {
+                bytes.write(dataField.getRawData());
+            }
+            return (bytes).toByteArray();
+        } catch (IOException e) {
+            System.out.println("An error occurred while trying to get the raw message data: ");
+            e.printStackTrace();
+            return new byte[0];
+        }
     }
 
     @Override
@@ -60,6 +72,11 @@ public class Iso8583Message implements Message {
     public void setDataField(int dataFieldNumber, DataField dataField) {
         dataFields.set(dataFieldNumber - 1, dataField);
         setBitmapBit(dataFieldNumber);
+    }
+
+    public void removeDataField(int dataFieldNumber) {
+        dataFields.remove(dataFieldNumber - 1);
+        unsetBitmapBit(dataFieldNumber);
     }
 
     void setBitmapBit(int dataFieldNumber) {
