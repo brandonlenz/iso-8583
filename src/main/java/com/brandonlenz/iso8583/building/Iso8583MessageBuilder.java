@@ -1,7 +1,6 @@
-package com.brandonlenz.iso8583.buidling;
+package com.brandonlenz.iso8583.building;
 
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
-import com.brandonlenz.iso8583.fields.DataField;
 import com.brandonlenz.iso8583.messages.Iso8583Message;
 import com.brandonlenz.iso8583.messages.Message;
 
@@ -14,17 +13,13 @@ public class Iso8583MessageBuilder implements MessageBuilder {
 
     @Override
     public void setField(int dataFieldNumber, byte[] data) {
-        //TODO: Abstract to DataFieldBuilder:
-        //This should validate the raw data according to the field definition, then instantiate a DataField from it if valid
-        DataField dataField = new DataField(message.getDefinition().getFieldDefinition(dataFieldNumber));
-        dataField.setRawData(data); //better to have this automatically set when instantiating the DataField
-
-        message.setDataField(dataFieldNumber, dataField);
+        DataFieldBuilder dataFieldBuilder = new DataFieldBuilder(message.getDefinition().getFieldDefinition(dataFieldNumber), data);
+        message.setDataField(dataFieldNumber, dataFieldBuilder.getDataField());
     }
 
     @Override
     public void removeField(int dataFieldNumber) {
-        //Get definition from index to do the proper validation of the input field
+        message.removeDataField(dataFieldNumber);
     }
 
     @Override
