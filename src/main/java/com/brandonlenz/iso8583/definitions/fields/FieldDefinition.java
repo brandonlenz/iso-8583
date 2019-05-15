@@ -45,6 +45,10 @@ public abstract class FieldDefinition {
         return encoding;
     }
 
+    public ContentType getContentType() {
+        return contentType;
+    }
+
     public List<FieldDefinition> getSubfieldDefinitions() {
         return subfieldDefinitions;
     }
