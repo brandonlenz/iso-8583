@@ -15,7 +15,7 @@ public class Iso8583MessageBuilder implements MessageBuilder {
     @Override
     public void setField(int dataFieldNumber, byte[] data) {
         //TODO: Abstract to DataFieldBuilder:
-        //This should validate the raw data according to the field definition, then instantiate a DataField from it
+        //This should validate the raw data according to the field definition, then instantiate a DataField from it if valid
         DataField dataField = new DataField(message.getDefinition().getFieldDefinition(dataFieldNumber));
         dataField.setRawData(data); //better to have this automatically set when instantiating the DataField
 
