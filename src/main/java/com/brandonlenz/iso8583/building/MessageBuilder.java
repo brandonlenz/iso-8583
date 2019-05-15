@@ -1,4 +1,4 @@
-package com.brandonlenz.iso8583.buidling;
+package com.brandonlenz.iso8583.building;
 
 import com.brandonlenz.iso8583.messages.Message;
 
