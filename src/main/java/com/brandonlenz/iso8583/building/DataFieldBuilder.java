@@ -17,6 +17,10 @@ public class DataFieldBuilder {
         buildDataFieldFromRawData(rawData);
     }
 
+    public DataFieldBuilder(FieldDefinition fieldDefinition, String data) {
+        this(fieldDefinition, fieldDefinition.getEncoding().getEncodingHandler().encode(data));
+    }
+
     public DataField getDataField() {
         return dataField;
     }

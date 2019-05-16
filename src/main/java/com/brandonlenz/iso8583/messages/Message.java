@@ -11,4 +11,6 @@ public interface Message {
     MessageDefinition getDefinition();
 
     List<DataField> getDataFields();
+
+    DataField getDataField(int fieldIndex);
 }

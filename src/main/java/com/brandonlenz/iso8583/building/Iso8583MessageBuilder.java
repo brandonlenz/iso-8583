@@ -1,6 +1,7 @@
 package com.brandonlenz.iso8583.building;
 
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
+import com.brandonlenz.iso8583.definitions.messages.MessageDefinition;
 import com.brandonlenz.iso8583.messages.Iso8583Message;
 import com.brandonlenz.iso8583.messages.Message;
 
@@ -18,6 +19,12 @@ public class Iso8583MessageBuilder implements MessageBuilder {
     }
 
     @Override
+    public void setField(int dataFieldNumber, String data) {
+        DataFieldBuilder dataFieldBuilder = new DataFieldBuilder(getMessageDefinition().getFieldDefinition(dataFieldNumber), data);
+        message.setDataField(dataFieldNumber, dataFieldBuilder.getDataField());
+    }
+
+    @Override
     public void removeField(int dataFieldNumber) {
         message.removeDataField(dataFieldNumber);
     }
@@ -25,5 +32,14 @@ public class Iso8583MessageBuilder implements MessageBuilder {
     @Override
     public Message getMessage() {
         return message;
+    }
+
+    public Iso8583Message getIso8583Message() {
+        return message;
+    }
+
+    @Override
+    public MessageDefinition getMessageDefinition() {
+        return this.message.getDefinition();
     }
 }
