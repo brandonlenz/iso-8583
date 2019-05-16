@@ -25,6 +25,10 @@ public class DataField {
         return rawData;
     }
 
+    public String getData() {
+        return definition.getEncoding().getEncodingHandler().decode(rawData);
+    }
+
     public void setRawData(byte[] rawData) {
         this.rawData = rawData;
     }
@@ -49,5 +53,10 @@ public class DataField {
         }
 
         return subfieldList;
+    }
+
+    @Override
+    public String toString() {
+        return this.getData();
     }
 }

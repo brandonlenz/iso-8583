@@ -18,12 +18,9 @@ public class Iso8583Message implements Message {
 
     public Iso8583Message(Iso8583MessageDefinition definition) {
         this.definition = definition;
-
-        this.messageTypeIndicator = new DataField(definition.getMessageTypeIndicatorDefinition());
-
+        this.messageTypeIndicator = new DataField(definition.getMessageTypeIndicatorDefinition()); //TODO: Probably set this from the start and make final
         this.primaryBitmap = new DataField(definition.getPrimaryBitmapDefinition());
         this.primaryBitmap.setRawData(new byte[definition.getPrimaryBitmapDefinition().getLength()]); //TODO: Maybe extract to bitmap class extending DataField? For now just set to all 0's
-
         this.dataFields = createDataFieldsFromDefinition(definition);
     }
 
