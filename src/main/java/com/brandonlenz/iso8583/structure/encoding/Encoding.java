@@ -4,12 +4,13 @@ import com.brandonlenz.iso8583.structure.encoding.handlers.BcdEncodingHandler;
 import com.brandonlenz.iso8583.structure.encoding.handlers.BinaryEncodingHandler;
 import com.brandonlenz.iso8583.structure.encoding.handlers.EncodingHandler;
 import com.brandonlenz.iso8583.structure.encoding.handlers.HexadecimalAsciiEncodingHandler;
+import com.brandonlenz.iso8583.structure.encoding.handlers.HexadecimalEbcdicEncodingHandler;
 
 public enum Encoding {
     BCD(new BcdEncodingHandler()),
     BINARY(new BinaryEncodingHandler()),
     HEXADECIMAL_ASCII(new HexadecimalAsciiEncodingHandler()),
-    HEXADECIMAL_EBCDIC(new BinaryEncodingHandler());
+    HEXADECIMAL_EBCDIC(new HexadecimalEbcdicEncodingHandler());
 
 
     private final EncodingHandler encodingHandler;
