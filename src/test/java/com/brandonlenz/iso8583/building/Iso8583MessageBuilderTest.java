@@ -9,7 +9,8 @@ class Iso8583MessageBuilderTest {
 
     private Iso8583MessageBuilder iso8583MessageBuilder;
     private static final String TEST_AMOUNT_DATA = "000000001000";
-    private static final byte[] TEST_AMOUNT_RAW_DATA = new byte[] {0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x31, 0x30, 0x30, 0x30};
+    private static final byte[] TEST_AMOUNT_RAW_DATA =
+            new byte[] {0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x31, 0x30, 0x30, 0x30};
 
     @BeforeEach
     void setUp() {
@@ -17,7 +18,7 @@ class Iso8583MessageBuilderTest {
     }
 
     @Test
-    void setFieldHex() {
+    void setFieldBytes() {
         iso8583MessageBuilder.setField(4, TEST_AMOUNT_RAW_DATA);
 
         Assertions.assertArrayEquals(iso8583MessageBuilder.getMessage().getDataField(4).getRawData(), TEST_AMOUNT_RAW_DATA);

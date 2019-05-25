@@ -9,11 +9,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Iso8583Parser implements MessageParser {
+public class Iso8583MessageParser implements MessageParser {
 
     private final Iso8583MessageDefinition messageDefinition;
 
-    public Iso8583Parser(Iso8583MessageDefinition iso8583MessageDefinition) {
+    public Iso8583MessageParser(Iso8583MessageDefinition iso8583MessageDefinition) {
         this.messageDefinition = iso8583MessageDefinition;
     }
 

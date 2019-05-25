@@ -1,6 +1,8 @@
 package com.brandonlenz.iso8583.fields;
 
 import com.brandonlenz.iso8583.structure.encoding.Encoding;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Bitmap {
 
@@ -29,6 +31,10 @@ public class Bitmap {
     public int getEndFieldIndex() {
         return endFieldIndex;
     }
+//
+//    public void initializeAsEmptyBitmap() {
+//        bitmapField.setRawData(new byte[]);
+//    }
 
     public void setBit(int dataFieldNumber) {
         if (dataFieldNumber < startFieldIndex || dataFieldNumber > endFieldIndex) {
@@ -83,6 +89,26 @@ public class Bitmap {
 
     private int getBitIndex(int dataFieldNumber) {
         return 8 - (((dataFieldNumber - startFieldIndex)) % 8);
+    }
+
+    public List<Integer> getSetBits() {
+        List<Integer> bits = new ArrayList<>();
+        byte[] bytes = bitmapField.getRawData();
+
+        for (int byteIndex = 0; byteIndex < bytes.length; byteIndex++) {
+            for (int bitIndex = 0; bitIndex < 8; bitIndex++) {
+                byte mask = (byte) (0b10000000 >>> bitIndex);
+                if (((bytes[byteIndex] & 0xFF) & mask) != 0) {
+                    bits.add(getDataFieldNumber(byteIndex, bitIndex));
+                }
+            }
+        }
+
+        return bits;
+    }
+
+    private int getDataFieldNumber(int byteIndex, int bitIndex) {
+        return (byteIndex * 8) + (bitIndex + 1);
     }
 
     public String getBinaryRepresentation() {

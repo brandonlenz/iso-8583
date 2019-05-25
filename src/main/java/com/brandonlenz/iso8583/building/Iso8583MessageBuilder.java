@@ -31,7 +31,16 @@ public class Iso8583MessageBuilder implements MessageBuilder {
     public void setField(int dataFieldNumber, byte[] rawData) {
         DataFieldBuilder dataFieldBuilder =
                 new DataFieldBuilder(messageDefinition.getFieldDefinition(dataFieldNumber), rawData);
+
+        //message.setDataField() will set the appropriate bit in the appropriate bitmap, but only if the other bitmap field is set
+        //1. Before setting a data field, make sure that the corresponding bitmap is at least set:
+
+
+        //2. Now that we are sure that the bitmap bit is set, :
+
+        //3. set the data field:
         message.setDataField(dataFieldNumber, dataFieldBuilder.getDataField());
+
     }
 
     @Override
