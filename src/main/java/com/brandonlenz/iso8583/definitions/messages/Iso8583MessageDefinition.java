@@ -51,7 +51,11 @@ public abstract class Iso8583MessageDefinition implements MessageDefinition {
 
     @Override
     public FieldDefinition getFieldDefinition(int fieldNumber) {
-        return fieldDefinitions.get(fieldNumber - 1); //TODO: Handle index out of bounds exception
+        if (fieldNumber < 1 || fieldNumber > fieldDefinitions.size()) {
+            throw new IllegalArgumentException("MessageDefinition does not contain FieldDefinition for field number " + fieldNumber);
+        }
+
+        return fieldDefinitions.get(fieldNumber - 1);
     }
 
     @Override

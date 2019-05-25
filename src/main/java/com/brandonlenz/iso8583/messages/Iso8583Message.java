@@ -137,6 +137,10 @@ public class Iso8583Message implements Message {
     }
 
     public void setDataField(int dataFieldNumber, DataField dataField) { //TODO: Refactor. This is really awful
+        if (dataFieldNumber < 1 || dataFieldNumber > definition.getFieldDefinitions().size()) {
+            throw new IllegalArgumentException("Message does not contain FieldDefinition for DataField number " + dataFieldNumber);
+        }
+
         Bitmap bitmap = getCorrespondingBitmap(dataFieldNumber);
         //Note: If bitmap is the primary bitmap and somehow its data is null, we have a problem.
 
@@ -156,6 +160,10 @@ public class Iso8583Message implements Message {
     }
 
     public void removeDataField(int dataFieldNumber) { //TODO: Refactor, same as setDataField(), this is gross.
+        if (dataFieldNumber < 1 || dataFieldNumber > definition.getFieldDefinitions().size()) {
+            throw new IllegalArgumentException("Message does not contain FieldDefinition for DataField number " + dataFieldNumber);
+        }
+
         Bitmap bitmap = getCorrespondingBitmap(dataFieldNumber);
         dataFields.get(dataFieldNumber - 1).setRawData(null);
         bitmap.unsetBit(dataFieldNumber);

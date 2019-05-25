@@ -31,10 +31,6 @@ public class Bitmap {
     public int getEndFieldIndex() {
         return endFieldIndex;
     }
-//
-//    public void initializeAsEmptyBitmap() {
-//        bitmapField.setRawData(new byte[]);
-//    }
 
     public void setBit(int dataFieldNumber) {
         if (dataFieldNumber < startFieldIndex || dataFieldNumber > endFieldIndex) {
@@ -44,9 +40,6 @@ public class Bitmap {
 
         if (!bitIsSet(dataFieldNumber)) {
             flipBit(dataFieldNumber);
-        } else {
-            throw new IllegalArgumentException(
-                    "Bit corresponding to field number " + dataFieldNumber + " is already set");
         }
     }
 
