@@ -1,8 +1,11 @@
 package com.brandonlenz.iso8583.messages;
 
+import com.brandonlenz.iso8583.building.DataFieldBuilder;
 import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
 import com.brandonlenz.iso8583.definitions.messages.MessageDefinition;
+import com.brandonlenz.iso8583.definitions.names.FieldName;
+import com.brandonlenz.iso8583.fields.Bitmap;
 import com.brandonlenz.iso8583.fields.DataField;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -11,26 +14,45 @@ import java.util.List;
 
 public class Iso8583Message implements Message {
 
-    private final Iso8583MessageDefinition definition;
-    private DataField messageTypeIndicator;
+    private static final int PRIMARY_BITMAP_START_FIELD_INDEX = 1;
+    private static final int SECONDARY_BITMAP_START_FIELD_INDEX = 65;
+    private static final int TERTIARY_BITMAP_START_FIELD_INDEX = 128;
+
+    private final MessageDefinition definition;
     private DataField primaryBitmap;
+    private DataField messageTypeIndicator;
     private List<DataField> dataFields;
 
     public Iso8583Message(Iso8583MessageDefinition definition) {
         this.definition = definition;
-        this.messageTypeIndicator = new DataField(definition.getMessageTypeIndicatorDefinition()); //TODO: Probably set this from the start and make final
-        this.primaryBitmap = new DataField(definition.getPrimaryBitmapDefinition());
-        this.primaryBitmap.setRawData(new byte[definition.getPrimaryBitmapDefinition().getLength()]); //TODO: Maybe extract to bitmap class extending DataField? For now just set to all 0's
+        this.primaryBitmap = new DataFieldBuilder(definition.getPrimaryBitmapDefinition(),
+                new byte[definition.getPrimaryBitmapDefinition().getLength()]).getDataField();
         this.dataFields = createDataFieldsFromDefinition(definition);
+    }
+
+    public Iso8583Message(Iso8583MessageDefinition definition, byte[] messageTypeIndicatorRawData) {
+        this(definition);
+        this.messageTypeIndicator = new DataFieldBuilder(definition.getMessageTypeIndicatorDefinition(),
+                messageTypeIndicatorRawData).getDataField();
+    }
+
+    public Iso8583Message(Iso8583MessageDefinition definition, String messageTypeIndicatorData) {
+        this(definition, definition.getMessageTypeIndicatorDefinition().getEncoding().encode(messageTypeIndicatorData));
     }
 
     @Override
     public byte[] getRawData() {
-        try(ByteArrayOutputStream bytes = new ByteArrayOutputStream()) {
-            bytes.write(messageTypeIndicator.getRawData());
-            bytes.write(primaryBitmap.getRawData());
-            for(DataField dataField : dataFields) {
-                bytes.write(dataField.getRawData());
+        try (ByteArrayOutputStream bytes = new ByteArrayOutputStream()) {
+            if (messageTypeIndicator != null && messageTypeIndicator.getRawData() != null) {
+                bytes.write(messageTypeIndicator.getRawData());
+            }
+            if (primaryBitmap != null && primaryBitmap.getRawData() != null) {
+                bytes.write(primaryBitmap.getRawData());
+            }
+            for (DataField dataField : dataFields) {
+                if (dataField.getRawData() != null) {
+                    bytes.write(dataField.getRawData());
+                }
             }
             return (bytes).toByteArray();
         } catch (IOException e) {
@@ -40,6 +62,16 @@ public class Iso8583Message implements Message {
         }
     }
 
+    public String getData() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(messageTypeIndicator.getData());
+        stringBuilder.append(primaryBitmap.getData());
+        for (DataField dataField : dataFields) {
+            stringBuilder.append(dataField.getData());
+        }
+        return stringBuilder.toString();
+    }
+
     @Override
     public MessageDefinition getDefinition() {
         return definition;
@@ -47,7 +79,11 @@ public class Iso8583Message implements Message {
 
     @Override
     public List<DataField> getDataFields() {
-        return dataFields;
+        List<DataField> allDataFields = new ArrayList<>();
+        allDataFields.add(messageTypeIndicator);
+        allDataFields.add(primaryBitmap);
+        allDataFields.addAll(dataFields);
+        return allDataFields;
     }
 
     public DataField getMessageTypeIndicator() {
@@ -58,60 +94,75 @@ public class Iso8583Message implements Message {
         this.messageTypeIndicator = messageTypeIndicator;
     }
 
-    public DataField getPrimaryBitmap() {
+    public void setPrimaryBitmap(DataField primaryBitmap) {
+        this.primaryBitmap = primaryBitmap;
+    }
+
+    public DataField getPrimaryBitmapField() {
         return primaryBitmap;
     }
 
+    public Bitmap getPrimaryBitmap() {
+        return primaryBitmap.asBitmap(PRIMARY_BITMAP_START_FIELD_INDEX);
+    }
+
+    public DataField getSecondaryBitmapField() {
+        return getDataField(FieldName.SECONDARY_BITMAP);
+    }
+
+    public Bitmap getSecondaryBitmap() {
+        return getSecondaryBitmapField().asBitmap(SECONDARY_BITMAP_START_FIELD_INDEX);
+    }
+
+    public DataField getTertiaryBitmapField() {
+        return getDataField(FieldName.TERTIARY_BITMAP);
+    }
+
+    public Bitmap getTertiaryBitmap() {
+        return getTertiaryBitmapField().asBitmap(TERTIARY_BITMAP_START_FIELD_INDEX);
+    }
+
+    public boolean dataFieldBitIsSet(int dataFieldNumber) {
+        return getCorrespondingBitmap(dataFieldNumber).bitIsSet(dataFieldNumber);
+    }
+
+    @Override
     public DataField getDataField(int dataFieldNumber) {
         return dataFields.get(dataFieldNumber - 1);
     }
 
+
+    public DataField getDataField(FieldName fieldName) {
+        return dataFields.stream()
+                .filter(f -> f.getFieldName().equals(fieldName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Message does not contain DataField with name: " + fieldName.getName() + "."));
+    }
+
     public void setDataField(int dataFieldNumber, DataField dataField) {
+        //TODO: If the corresponding bitmap bit is not set (ie bit 1 of field 1 for secondary bitmap), set it and initialize empty bitmap
+        Bitmap bitmap = getCorrespondingBitmap(dataFieldNumber);
         dataFields.set(dataFieldNumber - 1, dataField);
-        setBitmapBit(dataFieldNumber);
+        bitmap.setBit(dataFieldNumber);
     }
 
     public void removeDataField(int dataFieldNumber) {
-        dataFields.remove(dataFieldNumber - 1);
-        unsetBitmapBit(dataFieldNumber);
+        Bitmap bitmap = getCorrespondingBitmap(dataFieldNumber);
+        dataFields.get(dataFieldNumber - 1).setRawData(null); //TODO: Explore re-working datafields as a whole, this is gross
+        bitmap.unsetBit(dataFieldNumber);
     }
 
-    void setBitmapBit(int dataFieldNumber) {
-        if (!bitIsSet(dataFieldNumber)) {
-            flipBitmapBit(dataFieldNumber);
+    private Bitmap getCorrespondingBitmap(int dataFieldNumber) {
+        if (dataFieldNumber < SECONDARY_BITMAP_START_FIELD_INDEX) {
+            return getPrimaryBitmap();
+        } else if (dataFieldNumber < TERTIARY_BITMAP_START_FIELD_INDEX) {
+            return getSecondaryBitmap();
+        } else if (dataFieldNumber <= getTertiaryBitmap().getEndFieldIndex()) {
+            return getTertiaryBitmap();
         } else {
-            throw new IllegalArgumentException("Bit corresponding to field number " + dataFieldNumber + " is already set");
+            throw new IllegalArgumentException("ISO8583Messages do not support field number: " + dataFieldNumber);
         }
-    }
-
-    void unsetBitmapBit(int dataFieldNumber) {
-        if (bitIsSet(dataFieldNumber)) {
-            flipBitmapBit(dataFieldNumber);
-        } else {
-            throw new IllegalArgumentException("Bit corresponding to field number " + dataFieldNumber + " is not yet set");
-        }
-    }
-
-    private boolean bitIsSet(int dataFieldNumber) {
-        int byteIndex = getByteIndexFromDataFieldNumber(dataFieldNumber);
-        int bitIndex = getBitIndexFromDataFieldNumber(dataFieldNumber);
-
-        return ((primaryBitmap.getRawData()[byteIndex] & 0xFF) & (1 << (bitIndex - 1))) >= 1;
-    }
-
-    private void flipBitmapBit(int dataFieldNumber) {
-        int byteIndex = getByteIndexFromDataFieldNumber(dataFieldNumber);
-        int bitIndex = getBitIndexFromDataFieldNumber(dataFieldNumber);
-
-        primaryBitmap.getRawData()[byteIndex] = (byte) ((primaryBitmap.getRawData()[byteIndex] & 0xFF) ^ (1 << (bitIndex - 1)));
-    }
-
-    private int getByteIndexFromDataFieldNumber(int dataFieldNumber) {
-        return (dataFieldNumber - 1) / 8;
-    }
-
-    private int getBitIndexFromDataFieldNumber(int dataFieldNumber) {
-        return 8 - ((dataFieldNumber - 1) % 8);
     }
 
     private List<DataField> createDataFieldsFromDefinition(Iso8583MessageDefinition definition) {
@@ -122,5 +173,10 @@ public class Iso8583Message implements Message {
         }
 
         return dataFields;
+    }
+
+    @Override
+    public String toString() {
+        return getData();
     }
 }

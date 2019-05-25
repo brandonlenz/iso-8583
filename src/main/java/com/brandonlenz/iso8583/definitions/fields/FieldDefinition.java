@@ -41,6 +41,8 @@ public abstract class FieldDefinition {
 
     public abstract int getLength();
 
+    public abstract int getByteLength();
+
     public Encoding getEncoding() {
         return encoding;
     }

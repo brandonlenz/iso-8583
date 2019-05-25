@@ -20,16 +20,16 @@ class Iso8583MessageBuilderTest {
     void setFieldHex() {
         iso8583MessageBuilder.setField(4, TEST_AMOUNT_RAW_DATA);
 
-        Assertions.assertArrayEquals(iso8583MessageBuilder.getIso8583Message().getDataField(4).getRawData(), TEST_AMOUNT_RAW_DATA);
-        Assertions.assertEquals(iso8583MessageBuilder.getIso8583Message().getDataField(4).getData(), TEST_AMOUNT_DATA);
+        Assertions.assertArrayEquals(iso8583MessageBuilder.getMessage().getDataField(4).getRawData(), TEST_AMOUNT_RAW_DATA);
+        Assertions.assertEquals(iso8583MessageBuilder.getMessage().getDataField(4).getData(), TEST_AMOUNT_DATA);
     }
 
     @Test
     void setFieldString() {
         iso8583MessageBuilder.setField(4, TEST_AMOUNT_DATA);
 
-        Assertions.assertArrayEquals(iso8583MessageBuilder.getIso8583Message().getDataField(4).getRawData(), TEST_AMOUNT_RAW_DATA);
-        Assertions.assertEquals(iso8583MessageBuilder.getIso8583Message().getDataField(4).getData(), TEST_AMOUNT_DATA);
+        Assertions.assertArrayEquals(iso8583MessageBuilder.getMessage().getDataField(4).getRawData(), TEST_AMOUNT_RAW_DATA);
+        Assertions.assertEquals(iso8583MessageBuilder.getMessage().getDataField(4).getData(), TEST_AMOUNT_DATA);
     }
 
     @Test
@@ -37,6 +37,6 @@ class Iso8583MessageBuilderTest {
         iso8583MessageBuilder.setField(4, TEST_AMOUNT_RAW_DATA);
         iso8583MessageBuilder.removeField(4);
 
-        Assertions.assertNull(iso8583MessageBuilder.getIso8583Message().getRawData());
+        Assertions.assertNull(iso8583MessageBuilder.getMessage().getDataField(4).getRawData());
     }
 }

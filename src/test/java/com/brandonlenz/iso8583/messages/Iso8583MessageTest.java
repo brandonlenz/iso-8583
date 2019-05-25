@@ -1,6 +1,8 @@
 package com.brandonlenz.iso8583.messages;
 
+import com.brandonlenz.iso8583.building.DataFieldBuilder;
 import com.brandonlenz.iso8583.definitions.messages.SampleIso8583MessageDefinition;
+import com.brandonlenz.iso8583.fields.DataField;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,52 +17,54 @@ class Iso8583MessageTest {
     }
 
     @Test
-    void setAndUnsetBitmapBits() {
-        iso8583Message.setBitmapBit(1);
-        Assertions.assertEquals((byte) 0b10000000, iso8583Message.getPrimaryBitmap().getRawData()[0]);
+    void setAndUnsetBitmapFields() {
+        DataField testSecondaryBitmap =
+                new DataFieldBuilder(
+                        iso8583Message.getDefinition().getFieldDefinition(1),
+                        "00 00 00 00 00 00 00 00"
+                ).getDataField();
+        iso8583Message.setDataField(1, testSecondaryBitmap);
+        Assertions.assertTrue(iso8583Message.dataFieldBitIsSet(1));
+        Assertions.assertEquals((byte) 0b10000000, iso8583Message.getPrimaryBitmapField().getRawData()[0]);
 
-        iso8583Message.setBitmapBit(2);
-        Assertions.assertEquals((byte) 0b11000000, iso8583Message.getPrimaryBitmap().getRawData()[0]);
+        DataField testField2 = new DataField(iso8583Message.getDefinition().getFieldDefinition(2));
+        iso8583Message.setDataField(2, testField2);
+        Assertions.assertTrue(iso8583Message.dataFieldBitIsSet(2));
 
-        iso8583Message.setBitmapBit(24);
-        Assertions.assertEquals((byte) 0b00000001, iso8583Message.getPrimaryBitmap().getRawData()[2]);
+        DataField testField24 = new DataField(iso8583Message.getDefinition().getFieldDefinition(24));
+        iso8583Message.setDataField(24, testField24);
+        Assertions.assertTrue(iso8583Message.dataFieldBitIsSet(24));
 
-        iso8583Message.setBitmapBit(25);
-        Assertions.assertEquals((byte) 0b10000000, iso8583Message.getPrimaryBitmap().getRawData()[3]);
+        DataField testField25 = new DataField(iso8583Message.getDefinition().getFieldDefinition(25));
+        iso8583Message.setDataField(25, testField25);
+        Assertions.assertTrue(iso8583Message.dataFieldBitIsSet(25));
 
-        iso8583Message.setBitmapBit(64);
-        Assertions.assertEquals((byte) 0b00000001, iso8583Message.getPrimaryBitmap().getRawData()[7]);
+        DataField testField64 = new DataField(iso8583Message.getDefinition().getFieldDefinition(64));
+        iso8583Message.setDataField(64, testField64);
+        Assertions.assertTrue(iso8583Message.dataFieldBitIsSet(64));
 
-        for (byte bitmapByte :
-                iso8583Message.getPrimaryBitmap().getRawData()) {
-            System.out.print(String.format("%8s", Integer.toBinaryString(bitmapByte & 0xFF)).replace(' ', '0')  + " ");
-        }
-        System.out.println();
+        DataField testField100 = new DataField(iso8583Message.getDefinition().getFieldDefinition(100));
+        iso8583Message.setDataField(100, testField100);
+        Assertions.assertTrue(iso8583Message.dataFieldBitIsSet(100));
 
-        // raw bitmap =  11000000 00000000 00000001 00000000 00000000 00000000 00000000 00000001
-        //               12345678 12345678 12345678 12345678 12345678 12345678 12345678 12345678
-        //               1        2        3        4        5        6        7        8
+        //Now remove the fields:
+        iso8583Message.removeDataField(2);
+        Assertions.assertFalse(iso8583Message.dataFieldBitIsSet(2));
 
+        iso8583Message.removeDataField(24);
+        Assertions.assertFalse(iso8583Message.dataFieldBitIsSet(24));
 
-        iso8583Message.unsetBitmapBit(1);
-        Assertions.assertEquals((byte) 0b01000000, iso8583Message.getPrimaryBitmap().getRawData()[0]);
+        iso8583Message.removeDataField(25);
+        Assertions.assertFalse(iso8583Message.dataFieldBitIsSet(25));
 
-        iso8583Message.unsetBitmapBit(2);
-        Assertions.assertEquals((byte) 0b00000000, iso8583Message.getPrimaryBitmap().getRawData()[0]);
+        iso8583Message.removeDataField(64);
+        Assertions.assertFalse(iso8583Message.dataFieldBitIsSet(64));
 
-        iso8583Message.unsetBitmapBit(24);
-        Assertions.assertEquals((byte) 0b00000000, iso8583Message.getPrimaryBitmap().getRawData()[2]);
+        iso8583Message.removeDataField(100);
+        Assertions.assertFalse(iso8583Message.dataFieldBitIsSet(100));
 
-        iso8583Message.unsetBitmapBit(25);
-        Assertions.assertEquals((byte) 0b00000000, iso8583Message.getPrimaryBitmap().getRawData()[3]);
-
-        iso8583Message.unsetBitmapBit(64);
-        Assertions.assertEquals((byte) 0b00000000, iso8583Message.getPrimaryBitmap().getRawData()[7]);
-
-        for (byte bitmapByte :
-                iso8583Message.getPrimaryBitmap().getRawData()) {
-            System.out.print(String.format("%8s", Integer.toBinaryString(bitmapByte & 0xFF)).replace(' ', '0')  + " ");
-        }
-        System.out.println();
+        iso8583Message.removeDataField(1);
+        Assertions.assertFalse(iso8583Message.dataFieldBitIsSet(1));
+        Assertions.assertEquals((byte) 0b00000000, iso8583Message.getPrimaryBitmapField().getRawData()[0]);
     }
 }

@@ -11,13 +11,22 @@ public enum Encoding {
     HEXADECIMAL_ASCII(new HexadecimalAsciiEncodingHandler()),
     HEXADECIMAL_EBCDIC(new BinaryEncodingHandler());
 
-    private EncodingHandler encodingHandler;
 
-    Encoding (EncodingHandler encodingHandler) {
+    private final EncodingHandler encodingHandler;
+
+    Encoding(EncodingHandler encodingHandler) {
         this.encodingHandler = encodingHandler;
     }
 
     public EncodingHandler getEncodingHandler() {
         return encodingHandler;
+    }
+
+    public byte[] encode(String data) {
+        return this.encodingHandler.encode(data);
+    }
+
+    public String decode(byte[] rawData) {
+        return this.encodingHandler.decode(rawData);
     }
 }

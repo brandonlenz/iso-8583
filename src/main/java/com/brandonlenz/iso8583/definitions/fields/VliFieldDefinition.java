@@ -8,8 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VliFieldDefinition extends FieldDefinition {
+    //TODO: Will need to set length via some indicated length property, but this is based on the actual field data, so...
 
-    private VliDefinition vliDefinition;
+    private final VliDefinition vliDefinition;
     private final Integer minimumLength;
     private final Integer maximumLength;
 
@@ -73,4 +74,6 @@ public class VliFieldDefinition extends FieldDefinition {
     public int getLength() {
         return 0;
     }
+
+    public int getByteLength() { return getEncoding().getEncodingHandler().getByteLength(getLength()); }
 }

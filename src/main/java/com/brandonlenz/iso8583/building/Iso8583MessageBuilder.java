@@ -6,21 +6,38 @@ import com.brandonlenz.iso8583.messages.Iso8583Message;
 import com.brandonlenz.iso8583.messages.Message;
 
 public class Iso8583MessageBuilder implements MessageBuilder {
-    private Iso8583Message message;
+
+    private final Iso8583Message message;
+    private final Iso8583MessageDefinition messageDefinition;
 
     public Iso8583MessageBuilder(Iso8583MessageDefinition iso8583MessageDefinition) {
+        this.messageDefinition = iso8583MessageDefinition;
         this.message = new Iso8583Message(iso8583MessageDefinition);
     }
 
+    public void setMessageTypeIndicator(byte[] rawData) {
+        DataFieldBuilder dataFieldBuilder =
+                new DataFieldBuilder(messageDefinition.getMessageTypeIndicatorDefinition(), rawData);
+        message.setMessageTypeIndicator(dataFieldBuilder.getDataField());
+    }
+
+    public void setPrimaryBitmap(byte[] rawData) {
+        DataFieldBuilder dataFieldBuilder =
+                new DataFieldBuilder(messageDefinition.getPrimaryBitmapDefinition(), rawData);
+        message.setPrimaryBitmap(dataFieldBuilder.getDataField());
+    }
+
     @Override
-    public void setField(int dataFieldNumber, byte[] data) {
-        DataFieldBuilder dataFieldBuilder = new DataFieldBuilder(message.getDefinition().getFieldDefinition(dataFieldNumber), data);
+    public void setField(int dataFieldNumber, byte[] rawData) {
+        DataFieldBuilder dataFieldBuilder =
+                new DataFieldBuilder(messageDefinition.getFieldDefinition(dataFieldNumber), rawData);
         message.setDataField(dataFieldNumber, dataFieldBuilder.getDataField());
     }
 
     @Override
     public void setField(int dataFieldNumber, String data) {
-        DataFieldBuilder dataFieldBuilder = new DataFieldBuilder(getMessageDefinition().getFieldDefinition(dataFieldNumber), data);
+        DataFieldBuilder dataFieldBuilder =
+                new DataFieldBuilder(messageDefinition.getFieldDefinition(dataFieldNumber), data);
         message.setDataField(dataFieldNumber, dataFieldBuilder.getDataField());
     }
 
@@ -31,10 +48,6 @@ public class Iso8583MessageBuilder implements MessageBuilder {
 
     @Override
     public Message getMessage() {
-        return message;
-    }
-
-    public Iso8583Message getIso8583Message() {
         return message;
     }
 

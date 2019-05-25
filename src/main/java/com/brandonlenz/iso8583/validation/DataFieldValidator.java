@@ -1,7 +1,6 @@
 package com.brandonlenz.iso8583.validation;
 
 import com.brandonlenz.iso8583.fields.DataField;
-import com.brandonlenz.iso8583.structure.encoding.handlers.EncodingHandler;
 
 public class DataFieldValidator {
 
@@ -11,8 +10,7 @@ public class DataFieldValidator {
 
     private boolean encodingIsValid(DataField dataField) {
         try {
-            EncodingHandler encodingHandler = dataField.getDefinition().getEncoding().getEncodingHandler();
-            encodingHandler.decode(dataField.getRawData());
+            dataField.getDefinition().getEncoding().decode(dataField.getRawData());
             return true;
         } catch (IllegalArgumentException e) {
             return false;
