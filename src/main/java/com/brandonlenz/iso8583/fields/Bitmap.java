@@ -65,15 +65,14 @@ public class Bitmap {
         int byteIndex = getByteIndex(dataFieldNumber);
         int bitIndex = getBitIndex(dataFieldNumber);
 
-        return ((bitmapField.getRawData()[byteIndex] & 0xFF) & (1 << (bitIndex - 1))) >= 1;
+        return ((getRawData()[byteIndex] & 0xFF) & (1 << (bitIndex - 1))) >= 1;
     }
 
     private void flipBit(int dataFieldNumber) {
         int byteIndex = getByteIndex(dataFieldNumber);
         int bitIndex = getBitIndex(dataFieldNumber);
 
-        bitmapField.getRawData()[byteIndex] =
-                (byte) ((bitmapField.getRawData()[byteIndex] & 0xFF) ^ (1 << (bitIndex - 1)));
+        getRawData()[byteIndex] = (byte) ((getRawData()[byteIndex] & 0xFF) ^ (1 << (bitIndex - 1)));
     }
 
     private int getByteIndex(int dataFieldNumber) {
@@ -106,7 +105,7 @@ public class Bitmap {
 
     public String getBinaryRepresentation() {
         StringBuilder sb = new StringBuilder();
-        byte[] bitmapRawData = bitmapField.getRawData();
+        byte[] bitmapRawData = getRawData();
 
         for (int i = 0; i < bitmapRawData.length; i++) {
             sb.append(String.format("%8s", Integer.toBinaryString(bitmapRawData[i] & 0xFF)).replace(' ', '0'));
@@ -120,6 +119,10 @@ public class Bitmap {
 
     public String getHexRepresentation() {
         return Encoding.BINARY.decode(bitmapField.getRawData());
+    }
+
+    public byte[] getRawData() {
+        return bitmapField.getRawData();
     }
 
     @Override
