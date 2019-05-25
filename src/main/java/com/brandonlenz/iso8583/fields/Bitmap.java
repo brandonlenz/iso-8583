@@ -3,6 +3,7 @@ package com.brandonlenz.iso8583.fields;
 import com.brandonlenz.iso8583.structure.encoding.Encoding;
 
 public class Bitmap {
+
     private final int startFieldIndex;
     private final int endFieldIndex;
     private final DataField bitmapField;
@@ -30,6 +31,11 @@ public class Bitmap {
     }
 
     public void setBit(int dataFieldNumber) {
+        if (dataFieldNumber < startFieldIndex || dataFieldNumber > endFieldIndex) {
+            throw new IllegalArgumentException(
+                    "Input bit " + dataFieldNumber + " must be between " + startFieldIndex + " and " + endFieldIndex);
+        }
+
         if (!bitIsSet(dataFieldNumber)) {
             flipBit(dataFieldNumber);
         } else {
@@ -39,6 +45,11 @@ public class Bitmap {
     }
 
     public void unsetBit(int dataFieldNumber) {
+        if (dataFieldNumber < startFieldIndex || dataFieldNumber > endFieldIndex) {
+            throw new IllegalArgumentException(
+                    "Input bit " + dataFieldNumber + " must be between " + startFieldIndex + " and " + endFieldIndex);
+        }
+
         if (bitIsSet(dataFieldNumber)) {
             flipBit(dataFieldNumber);
         } else {
@@ -49,7 +60,7 @@ public class Bitmap {
 
     public boolean bitIsSet(int dataFieldNumber) {
         if (bitmapField.getRawData() == null) {
-            return  false;
+            return false;
         }
 
         int byteIndex = getByteIndex(dataFieldNumber);
@@ -76,10 +87,15 @@ public class Bitmap {
 
     public String getBinaryRepresentation() {
         StringBuilder sb = new StringBuilder();
-        for (byte bitmapByte : bitmapField.getRawData()) {
-            sb.append(String.format("%8s", Integer.toBinaryString(bitmapByte & 0xFF)).replace(' ', '0'));
-            sb.append(' ');
+        byte[] bitmapRawData = bitmapField.getRawData();
+
+        for (int i = 0; i < bitmapRawData.length; i++) {
+            sb.append(String.format("%8s", Integer.toBinaryString(bitmapRawData[i] & 0xFF)).replace(' ', '0'));
+            if (i != bitmapRawData.length - 1) {
+                sb.append(' ');
+            }
         }
+
         return sb.toString();
     }
 
@@ -89,6 +105,6 @@ public class Bitmap {
 
     @Override
     public String toString() {
-        return bitmapField.toString();
+        return getHexRepresentation();
     }
 }

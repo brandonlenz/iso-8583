@@ -65,6 +65,5 @@ class Iso8583MessageTest {
 
         iso8583Message.removeDataField(1);
         Assertions.assertFalse(iso8583Message.dataFieldBitIsSet(1));
-        Assertions.assertEquals((byte) 0b00000000, iso8583Message.getPrimaryBitmapField().getRawData()[0]);
     }
 }
