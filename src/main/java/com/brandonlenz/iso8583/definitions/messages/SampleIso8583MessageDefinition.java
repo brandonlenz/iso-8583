@@ -58,7 +58,7 @@ public class SampleIso8583MessageDefinition extends Iso8583MessageDefinition {
         fieldDefinitions.add(new FixedFieldDefinition(  FieldName.APPLICATION_PAN_SEQUENCE_NUMBER,              3,      NUMERIC_FIELD_ENCODING,         ContentType.NUMERIC));
         fieldDefinitions.add(new FixedFieldDefinition(  FieldName.FUNCTION_CODE,                                3,      NUMERIC_FIELD_ENCODING,         ContentType.NUMERIC));
         fieldDefinitions.add(new FixedFieldDefinition(  FieldName.POINT_OF_SERVICE_CONDITION_CODE,              2,      NUMERIC_FIELD_ENCODING,         ContentType.NUMERIC));
-        fieldDefinitions.add(new FixedFieldDefinition(  FieldName.POINT_OF_SERCICE_CAPTURE_CODE,                2,      NUMERIC_FIELD_ENCODING,         ContentType.NUMERIC));
+        fieldDefinitions.add(new FixedFieldDefinition(  FieldName.POINT_OF_SERVICE_CAPTURE_CODE,                2,      NUMERIC_FIELD_ENCODING,         ContentType.NUMERIC));
         fieldDefinitions.add(new FixedFieldDefinition(  FieldName.AUTHORIZING_IDENTIFICATION_RESPONSE_LENGTH,   1,      NUMERIC_FIELD_ENCODING,         ContentType.NUMERIC));
         fieldDefinitions.add(new FixedFieldDefinition(  FieldName.AMOUNT_TRANSACTION_FEE,                       9,      ALPHANUMERIC_FIELD_ENCODING,    ContentType.ALPHANUMERIC));
         fieldDefinitions.add(new FixedFieldDefinition(  FieldName.AMOUNT_SETTLEMENT_FEE,                        9,      ALPHANUMERIC_FIELD_ENCODING,    ContentType.ALPHANUMERIC));

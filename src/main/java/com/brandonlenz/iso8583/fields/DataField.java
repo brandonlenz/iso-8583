@@ -9,7 +9,7 @@ import java.util.List;
 public class DataField {
 
     private final FieldDefinition definition;
-    private byte[] rawData;
+    private byte[] rawData; //You couldn't live with your failure, and where did that bring you? Back to me. (NULL POINTER GON' HAPPEN HERE)
     private List<DataField> subfields;
 
     public DataField(FieldDefinition fieldDefinition) {
@@ -26,7 +26,7 @@ public class DataField {
     }
 
     public String getData() {
-        return definition.getEncoding().getEncodingHandler().decode(rawData);
+        return definition.getEncoding().decode(rawData);
     }
 
     public void setRawData(byte[] rawData) {
@@ -53,6 +53,10 @@ public class DataField {
         }
 
         return subfieldList;
+    }
+
+    public Bitmap asBitmap(int startFieldIndex) {
+        return new Bitmap(this, startFieldIndex);
     }
 
     @Override

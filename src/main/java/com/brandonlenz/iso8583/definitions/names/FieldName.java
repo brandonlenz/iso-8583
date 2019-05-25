@@ -29,7 +29,7 @@ public enum FieldName {
     APPLICATION_PAN_SEQUENCE_NUMBER("Application PAN Sequence Number"),
     FUNCTION_CODE("Function Code"),
     POINT_OF_SERVICE_CONDITION_CODE("Point of Service Condition Code"),
-    POINT_OF_SERCICE_CAPTURE_CODE("Point of Service Capture Code"),
+    POINT_OF_SERVICE_CAPTURE_CODE("Point of Service Capture Code"),
     AUTHORIZING_IDENTIFICATION_RESPONSE_LENGTH("Authorizing Identification Response Length"),
     AMOUNT_TRANSACTION_FEE("Amount, Transaction Fee"),
     AMOUNT_SETTLEMENT_FEE("Amount, settlement Fee"),
@@ -103,7 +103,6 @@ public enum FieldName {
     ACCOUNT_IDENTIFICATION_1("Account Identification 1"),
     ACCOUNT_IDENTIFICATION_2("Account Identification 2"),
     TRANSACTION_DESCRIPTION("Transaction Description"),
-
 
     VARIABLE_LENGTH_INDICATOR("VLI");
 
