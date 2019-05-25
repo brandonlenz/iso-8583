@@ -9,6 +9,8 @@ import com.brandonlenz.iso8583.definitions.fields.FixedFieldDefinition;
 import com.brandonlenz.iso8583.definitions.names.FieldName;
 import com.brandonlenz.iso8583.structure.content.ContentType;
 import com.brandonlenz.iso8583.structure.encoding.Encoding;
+import java.util.Arrays;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -57,6 +59,17 @@ class BitmapTest {
 
         bitmap.unsetBit(27);
         assertEquals((byte) 0b00000000, bitmap.asDataField().getRawData()[3]);
+    }
+
+    @Test
+    void getSetBits() {
+        Assertions.assertTrue(bitmap.getSetBits().isEmpty());
+
+        bitmap.setBit(1);
+        bitmap.setBit(8);
+        bitmap.setBit(9);
+        bitmap.setBit(64);
+        Assertions.assertEquals(Arrays.asList(1, 8, 9, 64), bitmap.getSetBits());
     }
 
     @Test

@@ -79,11 +79,7 @@ public class Iso8583Message implements Message {
 
     @Override
     public List<DataField> getDataFields() {
-        List<DataField> allDataFields = new ArrayList<>();
-        allDataFields.add(messageTypeIndicator);
-        allDataFields.add(primaryBitmap);
-        allDataFields.addAll(dataFields);
-        return allDataFields;
+        return dataFields;
     }
 
     public DataField getMessageTypeIndicator() {
@@ -94,16 +90,16 @@ public class Iso8583Message implements Message {
         this.messageTypeIndicator = messageTypeIndicator;
     }
 
-    public void setPrimaryBitmap(DataField primaryBitmap) {
-        this.primaryBitmap = primaryBitmap;
-    }
-
     public DataField getPrimaryBitmapField() {
         return primaryBitmap;
     }
 
     public Bitmap getPrimaryBitmap() {
         return primaryBitmap.asBitmap(PRIMARY_BITMAP_START_FIELD_INDEX);
+    }
+
+    public void setPrimaryBitmap(DataField primaryBitmap) {
+        this.primaryBitmap = primaryBitmap;
     }
 
     public DataField getSecondaryBitmapField() {
@@ -140,17 +136,32 @@ public class Iso8583Message implements Message {
                         "Message does not contain DataField with name: " + fieldName.getName() + "."));
     }
 
-    public void setDataField(int dataFieldNumber, DataField dataField) {
-        //TODO: If the corresponding bitmap bit is not set (ie bit 1 of field 1 for secondary bitmap), set it and initialize empty bitmap
+    public void setDataField(int dataFieldNumber, DataField dataField) { //TODO: Refactor. This is really awful
         Bitmap bitmap = getCorrespondingBitmap(dataFieldNumber);
+        //Note: If bitmap is the primary bitmap and somehow its data is null, we have a problem.
+
+        //recursively set bitmaps as necessary
+        if (dataFields.indexOf(bitmap.asDataField()) != -1) {
+            int bitmapFieldNumber = dataFields.indexOf(bitmap.asDataField()) + 1;
+            if (!dataFieldBitIsSet(bitmapFieldNumber)) {
+                FieldDefinition bitmapDefinition = bitmap.asDataField().getDefinition();
+                int startFieldIndex = bitmap.getStartFieldIndex();
+                bitmap = new DataFieldBuilder(bitmapDefinition, new byte[bitmapDefinition.getByteLength()]).getDataField().asBitmap(startFieldIndex);
+                setDataField(bitmapFieldNumber, bitmap.asDataField());
+            }
+        }
+
         dataFields.set(dataFieldNumber - 1, dataField);
         bitmap.setBit(dataFieldNumber);
     }
 
-    public void removeDataField(int dataFieldNumber) {
+    public void removeDataField(int dataFieldNumber) { //TODO: Refactor, same as setDataField(), this is gross.
         Bitmap bitmap = getCorrespondingBitmap(dataFieldNumber);
-        dataFields.get(dataFieldNumber - 1).setRawData(null); //TODO: Explore re-working datafields as a whole, this is gross
+        dataFields.get(dataFieldNumber - 1).setRawData(null);
         bitmap.unsetBit(dataFieldNumber);
+        if (dataFields.indexOf(bitmap.asDataField()) != -1 && bitmap.getSetBits().isEmpty()) {
+            removeDataField(dataFields.indexOf(bitmap.asDataField()) + 1);
+        }
     }
 
     private Bitmap getCorrespondingBitmap(int dataFieldNumber) {

@@ -2,7 +2,6 @@ package com.brandonlenz.iso8583.definitions.messages;
 
 import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
 import com.brandonlenz.iso8583.definitions.names.FieldName;
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Iso8583MessageDefinition implements MessageDefinition {
@@ -47,16 +46,12 @@ public abstract class Iso8583MessageDefinition implements MessageDefinition {
 
     @Override
     public List<FieldDefinition> getFieldDefinitions() {
-        List<FieldDefinition> allFieldDefinitions = new ArrayList<>();
-        allFieldDefinitions.add(messageTypeIndicatorDefinition);
-        allFieldDefinitions.add(primaryBitmapDefinition);
-        allFieldDefinitions.addAll(fieldDefinitions);
-        return allFieldDefinitions;
+        return fieldDefinitions;
     }
 
     @Override
     public FieldDefinition getFieldDefinition(int fieldNumber) {
-        return fieldDefinitions.get(fieldNumber - 1); //TODO: Handle index out of bounds exception (Also create method to get by field name perhaps?)
+        return fieldDefinitions.get(fieldNumber - 1); //TODO: Handle index out of bounds exception
     }
 
     @Override
