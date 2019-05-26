@@ -6,7 +6,7 @@ public class BcdEncodingHandler implements EncodingHandler {
 
     @Override
     public byte[] encode(String data) {
-        data = data.replaceAll(" ", "");
+        data = data.replace(" ", "");
 
         if (data.length() % 2 != 0) {
             data = "0" + data;
