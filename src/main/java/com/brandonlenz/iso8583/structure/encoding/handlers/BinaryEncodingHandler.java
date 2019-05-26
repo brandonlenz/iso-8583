@@ -6,7 +6,7 @@ public class BinaryEncodingHandler implements EncodingHandler {
 
     @Override
     public byte[] encode(String data) {
-        data = data.replaceAll(" ", "");
+        data = data.replace(" ", "");
         return DatatypeConverter.parseHexBinary(data);
     }
 
