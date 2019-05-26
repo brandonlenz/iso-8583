@@ -184,8 +184,8 @@ public class Iso8583Message implements Message {
         }
     }
 
-    private List<DataField> createDataFieldsFromDefinition(Iso8583MessageDefinition definition) {
-        dataFields = new ArrayList<>();
+    private static List<DataField> createDataFieldsFromDefinition(Iso8583MessageDefinition definition) {
+        List<DataField> dataFields = new ArrayList<>();
 
         for (FieldDefinition fieldDefinition : definition.getFieldDefinitions()) {
             dataFields.add(new DataField(fieldDefinition));
