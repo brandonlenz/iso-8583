@@ -5,5 +5,7 @@ import java.io.InputStream;
 
 public interface MessageParser {
 
-    Message parseMessageFromStream(InputStream inputStream);
+    Message parseMessageFromRawData(byte[] rawData);
+
+    Message parseMessageFromStream(InputStream messageStream);
 }

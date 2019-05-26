@@ -2,6 +2,7 @@ package com.brandonlenz.iso8583.building;
 
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
 import com.brandonlenz.iso8583.definitions.messages.MessageDefinition;
+import com.brandonlenz.iso8583.fields.Bitmap;
 import com.brandonlenz.iso8583.messages.Iso8583Message;
 import com.brandonlenz.iso8583.messages.Message;
 
@@ -27,18 +28,22 @@ public class Iso8583MessageBuilder implements MessageBuilder {
         message.setPrimaryBitmap(dataFieldBuilder.getDataField());
     }
 
+    public Bitmap getPrimaryBitmap() {
+        return message.getPrimaryBitmap();
+    }
+
+    public Bitmap getSecondaryBitmap() {
+        return message.getSecondaryBitmap();
+    }
+
+    public Bitmap getTertiaryBitmap() {
+        return message.getTertiaryBitmap();
+    }
+
     @Override
     public void setField(int dataFieldNumber, byte[] rawData) {
         DataFieldBuilder dataFieldBuilder =
                 new DataFieldBuilder(messageDefinition.getFieldDefinition(dataFieldNumber), rawData);
-
-        //message.setDataField() will set the appropriate bit in the appropriate bitmap, but only if the other bitmap field is set
-        //1. Before setting a data field, make sure that the corresponding bitmap is at least set:
-
-
-        //2. Now that we are sure that the bitmap bit is set, :
-
-        //3. set the data field:
         message.setDataField(dataFieldNumber, dataFieldBuilder.getDataField());
 
     }
