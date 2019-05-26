@@ -2,11 +2,13 @@ package com.brandonlenz.iso8583.parsing;
 
 import com.brandonlenz.iso8583.building.Iso8583MessageBuilder;
 import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
+import com.brandonlenz.iso8583.definitions.fields.VliFieldDefinition;
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
+import com.brandonlenz.iso8583.fields.DataField;
 import com.brandonlenz.iso8583.messages.Message;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Iso8583MessageParser implements MessageParser {
@@ -17,28 +19,53 @@ public class Iso8583MessageParser implements MessageParser {
         this.messageDefinition = iso8583MessageDefinition;
     }
 
+    @Override
     public Message parseMessageFromRawData(byte[] rawData) {
-        return null;
+        InputStream inputStream = new ByteArrayInputStream(rawData);
+        return parseMessageFromStream(inputStream);
     }
 
     @Override
-    public Message parseMessageFromStream(InputStream inputStream) {
+    public Message parseMessageFromStream(InputStream messageStream) {
         Iso8583MessageBuilder messageBuilder = new Iso8583MessageBuilder(messageDefinition);
-        messageBuilder.setMessageTypeIndicator(parseDataFieldBytesFromStream(inputStream, messageDefinition.getMessageTypeIndicatorDefinition()));
-        messageBuilder.setPrimaryBitmap(parseDataFieldBytesFromStream(inputStream, messageDefinition.getPrimaryBitmapDefinition()));
-        List<Integer> fieldNumbers = new ArrayList<>(); //TODO: get the active fields from the bitmap(s)
-        for (int index : fieldNumbers) {
-            messageBuilder.setField(index, parseDataFieldBytesFromStream(inputStream, messageDefinition.getFieldDefinition(index)));
+
+        FieldDefinition messageTypeIndicatorDefinition = messageDefinition.getMessageTypeIndicatorDefinition();
+        byte[] messageTypeIndicatorBytes = parseDataFieldBytesFromStream(messageStream, messageTypeIndicatorDefinition);
+        messageBuilder.setMessageTypeIndicator(messageTypeIndicatorBytes);
+
+        FieldDefinition primaryBitmapDefinition = messageDefinition.getPrimaryBitmapDefinition();
+        byte[] primaryBitmapBytes = parseDataFieldBytesFromStream(messageStream, primaryBitmapDefinition);
+        messageBuilder.setPrimaryBitmap(primaryBitmapBytes);
+
+        List<Integer> primaryBitmapFields = messageBuilder.getPrimaryBitmap().getSetBits();
+        for (int fieldNumber : primaryBitmapFields) {
+            FieldDefinition fieldDefinition = messageDefinition.getFieldDefinition(fieldNumber);
+            byte[] fieldBytes = parseDataFieldBytesFromStream(messageStream, fieldDefinition);
+            messageBuilder.setField(fieldNumber, fieldBytes);
         }
+        //if has secondary bitmap, parse those
+        //if has tertiary bitmap, parse those
         return messageBuilder.getMessage();
     }
 
-    private byte[] parseDataFieldBytesFromStream (InputStream inputStream, FieldDefinition fieldDefinition) {
+    private byte[] parseDataFieldBytesFromStream(InputStream messageStream, FieldDefinition fieldDefinition) {
         try {
-            int fieldLength= fieldDefinition.getLength();
-            byte[] fieldRawData = new byte[fieldLength];
-            inputStream.read(fieldRawData, 0, fieldLength);
-            return fieldRawData;
+            int fieldLength;
+
+            if (fieldDefinition instanceof VliFieldDefinition) {
+                VliFieldDefinition vliFieldDefinition = (VliFieldDefinition) fieldDefinition;
+                byte[] vliData= parseDataFieldBytesFromStream(messageStream, vliFieldDefinition.getVliDefinition());
+                fieldLength = Integer.vliData
+            } else {
+                fieldLength = fieldDefinition.getByteLength();
+                byte[] fieldRawData = new byte[fieldLength];
+                int bytesRead = messageStream.read(fieldRawData, 0, fieldLength);
+                if (bytesRead < fieldLength) {
+                    throw new IllegalArgumentException("Prematurely reached end of message InputStream");
+                }
+                return fieldRawData;
+            }
+
         } catch (IOException e) {
             System.out.println("An error occurred while trying to parse field " + fieldDefinition.getFieldName());
             e.printStackTrace();
