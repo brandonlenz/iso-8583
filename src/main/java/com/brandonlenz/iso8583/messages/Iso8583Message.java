@@ -1,6 +1,6 @@
 package com.brandonlenz.iso8583.messages;
 
-import com.brandonlenz.iso8583.building.DataFieldBuilder;
+import com.brandonlenz.iso8583.building.fields.BitmapBuilder;
 import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
 import com.brandonlenz.iso8583.definitions.messages.MessageDefinition;
@@ -14,30 +14,22 @@ import java.util.List;
 
 public class Iso8583Message implements Message {
 
-    private static final int PRIMARY_BITMAP_START_FIELD_INDEX = 1;
-    private static final int SECONDARY_BITMAP_START_FIELD_INDEX = 65;
-    private static final int TERTIARY_BITMAP_START_FIELD_INDEX = 128;
-
     private final MessageDefinition definition;
-    private DataField primaryBitmap;
     private DataField messageTypeIndicator;
+    private Bitmap primaryBitmap;
     private List<DataField> dataFields;
 
     public Iso8583Message(Iso8583MessageDefinition definition) {
         this.definition = definition;
-        this.primaryBitmap = new DataFieldBuilder(definition.getPrimaryBitmapDefinition(),
-                new byte[definition.getPrimaryBitmapDefinition().getLength()]).getDataField();
+        BitmapBuilder dataFieldBuilder = definition.getPrimaryBitmapDefinition().getDataFieldBuilder();
+        dataFieldBuilder.setRawData(new byte[definition.getPrimaryBitmapDefinition().getLength()]);
+        this.primaryBitmap = dataFieldBuilder.build();
         this.dataFields = createDataFieldsFromDefinition(definition);
     }
 
-    public Iso8583Message(Iso8583MessageDefinition definition, byte[] messageTypeIndicatorRawData) {
+    public Iso8583Message(Iso8583MessageDefinition definition, DataField messageTypeIndicator) {
         this(definition);
-        this.messageTypeIndicator = new DataFieldBuilder(definition.getMessageTypeIndicatorDefinition(),
-                messageTypeIndicatorRawData).getDataField();
-    }
-
-    public Iso8583Message(Iso8583MessageDefinition definition, String messageTypeIndicatorData) {
-        this(definition, definition.getMessageTypeIndicatorDefinition().getEncoding().encode(messageTypeIndicatorData));
+        this.messageTypeIndicator = messageTypeIndicator;
     }
 
     @Override
@@ -95,27 +87,19 @@ public class Iso8583Message implements Message {
     }
 
     public Bitmap getPrimaryBitmap() {
-        return primaryBitmap.asBitmap(PRIMARY_BITMAP_START_FIELD_INDEX);
+        return primaryBitmap;
     }
 
-    public void setPrimaryBitmap(DataField primaryBitmap) {
+    public void setPrimaryBitmap(Bitmap primaryBitmap) {
         this.primaryBitmap = primaryBitmap;
     }
 
-    public DataField getSecondaryBitmapField() {
-        return getDataField(FieldName.SECONDARY_BITMAP);
-    }
-
     public Bitmap getSecondaryBitmap() {
-        return getSecondaryBitmapField().asBitmap(SECONDARY_BITMAP_START_FIELD_INDEX);
-    }
-
-    public DataField getTertiaryBitmapField() {
-        return getDataField(FieldName.TERTIARY_BITMAP);
+        return (Bitmap) getDataField(FieldName.SECONDARY_BITMAP);
     }
 
     public Bitmap getTertiaryBitmap() {
-        return getTertiaryBitmapField().asBitmap(TERTIARY_BITMAP_START_FIELD_INDEX);
+        return (Bitmap) getDataField(FieldName.TERTIARY_BITMAP);
     }
 
     public boolean dataFieldBitIsSet(int dataFieldNumber) {
@@ -130,7 +114,7 @@ public class Iso8583Message implements Message {
 
     public DataField getDataField(FieldName fieldName) {
         return dataFields.stream()
-                .filter(f -> f.getFieldName().equals(fieldName))
+                .filter(f -> f.getName().equals(fieldName))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Message does not contain DataField with name: " + fieldName.getName() + "."));
@@ -145,13 +129,13 @@ public class Iso8583Message implements Message {
         //Note: If bitmap is the primary bitmap and somehow its data is null, we have a problem.
 
         //recursively set bitmaps as necessary
-        if (dataFields.indexOf(bitmap.asDataField()) != -1) {
-            int bitmapFieldNumber = dataFields.indexOf(bitmap.asDataField()) + 1;
+        if (dataFields.indexOf(bitmap) != -1) {
+            int bitmapFieldNumber = dataFields.indexOf(bitmap) + 1;
             if (!dataFieldBitIsSet(bitmapFieldNumber)) {
-                FieldDefinition bitmapDefinition = bitmap.asDataField().getDefinition();
-                int startFieldIndex = bitmap.getStartFieldIndex();
-                bitmap = new DataFieldBuilder(bitmapDefinition, new byte[bitmapDefinition.getByteLength()]).getDataField().asBitmap(startFieldIndex);
-                setDataField(bitmapFieldNumber, bitmap.asDataField());
+                bitmap = bitmap.getDefinition().getDataFieldBuilder()
+                        .setRawData(new byte[bitmap.getDefinition().getByteLength()])
+                        .build();
+                setDataField(bitmapFieldNumber, bitmap);
             }
         }
 
@@ -167,15 +151,15 @@ public class Iso8583Message implements Message {
         Bitmap bitmap = getCorrespondingBitmap(dataFieldNumber);
         dataFields.get(dataFieldNumber - 1).setRawData(null);
         bitmap.unsetBit(dataFieldNumber);
-        if (dataFields.indexOf(bitmap.asDataField()) != -1 && bitmap.getSetBits().isEmpty()) {
-            removeDataField(dataFields.indexOf(bitmap.asDataField()) + 1);
+        if (dataFields.indexOf(bitmap) != -1 && bitmap.getSetBits().isEmpty()) {
+            removeDataField(dataFields.indexOf(bitmap) + 1);
         }
     }
 
     private Bitmap getCorrespondingBitmap(int dataFieldNumber) {
-        if (dataFieldNumber < SECONDARY_BITMAP_START_FIELD_INDEX) {
+        if (dataFieldNumber < getSecondaryBitmap().getStartFieldIndex()) {
             return getPrimaryBitmap();
-        } else if (dataFieldNumber < TERTIARY_BITMAP_START_FIELD_INDEX) {
+        } else if (dataFieldNumber < getTertiaryBitmap().getStartFieldIndex()) {
             return getSecondaryBitmap();
         } else if (dataFieldNumber <= getTertiaryBitmap().getEndFieldIndex()) {
             return getTertiaryBitmap();
@@ -188,7 +172,7 @@ public class Iso8583Message implements Message {
         List<DataField> dataFields = new ArrayList<>();
 
         for (FieldDefinition fieldDefinition : definition.getFieldDefinitions()) {
-            dataFields.add(new DataField(fieldDefinition));
+            dataFields.add(fieldDefinition.getDataFieldBuilder().build());
         }
 
         return dataFields;

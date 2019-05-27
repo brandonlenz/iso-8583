@@ -30,4 +30,6 @@ public enum Encoding {
     public String decode(byte[] rawData) {
         return this.encodingHandler.decode(rawData);
     }
+
+
 }

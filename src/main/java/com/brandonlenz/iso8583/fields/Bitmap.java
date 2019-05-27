@@ -1,27 +1,26 @@
 package com.brandonlenz.iso8583.fields;
 
+import com.brandonlenz.iso8583.definitions.fields.BitmapDefinition;
 import com.brandonlenz.iso8583.structure.encoding.Encoding;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Bitmap {
+public class Bitmap extends FixedField {
 
+    private final BitmapDefinition definition;
     private final int startFieldIndex;
     private final int endFieldIndex;
-    private final DataField bitmapField;
 
-    public Bitmap(DataField dataField, int startFieldIndex) {
-        this.bitmapField = dataField;
-        this.startFieldIndex = startFieldIndex;
-        this.endFieldIndex = startFieldIndex + (dataField.getDefinition().getByteLength() * 8) - 1;
+    public Bitmap(BitmapDefinition fieldDefinition) {
+        super(fieldDefinition);
+        this.definition = fieldDefinition;
+        startFieldIndex = fieldDefinition.getStartFieldIndex();
+        endFieldIndex = startFieldIndex + (fieldDefinition.getByteLength() * 8) - 1;
     }
 
-    public Bitmap(DataField dataField) {
-        this(dataField, 1);
-    }
-
-    public DataField asDataField() {
-        return this.bitmapField;
+    @Override
+    public BitmapDefinition getDefinition() {
+        return definition;
     }
 
     public int getStartFieldIndex() {
@@ -58,7 +57,7 @@ public class Bitmap {
     }
 
     public boolean bitIsSet(int dataFieldNumber) {
-        if (bitmapField.getRawData() == null) {
+        if (getRawData() == null) {
             return false;
         }
 
@@ -85,7 +84,7 @@ public class Bitmap {
 
     public List<Integer> getSetBits() {
         List<Integer> bits = new ArrayList<>();
-        byte[] bytes = bitmapField.getRawData();
+        byte[] bytes = getRawData();
 
         for (int byteIndex = 0; byteIndex < bytes.length; byteIndex++) {
             for (int bitIndex = 0; bitIndex < 8; bitIndex++) {
@@ -118,15 +117,12 @@ public class Bitmap {
     }
 
     public String getHexRepresentation() {
-        return Encoding.BINARY.decode(bitmapField.getRawData());
-    }
-
-    public byte[] getRawData() {
-        return bitmapField.getRawData();
+        return Encoding.BINARY.decode(getRawData());
     }
 
     @Override
     public String toString() {
         return getHexRepresentation();
     }
+
 }

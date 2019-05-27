@@ -1,5 +1,8 @@
 package com.brandonlenz.iso8583.building;
 
+import com.brandonlenz.iso8583.building.fields.BitmapBuilder;
+import com.brandonlenz.iso8583.building.fields.DataFieldBuilder;
+import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
 import com.brandonlenz.iso8583.definitions.messages.MessageDefinition;
 import com.brandonlenz.iso8583.fields.Bitmap;
@@ -17,15 +20,15 @@ public class Iso8583MessageBuilder implements MessageBuilder {
     }
 
     public void setMessageTypeIndicator(byte[] rawData) {
-        DataFieldBuilder dataFieldBuilder =
-                new DataFieldBuilder(messageDefinition.getMessageTypeIndicatorDefinition(), rawData);
-        message.setMessageTypeIndicator(dataFieldBuilder.getDataField());
+        DataFieldBuilder dataFieldBuilder = messageDefinition.getMessageTypeIndicatorDefinition().getDataFieldBuilder();
+        dataFieldBuilder.setRawData(rawData);
+        message.setMessageTypeIndicator(dataFieldBuilder.build());
     }
 
     public void setPrimaryBitmap(byte[] rawData) {
-        DataFieldBuilder dataFieldBuilder =
-                new DataFieldBuilder(messageDefinition.getPrimaryBitmapDefinition(), rawData);
-        message.setPrimaryBitmap(dataFieldBuilder.getDataField());
+        BitmapBuilder dataFieldBuilder = messageDefinition.getPrimaryBitmapDefinition().getDataFieldBuilder();
+        dataFieldBuilder.setRawData(rawData);
+        message.setPrimaryBitmap(dataFieldBuilder.build());
     }
 
     public Bitmap getPrimaryBitmap() {
@@ -42,17 +45,18 @@ public class Iso8583MessageBuilder implements MessageBuilder {
 
     @Override
     public void setField(int dataFieldNumber, byte[] rawData) {
-        DataFieldBuilder dataFieldBuilder =
-                new DataFieldBuilder(messageDefinition.getFieldDefinition(dataFieldNumber), rawData);
-        message.setDataField(dataFieldNumber, dataFieldBuilder.getDataField());
+        DataFieldBuilder dataFieldBuilder = messageDefinition.getFieldDefinition(dataFieldNumber).getDataFieldBuilder();
+        dataFieldBuilder.setRawData(rawData);
+        message.setDataField(dataFieldNumber, dataFieldBuilder.build());
 
     }
 
     @Override
-    public void setField(int dataFieldNumber, String data) {
-        DataFieldBuilder dataFieldBuilder =
-                new DataFieldBuilder(messageDefinition.getFieldDefinition(dataFieldNumber), data);
-        message.setDataField(dataFieldNumber, dataFieldBuilder.getDataField());
+    public void setField(int dataFieldNumber, String data) { //TODO: this is terrible, use the other method and be smart ^^^^
+        FieldDefinition fieldDefinition = messageDefinition.getFieldDefinition(dataFieldNumber);
+        DataFieldBuilder dataFieldBuilder = fieldDefinition.getDataFieldBuilder();
+        dataFieldBuilder.setRawData(fieldDefinition.getEncoding().encode(data));
+        message.setDataField(dataFieldNumber, dataFieldBuilder.build());
     }
 
     @Override

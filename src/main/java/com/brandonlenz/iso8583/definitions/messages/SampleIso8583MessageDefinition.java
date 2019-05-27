@@ -1,5 +1,6 @@
 package com.brandonlenz.iso8583.definitions.messages;
 
+import com.brandonlenz.iso8583.definitions.fields.BitmapDefinition;
 import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
 import com.brandonlenz.iso8583.definitions.fields.FixedFieldDefinition;
 import com.brandonlenz.iso8583.definitions.fields.VliDefinition;
@@ -26,14 +27,14 @@ public class SampleIso8583MessageDefinition extends Iso8583MessageDefinition {
         return new FixedFieldDefinition(FieldName.MTI, 4, NUMERIC_FIELD_ENCODING, ContentType.NUMERIC);
     }
 
-    private static FieldDefinition getSampleIso8583PrimaryBitmapDefinition() {
-        return new FixedFieldDefinition(FieldName.PRIMARY_BITMAP, 8, BYTE_FIELD_ENCODING, ContentType.BYTES);
+    private static BitmapDefinition getSampleIso8583PrimaryBitmapDefinition() {
+        return new BitmapDefinition(FieldName.PRIMARY_BITMAP, 8, BYTE_FIELD_ENCODING);
     }
 
     private static List<FieldDefinition> getSampleIso8583FieldDefinitions() {
         List<FieldDefinition> fieldDefinitions = new ArrayList<>();
 
-        fieldDefinitions.add(new FixedFieldDefinition(  FieldName.SECONDARY_BITMAP,                             8,      BYTE_FIELD_ENCODING,            ContentType.BYTES));
+        fieldDefinitions.add(new BitmapDefinition( FieldName.SECONDARY_BITMAP,                             8,      BYTE_FIELD_ENCODING,            65));
         fieldDefinitions.add(new VliFieldDefinition(    FieldName.PRIMARY_ACCOUNT_NUMBER,                       15, 19, NUMERIC_FIELD_ENCODING,         ContentType.NUMERIC,                new VliDefinition(2, Encoding.HEXADECIMAL_ASCII)));
         fieldDefinitions.add(new FixedFieldDefinition(  FieldName.PROCESSING_CODE,                              6,      NUMERIC_FIELD_ENCODING,         ContentType.NUMERIC));
         fieldDefinitions.add(new FixedFieldDefinition(  FieldName.AMOUNT_TRANSACTION,                           12,     NUMERIC_FIELD_ENCODING,         ContentType.NUMERIC));
@@ -97,7 +98,7 @@ public class SampleIso8583MessageDefinition extends Iso8583MessageDefinition {
         fieldDefinitions.add(new VliFieldDefinition(    FieldName.RESERVED_PRIVATE,                             999,    ALPHANUMERIC_FIELD_ENCODING,    ContentType.ALPHANUMERIC_SPECIAL,   new VliDefinition(3, Encoding.HEXADECIMAL_ASCII)));
         fieldDefinitions.add(new VliFieldDefinition(    FieldName.RESERVED_PRIVATE,                             999,    ALPHANUMERIC_FIELD_ENCODING,    ContentType.ALPHANUMERIC_SPECIAL,   new VliDefinition(3, Encoding.HEXADECIMAL_ASCII)));
         fieldDefinitions.add(new FixedFieldDefinition(  FieldName.MESSAGE_AUTHENTICATION_CODE,                  8,      BYTE_FIELD_ENCODING,            ContentType.BYTES));
-        fieldDefinitions.add(new FixedFieldDefinition(  FieldName.TERTIARY_BITMAP,                              8,      BYTE_FIELD_ENCODING,            ContentType.BYTES));
+        fieldDefinitions.add(new BitmapDefinition( FieldName.TERTIARY_BITMAP,                              8,      BYTE_FIELD_ENCODING,            129));
         fieldDefinitions.add(new FixedFieldDefinition(  FieldName.SETTLEMENT_CODE,                              1,      NUMERIC_FIELD_ENCODING,         ContentType.NUMERIC));
         fieldDefinitions.add(new FixedFieldDefinition(  FieldName.EXTENDED_PAYMENT_CODE,                        2,      NUMERIC_FIELD_ENCODING,         ContentType.NUMERIC));
         fieldDefinitions.add(new FixedFieldDefinition(  FieldName.RECEIVING_INSTITUTION_COUNTRY_CODE,           3,      NUMERIC_FIELD_ENCODING,         ContentType.NUMERIC));
