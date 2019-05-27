@@ -2,7 +2,7 @@ package com.brandonlenz.iso8583.fields;
 
 import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
 import com.brandonlenz.iso8583.definitions.names.FieldName;
-import com.brandonlenz.iso8583.structure.Format;
+import com.brandonlenz.iso8583.structure.format.Format;
 
 public abstract class DataField {
 

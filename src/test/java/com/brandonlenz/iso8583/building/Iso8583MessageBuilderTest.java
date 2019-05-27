@@ -1,5 +1,6 @@
 package com.brandonlenz.iso8583.building;
 
+import com.brandonlenz.iso8583.building.messages.Iso8583MessageBuilder;
 import com.brandonlenz.iso8583.definitions.messages.SampleIso8583MessageDefinition;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

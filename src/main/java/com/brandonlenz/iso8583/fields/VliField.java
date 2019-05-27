@@ -5,9 +5,9 @@ import com.brandonlenz.iso8583.definitions.fields.VliFieldDefinition;
 public class VliField extends DataField {
 
     private final VliFieldDefinition definition;
-    private final Vli vli;
+    private final FixedField vli;
 
-    public VliField(VliFieldDefinition fieldDefinition, Vli vli) {
+    public VliField(VliFieldDefinition fieldDefinition, FixedField vli) {
         super(fieldDefinition);
         this.definition = fieldDefinition;
         this.vli = vli;

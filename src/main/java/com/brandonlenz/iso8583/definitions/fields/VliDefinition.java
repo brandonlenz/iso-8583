@@ -2,7 +2,7 @@ package com.brandonlenz.iso8583.definitions.fields;
 
 import com.brandonlenz.iso8583.building.fields.DataFieldBuilder;
 import com.brandonlenz.iso8583.definitions.names.FieldName;
-import com.brandonlenz.iso8583.fields.Vli;
+import com.brandonlenz.iso8583.fields.FixedField;
 import com.brandonlenz.iso8583.structure.content.ContentType;
 import com.brandonlenz.iso8583.structure.encoding.Encoding;
 
@@ -13,8 +13,8 @@ public final class VliDefinition extends FixedFieldDefinition {
     }
 
     @Override
-    public DataFieldBuilder<VliDefinition, Vli> getDataFieldBuilder() {
-        Vli vli = new Vli(this);
+    public DataFieldBuilder<VliDefinition, FixedField> getDataFieldBuilder() {
+        FixedField vli = new FixedField(this);
         return new DataFieldBuilder<>(this, vli);
     }
 }

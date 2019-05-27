@@ -3,7 +3,7 @@ package com.brandonlenz.iso8583.definitions.fields;
 import com.brandonlenz.iso8583.building.fields.DataFieldBuilder;
 import com.brandonlenz.iso8583.definitions.names.FieldName;
 import com.brandonlenz.iso8583.fields.FixedField;
-import com.brandonlenz.iso8583.structure.Format;
+import com.brandonlenz.iso8583.structure.format.Format;
 import com.brandonlenz.iso8583.structure.content.ContentType;
 import com.brandonlenz.iso8583.structure.encoding.Encoding;
 import java.util.ArrayList;
