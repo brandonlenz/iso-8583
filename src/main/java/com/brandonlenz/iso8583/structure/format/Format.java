@@ -1,7 +1,6 @@
-package com.brandonlenz.iso8583.structure;
+package com.brandonlenz.iso8583.structure.format;
 
 public enum Format {
     FIXED,
-    VARIABLE,
     VARIABLE_LENGTH_INDICATED
 }

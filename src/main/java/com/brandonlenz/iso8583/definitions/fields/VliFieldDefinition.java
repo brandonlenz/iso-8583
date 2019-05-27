@@ -2,11 +2,11 @@ package com.brandonlenz.iso8583.definitions.fields;
 
 import com.brandonlenz.iso8583.building.fields.DataFieldBuilder;
 import com.brandonlenz.iso8583.definitions.names.FieldName;
-import com.brandonlenz.iso8583.fields.Vli;
+import com.brandonlenz.iso8583.fields.FixedField;
 import com.brandonlenz.iso8583.fields.VliField;
-import com.brandonlenz.iso8583.structure.Format;
 import com.brandonlenz.iso8583.structure.content.ContentType;
 import com.brandonlenz.iso8583.structure.encoding.Encoding;
+import com.brandonlenz.iso8583.structure.format.Format;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +74,7 @@ public class VliFieldDefinition extends FieldDefinition {
     }
 
     public DataFieldBuilder<VliFieldDefinition, VliField> getDataFieldBuilder() {
-        Vli vli = new Vli(this.getVliDefinition());
+        FixedField vli = new FixedField(this.getVliDefinition());
         VliField vliField = new VliField(this, vli);
         return new DataFieldBuilder<>(this, vliField);
     }

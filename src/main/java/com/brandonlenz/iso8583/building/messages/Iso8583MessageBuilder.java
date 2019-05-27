@@ -1,4 +1,4 @@
-package com.brandonlenz.iso8583.building;
+package com.brandonlenz.iso8583.building.messages;
 
 import com.brandonlenz.iso8583.building.fields.DataFieldBuilder;
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;

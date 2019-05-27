@@ -1,6 +1,6 @@
-package com.brandonlenz.iso8583.parsing;
+package com.brandonlenz.iso8583.parsing.messages;
 
-import com.brandonlenz.iso8583.building.Iso8583MessageBuilder;
+import com.brandonlenz.iso8583.building.messages.Iso8583MessageBuilder;
 import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
 import com.brandonlenz.iso8583.messages.Message;
