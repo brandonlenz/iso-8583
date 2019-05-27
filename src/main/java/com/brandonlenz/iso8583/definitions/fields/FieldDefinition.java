@@ -21,10 +21,10 @@ public abstract class FieldDefinition {
     }
 
     public FieldDefinition(FieldName name,
-                           Format format,
-                           Encoding encoding,
-                           ContentType contentType,
-                           List<FieldDefinition> subfieldDefinitions) {
+            Format format,
+            Encoding encoding,
+            ContentType contentType,
+            List<FieldDefinition> subfieldDefinitions) {
         this.name = name;
         this.format = format;
         this.encoding = encoding;
@@ -39,10 +39,6 @@ public abstract class FieldDefinition {
     public Format getFormat() {
         return format;
     }
-
-    public abstract int getLength();
-
-    public abstract int getByteLength();
 
     public Encoding getEncoding() {
         return encoding;

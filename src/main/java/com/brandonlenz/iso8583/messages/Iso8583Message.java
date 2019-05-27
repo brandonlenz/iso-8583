@@ -1,6 +1,5 @@
 package com.brandonlenz.iso8583.messages;
 
-import com.brandonlenz.iso8583.building.fields.BitmapBuilder;
 import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
 import com.brandonlenz.iso8583.definitions.messages.MessageDefinition;
@@ -21,9 +20,9 @@ public class Iso8583Message implements Message {
 
     public Iso8583Message(Iso8583MessageDefinition definition) {
         this.definition = definition;
-        BitmapBuilder dataFieldBuilder = definition.getPrimaryBitmapDefinition().getDataFieldBuilder();
-        dataFieldBuilder.setRawData(new byte[definition.getPrimaryBitmapDefinition().getLength()]);
-        this.primaryBitmap = dataFieldBuilder.build();
+        this.primaryBitmap = definition.getPrimaryBitmapDefinition().getDataFieldBuilder()
+                .setRawData(new byte[definition.getPrimaryBitmapDefinition().getLength()])
+                .build();
         this.dataFields = createDataFieldsFromDefinition(definition);
     }
 
@@ -120,7 +119,7 @@ public class Iso8583Message implements Message {
                         "Message does not contain DataField with name: " + fieldName.getName() + "."));
     }
 
-    public void setDataField(int dataFieldNumber, DataField dataField) { //TODO: Refactor. This is really awful
+    public void setDataField(int dataFieldNumber, DataField dataField) { //TODO: Refactor.
         if (dataFieldNumber < 1 || dataFieldNumber > definition.getFieldDefinitions().size()) {
             throw new IllegalArgumentException("Message does not contain FieldDefinition for DataField number " + dataFieldNumber);
         }
@@ -143,13 +142,14 @@ public class Iso8583Message implements Message {
         bitmap.setBit(dataFieldNumber);
     }
 
-    public void removeDataField(int dataFieldNumber) { //TODO: Refactor, same as setDataField(), this is gross.
+    public void removeDataField(int dataFieldNumber) {
         if (dataFieldNumber < 1 || dataFieldNumber > definition.getFieldDefinitions().size()) {
             throw new IllegalArgumentException("Message does not contain FieldDefinition for DataField number " + dataFieldNumber);
         }
 
         Bitmap bitmap = getCorrespondingBitmap(dataFieldNumber);
-        dataFields.get(dataFieldNumber - 1).setRawData(null);
+        DataField emptyDataField = dataFields.get(dataFieldNumber - 1).getDefinition().getDataFieldBuilder().build(); //initialize an empty field
+        dataFields.set(dataFieldNumber - 1, emptyDataField);
         bitmap.unsetBit(dataFieldNumber);
         if (dataFields.indexOf(bitmap) != -1 && bitmap.getSetBits().isEmpty()) {
             removeDataField(dataFields.indexOf(bitmap) + 1);

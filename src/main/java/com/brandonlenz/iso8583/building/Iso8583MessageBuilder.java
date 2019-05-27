@@ -1,11 +1,10 @@
 package com.brandonlenz.iso8583.building;
 
-import com.brandonlenz.iso8583.building.fields.BitmapBuilder;
 import com.brandonlenz.iso8583.building.fields.DataFieldBuilder;
-import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
 import com.brandonlenz.iso8583.definitions.messages.MessageDefinition;
 import com.brandonlenz.iso8583.fields.Bitmap;
+import com.brandonlenz.iso8583.fields.DataField;
 import com.brandonlenz.iso8583.messages.Iso8583Message;
 import com.brandonlenz.iso8583.messages.Message;
 
@@ -26,9 +25,10 @@ public class Iso8583MessageBuilder implements MessageBuilder {
     }
 
     public void setPrimaryBitmap(byte[] rawData) {
-        BitmapBuilder dataFieldBuilder = messageDefinition.getPrimaryBitmapDefinition().getDataFieldBuilder();
-        dataFieldBuilder.setRawData(rawData);
-        message.setPrimaryBitmap(dataFieldBuilder.build());
+        Bitmap bitmap = messageDefinition.getPrimaryBitmapDefinition().getDataFieldBuilder()
+                .setRawData(rawData)
+                .build();
+        message.setPrimaryBitmap(bitmap);
     }
 
     public Bitmap getPrimaryBitmap() {
@@ -45,18 +45,17 @@ public class Iso8583MessageBuilder implements MessageBuilder {
 
     @Override
     public void setField(int dataFieldNumber, byte[] rawData) {
-        DataFieldBuilder dataFieldBuilder = messageDefinition.getFieldDefinition(dataFieldNumber).getDataFieldBuilder();
-        dataFieldBuilder.setRawData(rawData);
-        message.setDataField(dataFieldNumber, dataFieldBuilder.build());
+        DataField dataField = messageDefinition.getFieldDefinition(dataFieldNumber).getDataFieldBuilder()
+                .setRawData(rawData)
+                .build();
+        message.setDataField(dataFieldNumber, dataField);
 
     }
 
     @Override
-    public void setField(int dataFieldNumber, String data) { //TODO: this is terrible, use the other method and be smart ^^^^
-        FieldDefinition fieldDefinition = messageDefinition.getFieldDefinition(dataFieldNumber);
-        DataFieldBuilder dataFieldBuilder = fieldDefinition.getDataFieldBuilder();
-        dataFieldBuilder.setRawData(fieldDefinition.getEncoding().encode(data));
-        message.setDataField(dataFieldNumber, dataFieldBuilder.build());
+    public void setField(int dataFieldNumber, String data) {
+        byte[] encodedData = messageDefinition.getFieldDefinition(dataFieldNumber).getEncoding().encode(data);
+        setField(dataFieldNumber, encodedData);
     }
 
     @Override
