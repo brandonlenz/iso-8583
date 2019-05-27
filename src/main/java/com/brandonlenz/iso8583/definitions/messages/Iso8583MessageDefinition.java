@@ -1,5 +1,6 @@
 package com.brandonlenz.iso8583.definitions.messages;
 
+import com.brandonlenz.iso8583.definitions.fields.BitmapDefinition;
 import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
 import com.brandonlenz.iso8583.definitions.names.FieldName;
 import java.util.List;
@@ -9,11 +10,11 @@ public abstract class Iso8583MessageDefinition implements MessageDefinition {
     private static final int SECONDARY_BITMAP_FIELD_NUMBER = 1;
     private static final int TERTIARY_BITMAP_FIELD_NUMBER = 65;
     private final FieldDefinition messageTypeIndicatorDefinition;
-    private final FieldDefinition primaryBitmapDefinition;
+    private final BitmapDefinition primaryBitmapDefinition;
     private final List<FieldDefinition> fieldDefinitions;
 
     public Iso8583MessageDefinition(FieldDefinition messageTypeIndicatorDefinition,
-                             FieldDefinition primaryBitmapDefinition,
+                             BitmapDefinition primaryBitmapDefinition,
                              List<FieldDefinition> fieldDefinitions) {
         this.messageTypeIndicatorDefinition = messageTypeIndicatorDefinition;
         this.primaryBitmapDefinition = primaryBitmapDefinition;
@@ -24,7 +25,7 @@ public abstract class Iso8583MessageDefinition implements MessageDefinition {
         return messageTypeIndicatorDefinition;
     }
 
-    public FieldDefinition getPrimaryBitmapDefinition() {
+    public BitmapDefinition getPrimaryBitmapDefinition() {
         return primaryBitmapDefinition;
     }
 

@@ -1,5 +1,6 @@
 package com.brandonlenz.iso8583.definitions.fields;
 
+import com.brandonlenz.iso8583.building.fields.FixedFieldBuilder;
 import com.brandonlenz.iso8583.definitions.names.FieldName;
 import com.brandonlenz.iso8583.structure.Format;
 import com.brandonlenz.iso8583.structure.content.ContentType;
@@ -21,11 +22,18 @@ public class FixedFieldDefinition extends FieldDefinition {
         this.length = length;
     }
 
+    @Override
     public int getLength() {
         return length;
     }
 
+    @Override
     public int getByteLength() {
         return getEncoding().getEncodingHandler().getByteLength(length);
+    }
+
+    @Override
+    public FixedFieldBuilder getDataFieldBuilder() {
+        return new FixedFieldBuilder(this);
     }
 }

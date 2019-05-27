@@ -2,9 +2,7 @@ package com.brandonlenz.iso8583.parsing;
 
 import com.brandonlenz.iso8583.building.Iso8583MessageBuilder;
 import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
-import com.brandonlenz.iso8583.definitions.fields.VliFieldDefinition;
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
-import com.brandonlenz.iso8583.fields.DataField;
 import com.brandonlenz.iso8583.messages.Message;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -51,20 +49,13 @@ public class Iso8583MessageParser implements MessageParser {
     private byte[] parseDataFieldBytesFromStream(InputStream messageStream, FieldDefinition fieldDefinition) {
         try {
             int fieldLength;
-
-            if (fieldDefinition instanceof VliFieldDefinition) {
-                VliFieldDefinition vliFieldDefinition = (VliFieldDefinition) fieldDefinition;
-                byte[] vliData= parseDataFieldBytesFromStream(messageStream, vliFieldDefinition.getVliDefinition());
-                fieldLength = Integer.vliData
-            } else {
-                fieldLength = fieldDefinition.getByteLength();
-                byte[] fieldRawData = new byte[fieldLength];
-                int bytesRead = messageStream.read(fieldRawData, 0, fieldLength);
-                if (bytesRead < fieldLength) {
-                    throw new IllegalArgumentException("Prematurely reached end of message InputStream");
-                }
-                return fieldRawData;
+            fieldLength = fieldDefinition.getByteLength();
+            byte[] fieldRawData = new byte[fieldLength];
+            int bytesRead = messageStream.read(fieldRawData, 0, fieldLength);
+            if (bytesRead < fieldLength) {
+                throw new IllegalArgumentException("Prematurely reached end of message InputStream");
             }
+            return fieldRawData;
 
         } catch (IOException e) {
             System.out.println("An error occurred while trying to parse field " + fieldDefinition.getFieldName());
