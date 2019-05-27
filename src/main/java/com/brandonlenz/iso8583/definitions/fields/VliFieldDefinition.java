@@ -1,8 +1,9 @@
 package com.brandonlenz.iso8583.definitions.fields;
 
 import com.brandonlenz.iso8583.building.fields.DataFieldBuilder;
-import com.brandonlenz.iso8583.building.fields.VliFieldBuilder;
 import com.brandonlenz.iso8583.definitions.names.FieldName;
+import com.brandonlenz.iso8583.fields.Vli;
+import com.brandonlenz.iso8583.fields.VliField;
 import com.brandonlenz.iso8583.structure.Format;
 import com.brandonlenz.iso8583.structure.content.ContentType;
 import com.brandonlenz.iso8583.structure.encoding.Encoding;
@@ -10,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VliFieldDefinition extends FieldDefinition {
-    //TODO: Will need to set length via some indicated length property, but this is based on the actual field data, so...
 
     private final VliDefinition vliDefinition;
     private final Integer minimumLength;
@@ -73,13 +73,9 @@ public class VliFieldDefinition extends FieldDefinition {
         return maximumLength;
     }
 
-    public int getLength() {
-        return 0;
-    } //TODO: this shit is hard
-
-    public int getByteLength() { return getEncoding().getEncodingHandler().getByteLength(getLength()); }
-
-    public DataFieldBuilder getDataFieldBuilder() {
-        return new VliFieldBuilder(this);
+    public DataFieldBuilder<VliFieldDefinition, VliField> getDataFieldBuilder() {
+        Vli vli = new Vli(this.getVliDefinition());
+        VliField vliField = new VliField(this, vli);
+        return new DataFieldBuilder<>(this, vliField);
     }
 }

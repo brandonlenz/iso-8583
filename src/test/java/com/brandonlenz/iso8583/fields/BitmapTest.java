@@ -12,15 +12,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class BitmapTest {
-    private final BitmapDefinition bitmapFieldDefinition =
+    private final BitmapDefinition definition =
             new BitmapDefinition(FieldName.PRIMARY_BITMAP,8, Encoding.BINARY);
     private Bitmap bitmap;
 
     @BeforeEach
     void setUp() {
-        bitmap = bitmapFieldDefinition.getDataFieldBuilder()
-                .setRawData(bitmapFieldDefinition.getEncoding().encode("00 00 00 00 00 00 00 00"))
-                .build();
+        String emptyBitmapData = "00 00 00 00 00 00 00 00";
+        bitmap = definition.getDataFieldBuilder().setData(emptyBitmapData).build();
     }
 
     @Test

@@ -5,7 +5,7 @@ import com.brandonlenz.iso8583.definitions.fields.VliFieldDefinition;
 public class VliField extends DataField {
 
     private final VliFieldDefinition definition;
-    private Vli vli;
+    private final Vli vli;
 
     public VliField(VliFieldDefinition fieldDefinition, Vli vli) {
         super(fieldDefinition);
