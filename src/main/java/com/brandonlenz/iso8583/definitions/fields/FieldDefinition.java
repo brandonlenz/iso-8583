@@ -2,9 +2,11 @@ package com.brandonlenz.iso8583.definitions.fields;
 
 import com.brandonlenz.iso8583.building.fields.DataFieldBuilder;
 import com.brandonlenz.iso8583.definitions.names.FieldName;
-import com.brandonlenz.iso8583.structure.format.Format;
+import com.brandonlenz.iso8583.fields.DataField;
+import com.brandonlenz.iso8583.parsing.fields.DataFieldParser;
 import com.brandonlenz.iso8583.structure.content.ContentType;
 import com.brandonlenz.iso8583.structure.encoding.Encoding;
+import com.brandonlenz.iso8583.structure.format.Format;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,5 +54,7 @@ public abstract class FieldDefinition {
         return subfieldDefinitions;
     }
 
-    public abstract DataFieldBuilder getDataFieldBuilder();
+    public abstract <D extends FieldDefinition, F extends DataField> DataFieldBuilder<D, F> getDataFieldBuilder();
+
+    public abstract <D extends FieldDefinition, F extends DataField> DataFieldParser<D, F> getDataFieldParser();
 }

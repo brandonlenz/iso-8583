@@ -3,26 +3,26 @@ package com.brandonlenz.iso8583.building.fields;
 import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
 import com.brandonlenz.iso8583.fields.DataField;
 
-public class DataFieldBuilder<F extends FieldDefinition, D extends DataField> {
+public class DataFieldBuilder<D extends FieldDefinition, F extends DataField> {
 
-    private final F fieldDefinition;
-    private final D dataField;
+    private final D fieldDefinition;
+    private final F dataField;
 
-    public DataFieldBuilder(F fieldDefinition, D dataField) {
+    public DataFieldBuilder(D fieldDefinition, F dataField) {
         this.fieldDefinition = fieldDefinition;
         this.dataField = dataField;
     }
 
-    public D build() {
+    public F build() {
         return this.dataField;
     }
 
-    public DataFieldBuilder<F, D> setRawData(byte[] rawData) {
+    public DataFieldBuilder<D, F> setRawData(byte[] rawData) {
         dataField.setRawData(rawData);
         return this;
     }
 
-    public DataFieldBuilder<F, D> setData(String data) {
+    public DataFieldBuilder<D, F> setData(String data) {
         dataField.setRawData(fieldDefinition.getEncoding().encode(data));
         return this;
     }

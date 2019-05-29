@@ -3,6 +3,8 @@ package com.brandonlenz.iso8583.definitions.fields;
 import com.brandonlenz.iso8583.building.fields.DataFieldBuilder;
 import com.brandonlenz.iso8583.definitions.names.FieldName;
 import com.brandonlenz.iso8583.fields.FixedField;
+import com.brandonlenz.iso8583.parsing.fields.DataFieldParser;
+import com.brandonlenz.iso8583.parsing.fields.FixedFieldParser;
 import com.brandonlenz.iso8583.structure.format.Format;
 import com.brandonlenz.iso8583.structure.content.ContentType;
 import com.brandonlenz.iso8583.structure.encoding.Encoding;
@@ -35,5 +37,10 @@ public class FixedFieldDefinition extends FieldDefinition {
     public DataFieldBuilder<? extends FixedFieldDefinition, ? extends FixedField> getDataFieldBuilder() {
         FixedField fixedField = new FixedField(this);
         return new DataFieldBuilder<>(this, fixedField);
+    }
+
+    @Override
+    public DataFieldParser<? extends FixedFieldDefinition, ? extends FixedField> getDataFieldParser() {
+        return new FixedFieldParser(this);
     }
 }

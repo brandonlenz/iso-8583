@@ -1,5 +1,6 @@
 package com.brandonlenz.iso8583.parsing;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.brandonlenz.iso8583.definitions.messages.SampleIso8583MessageDefinition;
@@ -11,10 +12,10 @@ import org.junit.jupiter.api.Test;
 
 class Iso8583MessageParserTest {
 
-    private final byte[] rawMessage = getRawMessage();
+    private final byte[] rawMessageData = getRawMessageData();
     private final Iso8583MessageParser iso8583MessageParser = new Iso8583MessageParser(new SampleIso8583MessageDefinition());
 
-    private byte[] getRawMessage() {
+    private byte[] getRawMessageData() {
         String messageData = "30 31 30 30" +
                              "52 00 02 00 00 00 02 00" + // Fields set: 2, 4, 7, 23, 55
                              "31 36 31 32 33 34 35 36 37 38 39 30 31 32 33 34 35 36" +
@@ -28,16 +29,17 @@ class Iso8583MessageParserTest {
 
     @Test
     void parseMessageFromRawData() {
-        Iso8583Message parsedMessage = (Iso8583Message) iso8583MessageParser.parseMessageFromRawData(rawMessage);
+        Iso8583Message parsedMessage = (Iso8583Message) iso8583MessageParser.parseMessageFromRawData(rawMessageData);
 
         assertEquals("0100", parsedMessage.getMessageTypeIndicator().getData());
         assertEquals("5200020000000200", parsedMessage.getPrimaryBitmapField().getData());
         assertEquals(Arrays.asList(2, 4, 7, 23, 55), parsedMessage.getPrimaryBitmap().getSetBits());
         assertEquals("161234567890123456", parsedMessage.getDataField(2).getData());
         assertEquals("000000010000", parsedMessage.getDataField(4).getData());
+        assertEquals("1561507200", parsedMessage.getDataField(7).getData());
         assertEquals("052", parsedMessage.getDataField(23).getData());
-        assertEquals("01599F260801020304050607089F270180", parsedMessage.getDataField(55).getData());
+        assertEquals("0159F260801020304050607089F270180", parsedMessage.getDataField(55).getData());
 
-        assertEquals(rawMessage, parsedMessage.getRawData());
+        assertArrayEquals(rawMessageData, parsedMessage.getRawData());
     }
 }

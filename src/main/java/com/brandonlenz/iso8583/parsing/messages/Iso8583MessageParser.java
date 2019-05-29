@@ -3,6 +3,7 @@ package com.brandonlenz.iso8583.parsing.messages;
 import com.brandonlenz.iso8583.building.messages.Iso8583MessageBuilder;
 import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
+import com.brandonlenz.iso8583.fields.DataField;
 import com.brandonlenz.iso8583.messages.Message;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -23,43 +24,24 @@ public class Iso8583MessageParser implements MessageParser {
     }
 
     @Override
-    public Message parseMessageFromStream(InputStream messageStream) {
+    public Message parseMessageFromStream(InputStream messageStream) { //TODO: All of this is bad. Figure it out
         Iso8583MessageBuilder messageBuilder = new Iso8583MessageBuilder(messageDefinition);
 
-        FieldDefinition messageTypeIndicatorDefinition = messageDefinition.getMessageTypeIndicatorDefinition();
-        byte[] messageTypeIndicatorBytes = parseDataFieldBytesFromStream(messageStream, messageTypeIndicatorDefinition);
-        messageBuilder.setMessageTypeIndicator(messageTypeIndicatorBytes);
+        messageBuilder.setMessageTypeIndicator(messageDefinition.getMessageTypeIndicatorDefinition().getDataFieldParser()
+                        .parseFromStream(messageStream).getRawData()); //TODO: getRawData = BAD
 
-        FieldDefinition primaryBitmapDefinition = messageDefinition.getPrimaryBitmapDefinition();
-        byte[] primaryBitmapBytes = parseDataFieldBytesFromStream(messageStream, primaryBitmapDefinition);
-        messageBuilder.setPrimaryBitmap(primaryBitmapBytes);
+        messageBuilder.setPrimaryBitmap(messageDefinition.getPrimaryBitmapDefinition().getDataFieldParser()
+                .parseFromStream(messageStream).getRawData()); //TODO: getRawData = BAD
 
         List<Integer> primaryBitmapFields = messageBuilder.getPrimaryBitmap().getSetBits();
         for (int fieldNumber : primaryBitmapFields) {
             FieldDefinition fieldDefinition = messageDefinition.getFieldDefinition(fieldNumber);
-            byte[] fieldBytes = parseDataFieldBytesFromStream(messageStream, fieldDefinition);
-            messageBuilder.setField(fieldNumber, fieldBytes);
+            DataField dataField = fieldDefinition.getDataFieldParser().parseFromStream(messageStream);
+            byte[] fieldData = dataField.getRawData();
+            messageBuilder.setField(fieldNumber, fieldData); //TODO: getRawData = BAD
         }
         //if has secondary bitmap, parse those
         //if has tertiary bitmap, parse those
         return messageBuilder.getMessage();
-    }
-
-    private byte[] parseDataFieldBytesFromStream(InputStream messageStream, FieldDefinition fieldDefinition) {
-//        try {
-//            int fieldLength;
-//            fieldLength = fieldDefinition.getByteLength();
-//            byte[] fieldRawData = new byte[fieldLength];
-//            int bytesRead = messageStream.read(fieldRawData, 0, fieldLength);
-//            if (bytesRead < fieldLength) {
-//                throw new IllegalArgumentException("Prematurely reached end of message InputStream");
-//            }
-//            return fieldRawData;
-//
-//        } catch (IOException e) {
-//            System.out.println("An error occurred while trying to parse field " + fieldDefinition.getFieldName());
-//            e.printStackTrace();
-            return new byte[0];
-//        }
     }
 }

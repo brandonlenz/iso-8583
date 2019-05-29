@@ -9,7 +9,7 @@ import com.brandonlenz.iso8583.structure.encoding.Encoding;
 public final class VliDefinition extends FixedFieldDefinition {
 
     public VliDefinition(int length, Encoding encoding) {
-        super(FieldName.VARIABLE_LENGTH_INDICATOR, length, encoding, ContentType.NUMERIC);
+        super(FieldName.VARIABLE_LENGTH_INDICATOR, length, encoding, ContentType.NUMERIC); //TODO: could also be hex (ie byte 10 = 16)
     }
 
     @Override
