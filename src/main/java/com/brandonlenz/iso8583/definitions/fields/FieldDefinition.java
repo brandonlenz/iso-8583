@@ -57,4 +57,12 @@ public abstract class FieldDefinition {
     public abstract <D extends FieldDefinition, F extends DataField> DataFieldBuilder<D, F> getDataFieldBuilder();
 
     public abstract <D extends FieldDefinition, F extends DataField> DataFieldParser<D, F> getDataFieldParser();
+
+    @Override
+    public String toString() {
+        return "Field Name = " + this.getFieldName().toString() +
+                ", Format: " + this.getFormat() +
+                ", Encoding: " + this.getEncoding() +
+                ", Content Type: " + this.getContentType();
+    }
 }

@@ -26,7 +26,7 @@ public enum FieldName {
     PAN_EXTENDED_COUNTRY_CODE("PAN Extended (Country Code)"),
     FORWARDING_INSTITUTION_COUNTRY_CODE("Forwarding Institution (Country Code)"),
     POINT_OF_SERVICE_ENTRY_MODE("Point of Service Entry Mode"),
-    APPLICATION_PAN_SEQUENCE_NUMBER("Application PAN Sequence Number"),
+    APPLICATION_PAN_SEQUENCE_NUMBER("Main PAN Sequence Number"),
     FUNCTION_CODE("Function Code"),
     POINT_OF_SERVICE_CONDITION_CODE("Point of Service Condition Code"),
     POINT_OF_SERVICE_CAPTURE_CODE("Point of Service Capture Code"),

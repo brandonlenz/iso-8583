@@ -9,6 +9,8 @@ public interface Message {
 
     byte[] getRawData();
 
+    String getData();
+
     MessageDefinition getDefinition();
 
     List<DataField> getDataFields();
