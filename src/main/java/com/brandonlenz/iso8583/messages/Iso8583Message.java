@@ -2,7 +2,6 @@ package com.brandonlenz.iso8583.messages;
 
 import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
-import com.brandonlenz.iso8583.definitions.messages.MessageDefinition;
 import com.brandonlenz.iso8583.definitions.names.FieldName;
 import com.brandonlenz.iso8583.fields.Bitmap;
 import com.brandonlenz.iso8583.fields.DataField;
@@ -13,7 +12,7 @@ import java.util.List;
 
 public class Iso8583Message implements Message {
 
-    private final MessageDefinition definition;
+    private final Iso8583MessageDefinition definition;
     private DataField messageTypeIndicator;
     private Bitmap primaryBitmap;
     private List<DataField> dataFields;
@@ -53,18 +52,21 @@ public class Iso8583Message implements Message {
         }
     }
 
+    @Override
     public String getData() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(messageTypeIndicator.getData());
         stringBuilder.append(primaryBitmap.getData());
         for (DataField dataField : dataFields) {
-            stringBuilder.append(dataField.getData());
+            if (dataField.getRawData() != null) {
+                stringBuilder.append(dataField.getData());
+            }
         }
         return stringBuilder.toString();
     }
 
     @Override
-    public MessageDefinition getDefinition() {
+    public Iso8583MessageDefinition getDefinition() {
         return definition;
     }
 

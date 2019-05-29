@@ -1,12 +1,9 @@
 package com.brandonlenz.iso8583.building.messages;
 
-import com.brandonlenz.iso8583.building.fields.DataFieldBuilder;
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
-import com.brandonlenz.iso8583.definitions.messages.MessageDefinition;
 import com.brandonlenz.iso8583.fields.Bitmap;
 import com.brandonlenz.iso8583.fields.DataField;
 import com.brandonlenz.iso8583.messages.Iso8583Message;
-import com.brandonlenz.iso8583.messages.Message;
 
 public class Iso8583MessageBuilder implements MessageBuilder {
 
@@ -19,9 +16,17 @@ public class Iso8583MessageBuilder implements MessageBuilder {
     }
 
     public void setMessageTypeIndicator(byte[] rawData) {
-        DataFieldBuilder dataFieldBuilder = messageDefinition.getMessageTypeIndicatorDefinition().getDataFieldBuilder();
-        dataFieldBuilder.setRawData(rawData);
-        message.setMessageTypeIndicator(dataFieldBuilder.build());
+        DataField messageTypeIndicator = messageDefinition.getMessageTypeIndicatorDefinition().getDataFieldBuilder()
+                .setRawData(rawData)
+                .build();
+        message.setMessageTypeIndicator(messageTypeIndicator);
+    }
+
+    public void setMessageTypeIndicator(String data) {
+        DataField messageTypeIndicator = messageDefinition.getMessageTypeIndicatorDefinition().getDataFieldBuilder()
+                .setData(data)
+                .build();
+        message.setMessageTypeIndicator(messageTypeIndicator);
     }
 
     public void setPrimaryBitmap(byte[] rawData) {
@@ -64,12 +69,12 @@ public class Iso8583MessageBuilder implements MessageBuilder {
     }
 
     @Override
-    public Message getMessage() {
+    public Iso8583Message getMessage() {
         return message;
     }
 
     @Override
-    public MessageDefinition getMessageDefinition() {
+    public Iso8583MessageDefinition getMessageDefinition() {
         return this.message.getDefinition();
     }
 }

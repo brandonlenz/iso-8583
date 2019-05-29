@@ -4,7 +4,7 @@ import com.brandonlenz.iso8583.building.messages.Iso8583MessageBuilder;
 import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
 import com.brandonlenz.iso8583.fields.DataField;
-import com.brandonlenz.iso8583.messages.Message;
+import com.brandonlenz.iso8583.messages.Iso8583Message;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
@@ -18,13 +18,13 @@ public class Iso8583MessageParser implements MessageParser {
     }
 
     @Override
-    public Message parseMessageFromRawData(byte[] rawData) {
+    public Iso8583Message parseMessageFromRawData(byte[] rawData) {
         InputStream inputStream = new ByteArrayInputStream(rawData);
         return parseMessageFromStream(inputStream);
     }
 
     @Override
-    public Message parseMessageFromStream(InputStream messageStream) { //TODO: All of this is bad. Figure it out
+    public Iso8583Message parseMessageFromStream(InputStream messageStream) { //TODO: All of this is bad. Figure it out
         Iso8583MessageBuilder messageBuilder = new Iso8583MessageBuilder(messageDefinition);
 
         messageBuilder.setMessageTypeIndicator(messageDefinition.getMessageTypeIndicatorDefinition().getDataFieldParser()
