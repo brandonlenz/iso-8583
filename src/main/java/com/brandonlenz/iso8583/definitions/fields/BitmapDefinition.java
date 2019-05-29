@@ -6,7 +6,7 @@ import com.brandonlenz.iso8583.fields.Bitmap;
 import com.brandonlenz.iso8583.structure.content.ContentType;
 import com.brandonlenz.iso8583.structure.encoding.Encoding;
 
-public class BitmapDefinition extends FixedFieldDefinition {
+public final class BitmapDefinition extends FixedFieldDefinition {
 
     private final int startFieldIndex;
 
