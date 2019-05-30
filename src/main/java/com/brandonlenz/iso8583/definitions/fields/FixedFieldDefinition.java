@@ -43,4 +43,13 @@ public class FixedFieldDefinition extends FieldDefinition {
     public DataFieldParser<? extends FixedFieldDefinition, ? extends FixedField> getDataFieldParser() {
         return new FixedFieldParser(this);
     }
+
+    @Override
+    public String toString() {
+        return "Field Name: " + this.getFieldName().toString() +
+                ", Format: " + this.getFormat() +
+                ", Length: " + this.getLength() +
+                ", Encoding: " + this.getEncoding() +
+                ", Content Type: " + this.getContentType();
+    }
 }

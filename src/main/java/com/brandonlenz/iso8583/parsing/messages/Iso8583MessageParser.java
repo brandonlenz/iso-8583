@@ -33,7 +33,7 @@ public class Iso8583MessageParser implements MessageParser {
         messageBuilder.setPrimaryBitmap(messageDefinition.getPrimaryBitmapDefinition().getDataFieldParser()
                 .parseFromStream(messageStream).getRawData()); //TODO: getRawData = BAD
 
-        List<Integer> primaryBitmapFields = messageBuilder.getPrimaryBitmap().getSetBits();
+        List<Integer> primaryBitmapFields = messageBuilder.getMessage().getPrimaryBitmap().getSetBits();
         for (int fieldNumber : primaryBitmapFields) {
             FieldDefinition fieldDefinition = messageDefinition.getFieldDefinition(fieldNumber);
             DataField dataField = fieldDefinition.getDataFieldParser().parseFromStream(messageStream);

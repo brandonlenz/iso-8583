@@ -86,4 +86,14 @@ public final class VliFieldDefinition extends FieldDefinition {
     public DataFieldParser<VliFieldDefinition, VliField> getDataFieldParser() {
         return new VliFieldParser(this);
     }
+
+    @Override
+    public String toString() {
+        return "Field Name: " + this.getFieldName().toString() +
+                ", Format: " + this.getFormat() + " (" + vliDefinition.toString() + ")" +
+                ", Minimum Length: " + this.getMinimumLength() +
+                ", Maximum Length: " + this.getMaximumLength() +
+                ", Encoding: " + this.getEncoding() +
+                ", Content Type: " + this.getContentType();
+    }
 }
