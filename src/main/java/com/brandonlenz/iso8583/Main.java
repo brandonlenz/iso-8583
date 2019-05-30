@@ -2,6 +2,7 @@ package com.brandonlenz.iso8583;
 
 import com.brandonlenz.iso8583.building.messages.Iso8583MessageBuilder;
 import com.brandonlenz.iso8583.definitions.messages.SampleIso8583MessageDefinition;
+import com.brandonlenz.iso8583.definitions.names.FieldName;
 import com.brandonlenz.iso8583.fields.Bitmap;
 import com.brandonlenz.iso8583.fields.DataField;
 import com.brandonlenz.iso8583.messages.Iso8583Message;
@@ -62,29 +63,32 @@ public class Main { //TODO: log4j?
                 }
 
                 System.out.println();
-                System.out.print("Successful operation, press any key to continue...");
+                System.out.print("Successful operation, press enter to continue...");
                 System.in.read();
             } catch (RuntimeException | IOException e) {
-                System.out.println(e.getStackTrace());
+                System.out.println(e.getMessage());
                 System.out.println("Operation unsuccessful, please try again.");
             }
         }
     }
 
     private static void printHeader() {
-        System.out.println("######################################################################################################");
-        System.out.println("######################################################################################################");
-        System.out.println("###          ###          ###          ###########          ###          ###          ###          ###");
-        System.out.println("######   #######   ####   ###   ####   ###########   ####   ###   ##########   ####   ##########   ###");
-        System.out.println("######   #######   ##########   ####   ###########   ####   ###   ##########   ####   ##########   ###");
-        System.out.println("######   #######   ##########   ####   ###########   ####   ###   ##########   ####   ##########   ###");
-        System.out.println("######   #######          ###   ####   ###     ###          ###          ###          ######       ###");
-        System.out.println("######   ##############   ###   ####   ###########   ####   ##########   ###   ####   ##########   ###");
-        System.out.println("######   ##############   ###   ####   ###########   ####   ##########   ###   ####   ##########   ###");
-        System.out.println("######   #######   ####   ###   ####   ###########   ####   ##########   ###   ####   ##########   ###");
-        System.out.println("###          ###          ###          ###########          ###          ###          ###          ###");
-        System.out.println("######################################################################################################");
-        System.out.println("######################################################################################################");
+        System.out.println("IIIIIIIIII   SSSSSSSSSSSSSSS      OOOOOOOOO                           888888888     555555555555555555      888888888      333333333333333   ");
+        System.out.println("I::::::::I SS:::::::::::::::S   OO:::::::::OO                       88:::::::::88   5::::::::::::::::5    88:::::::::88   3:::::::::::::::33 ");
+        System.out.println("I::::::::IS:::::SSSSSS::::::S OO:::::::::::::OO                   88:::::::::::::88 5::::::::::::::::5  88:::::::::::::88 3::::::33333::::::3");
+        System.out.println("II::::::IIS:::::S     SSSSSSSO:::::::OOO:::::::O                 8::::::88888::::::85:::::555555555555 8::::::88888::::::83333333     3:::::3");
+        System.out.println("  I::::I  S:::::S            O::::::O   O::::::O                 8:::::8     8:::::85:::::5            8:::::8     8:::::8            3:::::3");
+        System.out.println("  I::::I  S:::::S            O:::::O     O:::::O                 8:::::8     8:::::85:::::5            8:::::8     8:::::8            3:::::3");
+        System.out.println("  I::::I   S::::SSSS         O:::::O     O:::::O                  8:::::88888:::::8 5:::::5555555555    8:::::88888:::::8     33333333:::::3 ");
+        System.out.println("  I::::I    SS::::::SSSSS    O:::::O     O:::::O ---------------   8:::::::::::::8  5:::::::::::::::5    8:::::::::::::8      3:::::::::::3  ");
+        System.out.println("  I::::I      SSS::::::::SS  O:::::O     O:::::O -:::::::::::::-  8:::::88888:::::8 555555555555:::::5  8:::::88888:::::8     33333333:::::3 ");
+        System.out.println("  I::::I         SSSSSS::::S O:::::O     O:::::O --------------- 8:::::8     8:::::8            5:::::58:::::8     8:::::8            3:::::3");
+        System.out.println("  I::::I              S:::::SO:::::O     O:::::O                 8:::::8     8:::::8            5:::::58:::::8     8:::::8            3:::::3");
+        System.out.println("  I::::I              S:::::SO::::::O   O::::::O                 8:::::8     8:::::85555555     5:::::58:::::8     8:::::8            3:::::3");
+        System.out.println("II::::::IISSSSSSS     S:::::SO:::::::OOO:::::::O                 8::::::88888::::::85::::::55555::::::58::::::88888::::::83333333     3:::::3");
+        System.out.println("I::::::::IS::::::SSSSSS:::::S OO:::::::::::::OO                   88:::::::::::::88  55:::::::::::::55  88:::::::::::::88 3::::::33333::::::3");
+        System.out.println("I::::::::IS:::::::::::::::SS    OO:::::::::OO                       88:::::::::88      55:::::::::55      88:::::::::88   3:::::::::::::::33 ");
+        System.out.println("IIIIIIIIII SSSSSSSSSSSSSSS        OOOOOOOOO                           888888888          555555555          888888888      333333333333333   ");
         System.out.println();
     }
 
@@ -130,24 +134,26 @@ public class Main { //TODO: log4j?
 
     private static void handlePrettyPrintRaw() {
         List<DataField> allFields = getAllDataFields(messageBuilder.getMessage());
+        int prettyPrintOffset = getPrettyPrintOffset(allFields);
 
         for (DataField dataField : allFields) {
-            System.out.format("%-20s: %s", dataField.getName(), DatatypeConverter.printHexBinary(dataField.getRawData()));
+            System.out.format("%-" + prettyPrintOffset + "s: %s", dataField.getName(), DatatypeConverter.printHexBinary(dataField.getRawData()));
             System.out.println();
         }
     }
 
     private static void handlePrettyPrintMessage() {
         List<DataField> allFields = getAllDataFields(messageBuilder.getMessage());
+        int prettyPrintOffset = getPrettyPrintOffset(allFields);
 
         for (DataField dataField : allFields) {
-            System.out.format("%-20s: %s", dataField.getName(), dataField.getData());
+            System.out.format("%-" + prettyPrintOffset + "s: %s", dataField.getName(), dataField.getData());
             System.out.println();
             if(dataField instanceof Bitmap) {
                 Bitmap bitmap = (Bitmap) dataField;
-                System.out.format("%-20s: %s", "", bitmap.getBinaryRepresentation());
+                System.out.format("%-" + prettyPrintOffset + "s: %s", "+--> BASE 2", bitmap.getBinaryRepresentation());
                 System.out.println();
-                System.out.format("%-20s: %s", "", bitmap.getSetBits());
+                System.out.format("%-" + prettyPrintOffset + "s: %s", "+--> FIELDS SET", bitmap.getSetBits());
                 System.out.println();
             }
         }
@@ -163,6 +169,16 @@ public class Main { //TODO: log4j?
             }
         }
         return allFields;
+    }
+
+    private static int getPrettyPrintOffset(List<DataField> dataFields) {
+        return dataFields.stream()
+                .map(DataField::getName)
+                .map(FieldName::toString)
+                .map(String::length)
+                .mapToInt(Integer::intValue)
+                .max()
+                .orElse(20) + 5;
     }
 }
 
