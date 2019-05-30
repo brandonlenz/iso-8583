@@ -18,7 +18,7 @@ public class DataFieldValidator {
     }
 
     private boolean contentIsValid(DataField dataField) {
-        return true; //TODO
+        return dataField.getDefinition().getContentType().isValid(dataField.getData());
     }
 
     private boolean formatIsValid(DataField dataField) {
