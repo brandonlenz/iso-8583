@@ -60,7 +60,7 @@ public abstract class FieldDefinition {
 
     @Override
     public String toString() {
-        return "Field Name = " + this.getFieldName().toString() +
+        return "Field Name: " + this.getFieldName().toString() +
                 ", Format: " + this.getFormat() +
                 ", Encoding: " + this.getEncoding() +
                 ", Content Type: " + this.getContentType();

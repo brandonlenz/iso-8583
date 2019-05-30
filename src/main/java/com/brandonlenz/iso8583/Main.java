@@ -2,8 +2,13 @@ package com.brandonlenz.iso8583;
 
 import com.brandonlenz.iso8583.building.messages.Iso8583MessageBuilder;
 import com.brandonlenz.iso8583.definitions.messages.SampleIso8583MessageDefinition;
+import com.brandonlenz.iso8583.fields.Bitmap;
+import com.brandonlenz.iso8583.fields.DataField;
+import com.brandonlenz.iso8583.messages.Iso8583Message;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 import javax.xml.bind.DatatypeConverter;
 
@@ -34,12 +39,18 @@ public class Main { //TODO: log4j?
                     case REMOVE_FIELD:
                         handleRemoveField();
                         break;
+                    case PRETTY_PRINT_RAW:
+                        handlePrettyPrintRaw();
+                        break;
+                    case PRETTY_PRINT_MESSAGE:
+                        handlePrettyPrintMessage();
+                        break;
                     case PRINT_RAW_DATA:
-                        System.out.println(DatatypeConverter.printHexBinary(messageBuilder.getMessage().getRawData()));
-                        break;
+                    System.out.println(DatatypeConverter.printHexBinary(messageBuilder.getMessage().getRawData()));
+                    break;
                     case PRINT_DATA:
-                        System.out.println(messageBuilder.getMessage().getData());
-                        break;
+                    System.out.println(messageBuilder.getMessage().getData());
+                    break;
                     case EXIT:
                         return; //exit this loop, and thusly the program.
                     case UNKNOWN:
@@ -116,17 +127,53 @@ public class Main { //TODO: log4j?
         int fieldNumber = scanner.nextInt();
         messageBuilder.removeField(fieldNumber);
     }
+
+    private static void handlePrettyPrintRaw() {
+        List<DataField> allFields = getAllDataFields(messageBuilder.getMessage());
+
+        for (DataField dataField : allFields) {
+            System.out.format("%-20s: %s", dataField.getName(), DatatypeConverter.printHexBinary(dataField.getRawData()));
+            System.out.println();
+        }
+    }
+
+    private static void handlePrettyPrintMessage() {
+        List<DataField> allFields = getAllDataFields(messageBuilder.getMessage());
+
+        for (DataField dataField : allFields) {
+            System.out.format("%-20s: %s", dataField.getName(), dataField.getData());
+            System.out.println();
+            if(dataField instanceof Bitmap) {
+                Bitmap bitmap = (Bitmap) dataField;
+                System.out.format("%-20s: %s", "", bitmap.getBinaryRepresentation());
+                System.out.println();
+                System.out.format("%-20s: %s", "", bitmap.getSetBits());
+                System.out.println();
+            }
+        }
+    }
+
+    private static List<DataField> getAllDataFields(Iso8583Message message) {
+        List<DataField> allFields = new ArrayList<>();
+        allFields.add(message.getMessageTypeIndicator());
+        allFields.add(message.getPrimaryBitmap());
+        for (DataField dataField : message.getDataFields()) {
+            if (dataField.getRawData() != null) {
+                allFields.add(dataField);
+            }
+        }
+        return allFields;
+    }
 }
 
 enum Option {
     NEW_MESSAGE(1),
     ADD_FIELD(2),
     REMOVE_FIELD(3),
-    PRETTY_PRINT_MESSAGE(4),//TODO:
-    PRETTY_PRINT_RAW(5), //TODO:
-    //    DUAL_DUMP(6),
-    PRINT_RAW_DATA(7),
-    PRINT_DATA(8),
+    PRETTY_PRINT_RAW(4),
+    PRETTY_PRINT_MESSAGE(5),
+    PRINT_RAW_DATA(6),
+    PRINT_DATA(7),
     EXIT(9),
     UNKNOWN(-1);
 

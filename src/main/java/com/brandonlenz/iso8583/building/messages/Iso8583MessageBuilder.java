@@ -36,18 +36,6 @@ public class Iso8583MessageBuilder implements MessageBuilder {
         message.setPrimaryBitmap(bitmap);
     }
 
-    public Bitmap getPrimaryBitmap() {
-        return message.getPrimaryBitmap();
-    }
-
-    public Bitmap getSecondaryBitmap() {
-        return message.getSecondaryBitmap();
-    }
-
-    public Bitmap getTertiaryBitmap() {
-        return message.getTertiaryBitmap();
-    }
-
     @Override
     public void setField(int dataFieldNumber, byte[] rawData) {
         DataField dataField = messageDefinition.getFieldDefinition(dataFieldNumber).getDataFieldBuilder()

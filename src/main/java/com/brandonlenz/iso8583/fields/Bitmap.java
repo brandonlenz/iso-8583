@@ -90,7 +90,7 @@ public class Bitmap extends FixedField {
             for (int bitIndex = 0; bitIndex < 8; bitIndex++) {
                 byte mask = (byte) (0b10000000 >>> bitIndex);
                 if (((bytes[byteIndex] & 0xFF) & mask) != 0) {
-                    bits.add(getDataFieldNumber(byteIndex, bitIndex));
+                    bits.add(startFieldIndex - 1 + getDataFieldNumber(byteIndex, bitIndex));
                 }
             }
         }
