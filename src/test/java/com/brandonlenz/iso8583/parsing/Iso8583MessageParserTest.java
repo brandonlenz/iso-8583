@@ -22,17 +22,17 @@ class Iso8583MessageParserTest {
                              "30 30 30 30 30 30 30 31 30 30 30 30" +
                              "31 35 36 31 35 30 37 32 30 30" +
                              "30 35 32" +
-                             "30 31 35 9F 26 08 01 02 03 04 05 06 07 08 9F 27 01 80";
+                             "30 31 35 9F 26 08 01 02 03 04 05 06 07 08 9F 27 01 80"; //TODO: Add secondary bitmap field for test now that its supported
 
         return DatatypeConverter.parseHexBinary(messageData.replace(" ", ""));
     }
 
     @Test
     void parseMessageFromRawData() {
-        Iso8583Message parsedMessage = (Iso8583Message) iso8583MessageParser.parseMessageFromRawData(rawMessageData);
+        Iso8583Message parsedMessage = iso8583MessageParser.parseMessageFromRawData(rawMessageData);
 
         assertEquals("0100", parsedMessage.getMessageTypeIndicator().getData());
-        assertEquals("5200020000000200", parsedMessage.getPrimaryBitmapField().getData());
+        assertEquals("5200020000000200", parsedMessage.getPrimaryBitmap().getData());
         assertEquals(Arrays.asList(2, 4, 7, 23, 55), parsedMessage.getPrimaryBitmap().getSetBits());
         assertEquals("161234567890123456", parsedMessage.getDataField(2).getData());
         assertEquals("000000010000", parsedMessage.getDataField(4).getData());

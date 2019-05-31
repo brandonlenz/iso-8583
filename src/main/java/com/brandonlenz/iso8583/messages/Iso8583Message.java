@@ -20,14 +20,8 @@ public class Iso8583Message implements Message {
     public Iso8583Message(Iso8583MessageDefinition definition) {
         this.definition = definition;
         this.primaryBitmap = definition.getPrimaryBitmapDefinition().getDataFieldBuilder()
-                .setRawData(new byte[definition.getPrimaryBitmapDefinition().getLength()])
-                .build();
+                .build(new byte[definition.getPrimaryBitmapDefinition().getLength()]);
         this.dataFields = createDataFieldsFromDefinition(definition);
-    }
-
-    public Iso8583Message(Iso8583MessageDefinition definition, DataField messageTypeIndicator) {
-        this(definition);
-        this.messageTypeIndicator = messageTypeIndicator;
     }
 
     @Override
@@ -83,10 +77,6 @@ public class Iso8583Message implements Message {
         this.messageTypeIndicator = messageTypeIndicator;
     }
 
-    public DataField getPrimaryBitmapField() {
-        return primaryBitmap;
-    }
-
     public Bitmap getPrimaryBitmap() {
         return primaryBitmap;
     }
@@ -104,7 +94,8 @@ public class Iso8583Message implements Message {
     }
 
     public boolean dataFieldBitIsSet(int dataFieldNumber) {
-        return getCorrespondingBitmap(dataFieldNumber).bitIsSet(dataFieldNumber);
+        Bitmap bitmap = getCorrespondingBitmap(dataFieldNumber);
+        return bitmap.getRawData() != null && !bitmap.getData().isEmpty() && bitmap.bitIsSet(dataFieldNumber);
     }
 
     @Override
@@ -121,7 +112,7 @@ public class Iso8583Message implements Message {
                         "Message does not contain DataField with name: " + fieldName.getName() + "."));
     }
 
-    public void setDataField(int dataFieldNumber, DataField dataField) { //TODO: Refactor.
+    public void setDataField(int dataFieldNumber, DataField dataField) {
         if (dataFieldNumber < 1 || dataFieldNumber > definition.getFieldDefinitions().size()) {
             throw new IllegalArgumentException("Message does not contain FieldDefinition for DataField number " + dataFieldNumber);
         }
@@ -134,8 +125,7 @@ public class Iso8583Message implements Message {
             int bitmapFieldNumber = dataFields.indexOf(bitmap) + 1;
             if (!dataFieldBitIsSet(bitmapFieldNumber)) {
                 bitmap = bitmap.getDefinition().getDataFieldBuilder()
-                        .setRawData(new byte[bitmap.getDefinition().getByteLength()])
-                        .build();
+                        .build(new byte[bitmap.getDefinition().getByteLength()]);
                 setDataField(bitmapFieldNumber, bitmap);
             }
         }
@@ -153,11 +143,16 @@ public class Iso8583Message implements Message {
         DataField emptyDataField = dataFields.get(dataFieldNumber - 1).getDefinition().getDataFieldBuilder().build(); //initialize an empty field
         dataFields.set(dataFieldNumber - 1, emptyDataField);
         bitmap.unsetBit(dataFieldNumber);
-        if (dataFields.indexOf(bitmap) != -1 && bitmap.getSetBits().isEmpty()) {
+        if (dataFields.contains(bitmap) && bitmap.getSetBits().isEmpty()) {
             removeDataField(dataFields.indexOf(bitmap) + 1);
         }
     }
 
+    /**
+     * gets the bitmap that governs the bit for a given data field number
+     * @param dataFieldNumber the number of the data field to get the "parent" bitmap of
+     * @return the "parent" bitmap
+     */
     private Bitmap getCorrespondingBitmap(int dataFieldNumber) {
         if (dataFieldNumber < getSecondaryBitmap().getStartFieldIndex()) {
             return getPrimaryBitmap();

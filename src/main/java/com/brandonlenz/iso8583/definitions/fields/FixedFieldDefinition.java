@@ -3,15 +3,14 @@ package com.brandonlenz.iso8583.definitions.fields;
 import com.brandonlenz.iso8583.building.fields.DataFieldBuilder;
 import com.brandonlenz.iso8583.definitions.names.FieldName;
 import com.brandonlenz.iso8583.fields.FixedField;
-import com.brandonlenz.iso8583.parsing.fields.DataFieldParser;
 import com.brandonlenz.iso8583.parsing.fields.FixedFieldParser;
-import com.brandonlenz.iso8583.structure.format.Format;
 import com.brandonlenz.iso8583.structure.content.ContentType;
 import com.brandonlenz.iso8583.structure.encoding.Encoding;
+import com.brandonlenz.iso8583.structure.format.Format;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FixedFieldDefinition extends FieldDefinition {
+public class FixedFieldDefinition extends FieldDefinition<FixedField> {
 
     private int length;
 
@@ -34,13 +33,12 @@ public class FixedFieldDefinition extends FieldDefinition {
     }
 
     @Override
-    public DataFieldBuilder<? extends FixedFieldDefinition, ? extends FixedField> getDataFieldBuilder() {
-        FixedField fixedField = new FixedField(this);
-        return new DataFieldBuilder<>(this, fixedField);
+    public DataFieldBuilder<FixedField> getDataFieldBuilder() {
+        return new DataFieldBuilder<>(() -> new FixedField(this));
     }
 
     @Override
-    public DataFieldParser<? extends FixedFieldDefinition, ? extends FixedField> getDataFieldParser() {
+    public FixedFieldParser getDataFieldParser() {
         return new FixedFieldParser(this);
     }
 

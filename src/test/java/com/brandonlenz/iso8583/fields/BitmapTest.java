@@ -19,7 +19,7 @@ class BitmapTest {
     @BeforeEach
     void setUp() {
         String emptyBitmapData = "00 00 00 00 00 00 00 00";
-        bitmap = definition.getDataFieldBuilder().setData(emptyBitmapData).build();
+        bitmap = definition.getDataFieldBuilder().build(emptyBitmapData);
     }
 
     @Test

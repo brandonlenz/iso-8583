@@ -1,8 +1,8 @@
 package com.brandonlenz.iso8583.parsing.messages;
 
-import com.brandonlenz.iso8583.building.messages.Iso8583MessageBuilder;
 import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
+import com.brandonlenz.iso8583.fields.Bitmap;
 import com.brandonlenz.iso8583.fields.DataField;
 import com.brandonlenz.iso8583.messages.Iso8583Message;
 import java.io.ByteArrayInputStream;
@@ -24,24 +24,32 @@ public class Iso8583MessageParser implements MessageParser {
     }
 
     @Override
-    public Iso8583Message parseMessageFromStream(InputStream messageStream) { //TODO: All of this is bad. Figure it out
-        Iso8583MessageBuilder messageBuilder = new Iso8583MessageBuilder(messageDefinition);
+    public Iso8583Message parseMessageFromStream(InputStream messageStream) {
+        Iso8583Message message = new Iso8583Message(messageDefinition);
 
-        messageBuilder.setMessageTypeIndicator(messageDefinition.getMessageTypeIndicatorDefinition().getDataFieldParser()
-                        .parseFromStream(messageStream).getRawData()); //TODO: getRawData = BAD
+        message.setMessageTypeIndicator(messageDefinition.getMessageTypeIndicatorDefinition().getDataFieldParser()
+                .parseFromStream(messageStream));
 
-        messageBuilder.setPrimaryBitmap(messageDefinition.getPrimaryBitmapDefinition().getDataFieldParser()
-                .parseFromStream(messageStream).getRawData()); //TODO: getRawData = BAD
+        message.setPrimaryBitmap(messageDefinition.getPrimaryBitmapDefinition().getDataFieldParser()
+                .parseFromStream(messageStream));
 
-        List<Integer> primaryBitmapFields = messageBuilder.getMessage().getPrimaryBitmap().getSetBits();
-        for (int fieldNumber : primaryBitmapFields) {
+        parseDataFieldsFromBitmapBits(messageStream, message.getPrimaryBitmap(), message);
+
+        if (message.dataFieldBitIsSet(message.getDefinition().getSecondaryBitmapFieldNumber())) {
+            parseDataFieldsFromBitmapBits(messageStream, message.getSecondaryBitmap(),message);
+        }
+
+        return message;
+    }
+
+    private void parseDataFieldsFromBitmapBits(InputStream messageStream, Bitmap bitmap, Iso8583Message message) {
+        //TODO: Once messages are refactored to contain ONLY the fields that are set,
+        // return a collection of DataFields here and do not take message as an input
+        List<Integer> bitmapFields = bitmap.getSetBits();
+        for (int fieldNumber : bitmapFields) {
             FieldDefinition fieldDefinition = messageDefinition.getFieldDefinition(fieldNumber);
             DataField dataField = fieldDefinition.getDataFieldParser().parseFromStream(messageStream);
-            byte[] fieldData = dataField.getRawData();
-            messageBuilder.setField(fieldNumber, fieldData); //TODO: getRawData = BAD
+            message.setDataField(fieldNumber, dataField);
         }
-        //if has secondary bitmap, parse those
-        //if has tertiary bitmap, parse those
-        return messageBuilder.getMessage();
     }
 }

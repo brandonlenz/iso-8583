@@ -10,7 +10,7 @@ import com.brandonlenz.iso8583.structure.format.Format;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class FieldDefinition {
+public abstract class FieldDefinition<F extends DataField> {
 
     private final FieldName name;
     private final Format format;
@@ -54,9 +54,9 @@ public abstract class FieldDefinition {
         return subfieldDefinitions;
     }
 
-    public abstract <D extends FieldDefinition, F extends DataField> DataFieldBuilder<D, F> getDataFieldBuilder();
+    public abstract DataFieldBuilder<F> getDataFieldBuilder();
 
-    public abstract <D extends FieldDefinition, F extends DataField> DataFieldParser<D, F> getDataFieldParser();
+    public abstract DataFieldParser<F> getDataFieldParser();
 
     @Override
     public String toString() {
