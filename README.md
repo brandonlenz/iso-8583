@@ -27,5 +27,5 @@ Brands and acquirers generally implement different flavors of ISO-8583 to build 
  
  There are certainly code smells and less-than-desirable patterns implemented. Over time these will be refactored and improved.
  
- The goal is to keep the balance of abstraction and maintainability while building on this library, and to continue to maintain a high level of test coverage.
+ Overall, I hope to maintain foster and maintain a balance of abstraction and maintainability while building on this library, and to continue to maintain a high level of test coverage.
  
