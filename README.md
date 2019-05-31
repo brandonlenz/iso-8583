@@ -21,7 +21,7 @@ Brands and acquirers generally implement different flavors of ISO-8583 to build 
  At the moment this library easiest "point-of-entry" is to run the simple CLI interface in the [Main](src/main/java/com/brandonlenz/iso8583/Main.java) class. 
  This simple application can be used to demo the library as well as the messaging specification.
  
- ##### Notes:
+ #### Notes:
  
  This library is by no means suited for production use, however the goal is to continually improve and extend the library's capabilities.
  
