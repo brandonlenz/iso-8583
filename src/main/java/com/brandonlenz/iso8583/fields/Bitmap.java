@@ -5,7 +5,7 @@ import com.brandonlenz.iso8583.structure.encoding.Encoding;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Bitmap extends FixedField {
+public class Bitmap extends DataField {
 
     private final BitmapDefinition definition;
     private final int startFieldIndex;

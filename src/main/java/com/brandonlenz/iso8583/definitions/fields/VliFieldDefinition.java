@@ -1,10 +1,8 @@
 package com.brandonlenz.iso8583.definitions.fields;
 
-import com.brandonlenz.iso8583.building.fields.DataFieldBuilder;
+import com.brandonlenz.iso8583.building.fields.VliDataFieldBuilder;
 import com.brandonlenz.iso8583.definitions.names.FieldName;
-import com.brandonlenz.iso8583.fields.FixedField;
 import com.brandonlenz.iso8583.fields.VliField;
-import com.brandonlenz.iso8583.parsing.fields.DataFieldParser;
 import com.brandonlenz.iso8583.parsing.fields.VliFieldParser;
 import com.brandonlenz.iso8583.structure.content.ContentType;
 import com.brandonlenz.iso8583.structure.encoding.Encoding;
@@ -12,7 +10,7 @@ import com.brandonlenz.iso8583.structure.format.Format;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class VliFieldDefinition extends FieldDefinition {
+public final class VliFieldDefinition extends FieldDefinition<VliField> {
 
     private final VliDefinition vliDefinition;
     private final Integer minimumLength;
@@ -76,14 +74,12 @@ public final class VliFieldDefinition extends FieldDefinition {
     }
 
     @Override
-    public DataFieldBuilder<VliFieldDefinition, VliField> getDataFieldBuilder() {
-        FixedField vli = new FixedField(this.getVliDefinition());
-        VliField vliField = new VliField(this, vli);
-        return new DataFieldBuilder<>(this, vliField);
+    public VliDataFieldBuilder getDataFieldBuilder() {
+        return new VliDataFieldBuilder(() -> new VliField(this));
     }
 
     @Override
-    public DataFieldParser<VliFieldDefinition, VliField> getDataFieldParser() {
+    public VliFieldParser getDataFieldParser() {
         return new VliFieldParser(this);
     }
 

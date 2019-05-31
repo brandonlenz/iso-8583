@@ -11,14 +11,19 @@ class HexadecimalAsciiEncodingHandlerTest {
 
     @Test
     void encode() {
-        Assertions.assertArrayEquals(encodingHandler.encode(TEST_HEXADECIMAL_ASCII_STRING),
-                TEST_HEXADECIMAL_ASCII_BYTE_ARRAY);
+        Assertions.assertArrayEquals(TEST_HEXADECIMAL_ASCII_BYTE_ARRAY,
+                encodingHandler.encode(TEST_HEXADECIMAL_ASCII_STRING));
     }
 
     @Test
     void decode() {
-        Assertions
-                .assertEquals(encodingHandler.decode(TEST_HEXADECIMAL_ASCII_BYTE_ARRAY), TEST_HEXADECIMAL_ASCII_STRING);
+        Assertions.assertEquals(TEST_HEXADECIMAL_ASCII_STRING,
+                encodingHandler.decode(TEST_HEXADECIMAL_ASCII_BYTE_ARRAY));
     }
 
+    @Test
+    void encodeInt() {
+        Assertions.assertArrayEquals(new byte[] {0x31, 0x36},
+                encodingHandler.encode(16));
+    }
 }

@@ -7,6 +7,12 @@ public class VliField extends DataField {
     private final VliFieldDefinition definition;
     private final FixedField vli;
 
+    public VliField(VliFieldDefinition fieldDefinition) {
+        super(fieldDefinition);
+        this.definition = fieldDefinition;
+        this.vli = new FixedField(fieldDefinition.getVliDefinition());
+    }
+
     public VliField(VliFieldDefinition fieldDefinition, FixedField vli) {
         super(fieldDefinition);
         this.definition = fieldDefinition;
@@ -32,22 +38,15 @@ public class VliField extends DataField {
     }
 
     @Override
-    public void setRawData(byte[] rawData) {
-        //Set the vli data first:
-        int vliByteLength = vli.getDefinition().getByteLength();
-        byte[] vliRawData = new byte[vliByteLength];
-        System.arraycopy(rawData, 0, vliRawData, 0, vliByteLength);
-        vli.setRawData(vliRawData);
-
-        //Set this VliField's data with the remainder:
-        int fieldByteLength = rawData.length - vliByteLength;
-        byte[] dataFieldRawData = new byte[fieldByteLength];
-        System.arraycopy(rawData, vliByteLength, dataFieldRawData, 0, fieldByteLength);
-        super.setRawData(dataFieldRawData);
-    }
-
-    @Override
     public String getData() {
         return vli.getData() + super.getData();
+    }
+
+    public void setVliRawData(byte[] rawData) {
+        vli.setRawData(rawData);
+    }
+
+    public FixedField getVli() {
+        return vli;
     }
 }

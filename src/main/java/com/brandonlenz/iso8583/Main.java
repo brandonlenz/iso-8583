@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Scanner;
 import javax.xml.bind.DatatypeConverter;
 
-public class Main { //TODO: log4j?
+public class Main {
 
     private static Iso8583MessageBuilder messageBuilder;
     private static Scanner scanner = new Scanner(System.in);

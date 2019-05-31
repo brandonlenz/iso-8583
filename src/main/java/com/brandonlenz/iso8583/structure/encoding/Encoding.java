@@ -27,6 +27,14 @@ public enum Encoding {
         return this.encodingHandler.encode(data);
     }
 
+    public byte[] encode(int integer) {
+        return this.encodingHandler.encode(integer);
+    }
+
+    public byte[] encode(int integer, int maximumBytes) {
+        return this.encodingHandler.encode(integer, maximumBytes);
+    }
+
     public String decode(byte[] rawData) {
         return this.encodingHandler.decode(rawData);
     }

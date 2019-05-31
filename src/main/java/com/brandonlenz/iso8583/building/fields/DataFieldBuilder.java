@@ -1,34 +1,30 @@
 package com.brandonlenz.iso8583.building.fields;
 
-import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
 import com.brandonlenz.iso8583.fields.DataField;
-import com.brandonlenz.iso8583.validation.DataFieldValidator;
+import java.util.function.Supplier;
 
-public class DataFieldBuilder<D extends FieldDefinition, F extends DataField> {
+public class DataFieldBuilder<F extends DataField> {
 
-    private static final DataFieldValidator datafieldValidator = new DataFieldValidator(); //TODO: could break on vli (since VLI and Datafield may have different formats)
-    private final D fieldDefinition;
-    private final F dataField;
+    final Supplier<F> supplier;
 
-    public DataFieldBuilder(D fieldDefinition, F dataField) {
-        this.fieldDefinition = fieldDefinition;
-        this.dataField = dataField;
+    public DataFieldBuilder(Supplier<F> supplier) {
+        this.supplier = supplier;
     }
 
     public F build() {
-        return this.dataField;
+        return supplier.get();
     }
 
-    public DataFieldBuilder<D, F> setRawData(byte[] rawData) {
+    public F build(byte[] rawData) {
+        F dataField = supplier.get();
         dataField.setRawData(rawData);
-        if (!datafieldValidator.dataFieldIsValid(dataField)) {
-            throw new IllegalArgumentException("The supplied data was not valid");
-        }
-        return this;
+        return dataField;
     }
 
-    public DataFieldBuilder<D, F> setData(String data) {
-        dataField.setRawData(fieldDefinition.getEncoding().encode(data));
-        return this;
+    public F build(String data) {
+        F dataField = supplier.get();
+        byte[] rawData = dataField.getDefinition().getEncoding().encode(data);
+        dataField.setRawData(rawData);
+        return dataField;
     }
 }

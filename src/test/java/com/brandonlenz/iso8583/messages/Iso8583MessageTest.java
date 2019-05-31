@@ -75,7 +75,7 @@ class Iso8583MessageTest {
     @Test
     void setAndUnsetTertiaryBitmapFields() {
         //Set the fields
-        //TODO: For now throw exception as Tertiaty Bitmaps are not really supported (but could be easily)
+        //TODO: For now throw exception as Tertiary Bitmaps are not really supported (but could be easily)
         DataField testField150 = iso8583Message.getDefinition().getFieldDefinition(100).getDataFieldBuilder().build();
         assertThrows(IllegalArgumentException.class, () -> iso8583Message.setDataField(150, testField150));
 //        assertTrue(iso8583Message.dataFieldBitIsSet(1));

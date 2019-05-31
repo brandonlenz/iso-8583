@@ -17,32 +17,27 @@ public class Iso8583MessageBuilder implements MessageBuilder {
 
     public void setMessageTypeIndicator(byte[] rawData) {
         DataField messageTypeIndicator = messageDefinition.getMessageTypeIndicatorDefinition().getDataFieldBuilder()
-                .setRawData(rawData)
-                .build();
+                .build(rawData);
         message.setMessageTypeIndicator(messageTypeIndicator);
     }
 
     public void setMessageTypeIndicator(String data) {
         DataField messageTypeIndicator = messageDefinition.getMessageTypeIndicatorDefinition().getDataFieldBuilder()
-                .setData(data)
-                .build();
+                .build(data);
         message.setMessageTypeIndicator(messageTypeIndicator);
     }
 
     public void setPrimaryBitmap(byte[] rawData) {
         Bitmap bitmap = messageDefinition.getPrimaryBitmapDefinition().getDataFieldBuilder()
-                .setRawData(rawData)
-                .build();
+                .build(rawData);
         message.setPrimaryBitmap(bitmap);
     }
 
     @Override
     public void setField(int dataFieldNumber, byte[] rawData) {
         DataField dataField = messageDefinition.getFieldDefinition(dataFieldNumber).getDataFieldBuilder()
-                .setRawData(rawData)
-                .build();
+                .build(rawData);
         message.setDataField(dataFieldNumber, dataField);
-
     }
 
     @Override

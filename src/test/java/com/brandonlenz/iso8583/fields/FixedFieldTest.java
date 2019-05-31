@@ -17,7 +17,7 @@ class FixedFieldTest {
     @Test
     void testFixedField() {
         String testAmountData = "000000120000";
-        FixedField amountField = definition.getDataFieldBuilder().setData(testAmountData).build();
+        FixedField amountField = definition.getDataFieldBuilder().build(testAmountData);
 
         Assertions.assertEquals("000000120000", amountField.getData());
     }
