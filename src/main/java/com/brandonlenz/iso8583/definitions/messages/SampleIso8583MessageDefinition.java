@@ -34,7 +34,7 @@ public class SampleIso8583MessageDefinition extends Iso8583MessageDefinition {
     private static List<FieldDefinition> getSampleIso8583FieldDefinitions() {
         List<FieldDefinition> fieldDefinitions = new ArrayList<>();
 
-        fieldDefinitions.add(new BitmapDefinition( FieldName.SECONDARY_BITMAP,                             8,      BYTE_FIELD_ENCODING,            65));
+        fieldDefinitions.add(new BitmapDefinition(      FieldName.SECONDARY_BITMAP,                             8,      BYTE_FIELD_ENCODING,            65));
         fieldDefinitions.add(new VliFieldDefinition(    FieldName.PRIMARY_ACCOUNT_NUMBER,                       15, 19, NUMERIC_FIELD_ENCODING,         ContentType.NUMERIC,                new VliDefinition(2, Encoding.HEXADECIMAL_ASCII)));
         fieldDefinitions.add(new FixedFieldDefinition(  FieldName.PROCESSING_CODE,                              6,      NUMERIC_FIELD_ENCODING,         ContentType.NUMERIC));
         fieldDefinitions.add(new FixedFieldDefinition(  FieldName.AMOUNT_TRANSACTION,                           12,     NUMERIC_FIELD_ENCODING,         ContentType.NUMERIC));
@@ -88,7 +88,7 @@ public class SampleIso8583MessageDefinition extends Iso8583MessageDefinition {
         fieldDefinitions.add(new FixedFieldDefinition(  FieldName.PERSONAL_IDENTIFICATION_NUMBER_DATA,          8,      BYTE_FIELD_ENCODING,            ContentType.BYTES));
         fieldDefinitions.add(new FixedFieldDefinition(  FieldName.SECURITY_RELATED_CONTROL_INFORMATION,         16,     NUMERIC_FIELD_ENCODING,         ContentType.NUMERIC));
         fieldDefinitions.add(new VliFieldDefinition(    FieldName.ADDITIONAL_AMOUNTS,                           120,    ALPHANUMERIC_FIELD_ENCODING,    ContentType.ALPHANUMERIC,           new VliDefinition(3, Encoding.HEXADECIMAL_ASCII)));
-        fieldDefinitions.add(new VliFieldDefinition(    FieldName.ICC_DATA,                                     999,    BYTE_FIELD_ENCODING,    ContentType.ALPHANUMERIC_SPECIAL,   new VliDefinition(3, Encoding.HEXADECIMAL_ASCII)));
+        fieldDefinitions.add(new VliFieldDefinition(    FieldName.ICC_DATA,                                     999,    BYTE_FIELD_ENCODING,            ContentType.ALPHANUMERIC_SPECIAL,   new VliDefinition(3, Encoding.HEXADECIMAL_ASCII)));
         fieldDefinitions.add(new VliFieldDefinition(    FieldName.RESERVED_ISO,                                 999,    ALPHANUMERIC_FIELD_ENCODING,    ContentType.ALPHANUMERIC_SPECIAL,   new VliDefinition(3, Encoding.HEXADECIMAL_ASCII)));
         fieldDefinitions.add(new VliFieldDefinition(    FieldName.RESERVED_NATIONAL,                            999,    ALPHANUMERIC_FIELD_ENCODING,    ContentType.ALPHANUMERIC_SPECIAL,   new VliDefinition(3, Encoding.HEXADECIMAL_ASCII)));
         fieldDefinitions.add(new VliFieldDefinition(    FieldName.RESERVED_NATIONAL,                            999,    ALPHANUMERIC_FIELD_ENCODING,    ContentType.ALPHANUMERIC_SPECIAL,   new VliDefinition(3, Encoding.HEXADECIMAL_ASCII)));
@@ -98,7 +98,7 @@ public class SampleIso8583MessageDefinition extends Iso8583MessageDefinition {
         fieldDefinitions.add(new VliFieldDefinition(    FieldName.RESERVED_PRIVATE,                             999,    ALPHANUMERIC_FIELD_ENCODING,    ContentType.ALPHANUMERIC_SPECIAL,   new VliDefinition(3, Encoding.HEXADECIMAL_ASCII)));
         fieldDefinitions.add(new VliFieldDefinition(    FieldName.RESERVED_PRIVATE,                             999,    ALPHANUMERIC_FIELD_ENCODING,    ContentType.ALPHANUMERIC_SPECIAL,   new VliDefinition(3, Encoding.HEXADECIMAL_ASCII)));
         fieldDefinitions.add(new FixedFieldDefinition(  FieldName.MESSAGE_AUTHENTICATION_CODE,                  8,      BYTE_FIELD_ENCODING,            ContentType.BYTES));
-        fieldDefinitions.add(new BitmapDefinition( FieldName.TERTIARY_BITMAP,                              8,      BYTE_FIELD_ENCODING,            129));
+        fieldDefinitions.add(new BitmapDefinition(      FieldName.TERTIARY_BITMAP,                              8,      BYTE_FIELD_ENCODING,            129));
         fieldDefinitions.add(new FixedFieldDefinition(  FieldName.SETTLEMENT_CODE,                              1,      NUMERIC_FIELD_ENCODING,         ContentType.NUMERIC));
         fieldDefinitions.add(new FixedFieldDefinition(  FieldName.EXTENDED_PAYMENT_CODE,                        2,      NUMERIC_FIELD_ENCODING,         ContentType.NUMERIC));
         fieldDefinitions.add(new FixedFieldDefinition(  FieldName.RECEIVING_INSTITUTION_COUNTRY_CODE,           3,      NUMERIC_FIELD_ENCODING,         ContentType.NUMERIC));
