@@ -93,6 +93,14 @@ public class Iso8583Message implements Message {
         return (Bitmap) getDataField(FieldName.TERTIARY_BITMAP);
     }
 
+    public boolean secondaryBitmapBitIsSet() {
+        return dataFieldBitIsSet(definition.getSecondaryBitmapFieldNumber());
+    }
+
+    public boolean tertiaryBitmapBitIsSet() {
+        return dataFieldBitIsSet(definition.getTertiaryBitmapFieldNumber());
+    }
+
     public boolean dataFieldBitIsSet(int dataFieldNumber) {
         Bitmap bitmap = getCorrespondingBitmap(dataFieldNumber);
         return bitmap.getRawData() != null && !bitmap.getData().isEmpty() && bitmap.bitIsSet(dataFieldNumber);
