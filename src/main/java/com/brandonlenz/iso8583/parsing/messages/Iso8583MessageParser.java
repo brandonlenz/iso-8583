@@ -35,8 +35,12 @@ public class Iso8583MessageParser implements MessageParser {
 
         parseDataFieldsFromBitmapBits(messageStream, message.getPrimaryBitmap(), message);
 
-        if (message.dataFieldBitIsSet(message.getDefinition().getSecondaryBitmapFieldNumber())) {
-            parseDataFieldsFromBitmapBits(messageStream, message.getSecondaryBitmap(),message);
+        if (message.secondaryBitmapBitIsSet()) {
+            parseDataFieldsFromBitmapBits(messageStream, message.getSecondaryBitmap(), message);
+        }
+
+        if (message.tertiaryBitmapBitIsSet()) {
+            parseDataFieldsFromBitmapBits(messageStream, message.getTertiaryBitmap(), message);
         }
 
         return message;

@@ -32,12 +32,18 @@ class Iso8583MessageParserTest {
         Iso8583Message parsedMessage = iso8583MessageParser.parseMessageFromRawData(rawMessageData);
 
         assertEquals("0100", parsedMessage.getMessageTypeIndicator().getData());
+
         assertEquals("5200020000000200", parsedMessage.getPrimaryBitmap().getData());
         assertEquals(Arrays.asList(2, 4, 7, 23, 55), parsedMessage.getPrimaryBitmap().getSetBits());
+
         assertEquals("161234567890123456", parsedMessage.getDataField(2).getData());
+
         assertEquals("000000010000", parsedMessage.getDataField(4).getData());
+
         assertEquals("1561507200", parsedMessage.getDataField(7).getData());
+
         assertEquals("052", parsedMessage.getDataField(23).getData());
+
         assertEquals("0159F260801020304050607089F270180", parsedMessage.getDataField(55).getData());
 
         assertArrayEquals(rawMessageData, parsedMessage.getRawData());
