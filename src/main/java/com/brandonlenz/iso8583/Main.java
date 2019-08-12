@@ -2,7 +2,7 @@ package com.brandonlenz.iso8583;
 
 import com.brandonlenz.iso8583.building.messages.Iso8583MessageBuilder;
 import com.brandonlenz.iso8583.definitions.messages.SampleIso8583MessageDefinition;
-import com.brandonlenz.iso8583.definitions.names.FieldName;
+import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
 import com.brandonlenz.iso8583.fields.Bitmap;
 import com.brandonlenz.iso8583.fields.DataField;
 import com.brandonlenz.iso8583.messages.Iso8583Message;

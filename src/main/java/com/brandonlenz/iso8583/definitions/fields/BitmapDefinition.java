@@ -1,7 +1,7 @@
 package com.brandonlenz.iso8583.definitions.fields;
 
 import com.brandonlenz.iso8583.building.fields.DataFieldBuilder;
-import com.brandonlenz.iso8583.definitions.names.FieldName;
+import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
 import com.brandonlenz.iso8583.fields.Bitmap;
 import com.brandonlenz.iso8583.parsing.fields.BitmapParser;
 import com.brandonlenz.iso8583.structure.content.ContentType;
