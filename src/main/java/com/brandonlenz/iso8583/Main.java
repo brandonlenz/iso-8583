@@ -9,8 +9,11 @@ import com.brandonlenz.iso8583.messages.Iso8583Message;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 import javax.xml.bind.DatatypeConverter;
 
 public class Main {
@@ -163,11 +166,12 @@ public class Main {
         List<DataField> allFields = new ArrayList<>();
         allFields.add(message.getMessageTypeIndicator());
         allFields.add(message.getPrimaryBitmap());
-        for (DataField dataField : message.getDataFields()) {
-            if (dataField.getRawData() != null) {
-                allFields.add(dataField);
-            }
-        }
+        allFields.addAll(message.getDataFields()
+                .entrySet()
+                .stream()
+                .sorted(Comparator.comparingInt(Entry::getKey))
+                .map(Entry::getValue)
+                .collect(Collectors.toList()));
         return allFields;
     }
 
