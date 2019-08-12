@@ -39,6 +39,6 @@ class Iso8583MessageBuilderTest {
         iso8583MessageBuilder.setField(4, TEST_AMOUNT_RAW_DATA);
         iso8583MessageBuilder.removeField(4);
 
-        Assertions.assertNull(iso8583MessageBuilder.getMessage().getDataField(4).getRawData());
+        Assertions.assertNull(iso8583MessageBuilder.getMessage().getDataField(4));
     }
 }

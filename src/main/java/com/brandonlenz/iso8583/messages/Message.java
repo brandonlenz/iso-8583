@@ -1,11 +1,10 @@
 package com.brandonlenz.iso8583.messages;
 
 import com.brandonlenz.iso8583.definitions.messages.MessageDefinition;
-import com.brandonlenz.iso8583.definitions.names.FieldName;
 import com.brandonlenz.iso8583.fields.DataField;
-import java.util.List;
+import java.util.Map;
 
-public interface Message {
+public interface Message { //TODO: For non index-driven messages, rework inheritance
 
     byte[] getRawData();
 
@@ -13,9 +12,7 @@ public interface Message {
 
     MessageDefinition getDefinition();
 
-    List<DataField> getDataFields();
+    Map<Integer, DataField> getDataFields();
 
     DataField getDataField(int fieldIndex);
-
-    DataField getDataField(FieldName fieldName);
 }

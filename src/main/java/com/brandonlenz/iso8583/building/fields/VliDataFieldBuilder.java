@@ -16,10 +16,6 @@ public class VliDataFieldBuilder extends DataFieldBuilder<VliField> {
         return buildFromRawData(rawData, vliField);
     }
 
-    private byte[] createVliRawData(int indicatedLength, VliDefinition vliDefinition) {
-        return vliDefinition.getEncoding().encode(indicatedLength, vliDefinition.getByteLength());
-    }
-
     @Override
     public VliField build(String data) {
         VliField vliField = supplier.get();
@@ -32,5 +28,9 @@ public class VliDataFieldBuilder extends DataFieldBuilder<VliField> {
         vliField.setVliRawData(vliRawData);
         vliField.setRawData(rawData);
         return vliField;
+    }
+
+    private byte[] createVliRawData(int indicatedLength, VliDefinition vliDefinition) {
+        return vliDefinition.getEncoding().encode(indicatedLength, vliDefinition.getByteLength());
     }
 }
