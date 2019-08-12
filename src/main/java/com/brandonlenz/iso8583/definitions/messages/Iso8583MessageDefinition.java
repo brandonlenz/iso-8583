@@ -2,7 +2,7 @@ package com.brandonlenz.iso8583.definitions.messages;
 
 import com.brandonlenz.iso8583.definitions.fields.BitmapDefinition;
 import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
-import com.brandonlenz.iso8583.definitions.names.FieldName;
+import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
 import java.util.Map;
 
 public abstract class Iso8583MessageDefinition implements MessageDefinition {

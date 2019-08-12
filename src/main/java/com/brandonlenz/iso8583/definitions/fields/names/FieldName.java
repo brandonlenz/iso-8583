@@ -1,4 +1,4 @@
-package com.brandonlenz.iso8583.definitions.names;
+package com.brandonlenz.iso8583.definitions.fields.names;
 
 public enum FieldName {
     MTI("Message Type Indicator (MTI)"),

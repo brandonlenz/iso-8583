@@ -1,7 +1,7 @@
 package com.brandonlenz.iso8583.fields;
 
 import com.brandonlenz.iso8583.definitions.fields.FixedFieldDefinition;
-import com.brandonlenz.iso8583.definitions.names.FieldName;
+import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
 import com.brandonlenz.iso8583.structure.content.ContentType;
 import com.brandonlenz.iso8583.structure.encoding.Encoding;
 import org.junit.jupiter.api.Assertions;
