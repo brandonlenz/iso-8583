@@ -2,7 +2,6 @@ package com.brandonlenz.iso8583.definitions.messages;
 
 import com.brandonlenz.iso8583.definitions.fields.BitmapDefinition;
 import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
-import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
 import java.util.Map;
 
 public abstract class Iso8583MessageDefinition implements MessageDefinition {
@@ -14,8 +13,8 @@ public abstract class Iso8583MessageDefinition implements MessageDefinition {
     private final Map<Integer, FieldDefinition> fieldDefinitions;
 
     public Iso8583MessageDefinition(FieldDefinition messageTypeIndicatorDefinition,
-                             BitmapDefinition primaryBitmapDefinition,
-                             Map<Integer, FieldDefinition> fieldDefinitions) {
+                                    BitmapDefinition primaryBitmapDefinition,
+                                    Map<Integer, FieldDefinition> fieldDefinitions) {
         this.messageTypeIndicatorDefinition = messageTypeIndicatorDefinition;
         this.primaryBitmapDefinition = primaryBitmapDefinition;
         this.fieldDefinitions = fieldDefinitions;
@@ -29,12 +28,14 @@ public abstract class Iso8583MessageDefinition implements MessageDefinition {
         return primaryBitmapDefinition;
     }
 
+    //TODO: Rework to not require casting of bitmap fields on get
     public BitmapDefinition getSecondaryBitmapDefinition() {
-        return (BitmapDefinition) this.getFieldDefinition(FieldName.SECONDARY_BITMAP);
+        return (BitmapDefinition) getFieldDefinition(SECONDARY_BITMAP_FIELD_NUMBER);
     }
 
+    //TODO: Rework to not require casting of bitmap fields on get
     public BitmapDefinition getTertiaryBitmapDefinition() {
-        return (BitmapDefinition) this.getFieldDefinition(FieldName.TERTIARY_BITMAP);
+        return (BitmapDefinition) getFieldDefinition(TERTIARY_BITMAP_FIELD_NUMBER);
     }
 
     public int getSecondaryBitmapFieldNumber() {
@@ -43,6 +44,18 @@ public abstract class Iso8583MessageDefinition implements MessageDefinition {
 
     public int getTertiaryBitmapFieldNumber() {
         return TERTIARY_BITMAP_FIELD_NUMBER;
+    }
+
+    public boolean primaryBitmapGovernsBit(int fieldNumber) {
+        return getPrimaryBitmapDefinition().governsBit(fieldNumber);
+    }
+
+    public boolean secondaryBitmapGovernsBit(int fieldNumber) {
+        return getSecondaryBitmapDefinition().governsBit(fieldNumber);
+    }
+
+    public boolean tertiaryBitmapGovernsBit(int fieldNumber) {
+        return getTertiaryBitmapDefinition().governsBit(fieldNumber);
     }
 
     @Override
@@ -57,14 +70,5 @@ public abstract class Iso8583MessageDefinition implements MessageDefinition {
         }
 
         return fieldDefinitions.get(fieldNumber);
-    }
-
-    @Override
-    public FieldDefinition getFieldDefinition(FieldName fieldName) {
-        return fieldDefinitions.values().stream()
-                .filter(fd -> fd.getFieldName().equals(fieldName))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "FieldDefinition does not contain field with name: " + fieldName.getName() + "."));
     }
 }

@@ -1,7 +1,7 @@
 package com.brandonlenz.iso8583.definitions.fields.names;
 
 public enum FieldName {
-    MTI("Message Type Indicator (MTI)"),
+    MESSAGE_TYPE_INDICATOR("Message Type Indicator (MTI)"),
     PRIMARY_BITMAP("Primary Bitmap"),
     SECONDARY_BITMAP("Secondary Bitmap"),
     TERTIARY_BITMAP("Tertiary Bitmap"),

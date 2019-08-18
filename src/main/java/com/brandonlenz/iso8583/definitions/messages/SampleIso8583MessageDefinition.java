@@ -24,7 +24,7 @@ public class SampleIso8583MessageDefinition extends Iso8583MessageDefinition {
     }
 
     private static FieldDefinition getSampleIso8583MessageTypeIndicatorDefinition() {
-        return new FixedFieldDefinition(FieldName.MTI, 4, NUMERIC_FIELD_ENCODING, ContentType.NUMERIC);
+        return new FixedFieldDefinition(FieldName.MESSAGE_TYPE_INDICATOR, 4, NUMERIC_FIELD_ENCODING, ContentType.NUMERIC);
     }
 
     private static BitmapDefinition getSampleIso8583PrimaryBitmapDefinition() {

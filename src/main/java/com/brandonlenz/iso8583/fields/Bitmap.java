@@ -86,6 +86,15 @@ public class Bitmap extends DataField {
         return 8 - ((dataFieldNumber - startFieldIndex) % 8);
     }
 
+    public boolean isEmpty() {
+        for (byte b : getRawData()) {
+            if ((b & 0xFF) != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public List<Integer> getSetBits() {
         List<Integer> bits = new ArrayList<>();
         byte[] bytes = getRawData();
