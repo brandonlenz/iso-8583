@@ -12,49 +12,50 @@ import java.util.List;
 
 public final class VliFieldDefinition extends FieldDefinition<VliField> {
 
+    private static final int DEFAULT_MINIMUM_LENGTH = 0;
     private final VliDefinition vliDefinition;
     private final Integer minimumLength;
     private final Integer maximumLength;
 
-    public VliFieldDefinition(  FieldName name,
-                                Encoding encoding,
-                                ContentType contentType,
-                                VliDefinition vliDefinition) {
+    public VliFieldDefinition(FieldName name,
+                              Encoding encoding,
+                              ContentType contentType,
+                              VliDefinition vliDefinition) {
         this(name, encoding, contentType, vliDefinition, new ArrayList<>());
     }
 
-    public VliFieldDefinition(  FieldName name,
-                                Integer maximumLength,
-                                Encoding encoding,
-                                ContentType contentType,
-                                VliDefinition vliDefinition) {
-        this(name, 0, maximumLength, encoding, contentType, vliDefinition, new ArrayList<>());
+    public VliFieldDefinition(FieldName name,
+                              Integer maximumLength,
+                              Encoding encoding,
+                              ContentType contentType,
+                              VliDefinition vliDefinition) {
+        this(name, DEFAULT_MINIMUM_LENGTH, maximumLength, encoding, contentType, vliDefinition, new ArrayList<>());
     }
 
-    public VliFieldDefinition(  FieldName name,
-                                Integer minimumLength,
-                                Integer maximumLength,
-                                Encoding encoding,
-                                ContentType contentType,
-                                VliDefinition vliDefinition) {
+    public VliFieldDefinition(FieldName name,
+                              Integer minimumLength,
+                              Integer maximumLength,
+                              Encoding encoding,
+                              ContentType contentType,
+                              VliDefinition vliDefinition) {
         this(name, minimumLength, maximumLength, encoding, contentType, vliDefinition, new ArrayList<>());
     }
 
-    public VliFieldDefinition(  FieldName name,
-                                Encoding encoding,
-                                ContentType contentType,
-                                VliDefinition vliDefinition,
-                                List<FieldDefinition> subfieldDefinitions) {
-        this(name, 0, Integer.MAX_VALUE, encoding, contentType, vliDefinition, subfieldDefinitions);
+    public VliFieldDefinition(FieldName name,
+                              Encoding encoding,
+                              ContentType contentType,
+                              VliDefinition vliDefinition,
+                              List<FieldDefinition> subfieldDefinitions) {
+        this(name, DEFAULT_MINIMUM_LENGTH, Integer.MAX_VALUE, encoding, contentType, vliDefinition, subfieldDefinitions);
     }
 
-    public VliFieldDefinition(  FieldName name,
-                                Integer minimumLength,
-                                Integer maximumLength,
-                                Encoding encoding,
-                                ContentType contentType,
-                                VliDefinition vliDefinition,
-                                List<FieldDefinition> subfieldDefinitions) {
+    public VliFieldDefinition(FieldName name,
+                              Integer minimumLength,
+                              Integer maximumLength,
+                              Encoding encoding,
+                              ContentType contentType,
+                              VliDefinition vliDefinition,
+                              List<FieldDefinition> subfieldDefinitions) {
         super(name, Format.VARIABLE_LENGTH_INDICATED, encoding, contentType, subfieldDefinitions);
         this.vliDefinition = vliDefinition;
         this.minimumLength = minimumLength;

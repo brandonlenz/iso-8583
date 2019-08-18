@@ -15,7 +15,7 @@ public class Bitmap extends DataField {
         super(fieldDefinition);
         this.definition = fieldDefinition;
         startFieldIndex = fieldDefinition.getStartFieldIndex();
-        endFieldIndex = startFieldIndex + (fieldDefinition.getByteLength() * 8) - 1;
+        endFieldIndex = fieldDefinition.getEndFieldIndex();
     }
 
     @Override
@@ -56,6 +56,10 @@ public class Bitmap extends DataField {
         }
     }
 
+    public boolean governsBit(int dataFieldNumber) {
+        return definition.governsBit(dataFieldNumber);
+    }
+
     public boolean bitIsSet(int dataFieldNumber) {
         if (getRawData() == null) {
             return false;
@@ -75,11 +79,11 @@ public class Bitmap extends DataField {
     }
 
     private int getByteIndex(int dataFieldNumber) {
-        return ((dataFieldNumber - startFieldIndex)) / 8;
+        return (dataFieldNumber - startFieldIndex) / 8;
     }
 
     private int getBitIndex(int dataFieldNumber) {
-        return 8 - (((dataFieldNumber - startFieldIndex)) % 8);
+        return 8 - ((dataFieldNumber - startFieldIndex) % 8);
     }
 
     public List<Integer> getSetBits() {

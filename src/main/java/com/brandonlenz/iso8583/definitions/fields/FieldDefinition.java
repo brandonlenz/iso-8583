@@ -22,7 +22,7 @@ public abstract class FieldDefinition<F extends DataField> {
         this(name, format, encoding, contentType, new ArrayList<>());
     }
 
-    public FieldDefinition(FieldName name,
+    FieldDefinition(FieldName name,
             Format format,
             Encoding encoding,
             ContentType contentType,
