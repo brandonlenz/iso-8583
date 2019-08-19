@@ -6,8 +6,8 @@ import com.brandonlenz.iso8583.definitions.fields.FixedFieldDefinition;
 import com.brandonlenz.iso8583.definitions.fields.VliDefinition;
 import com.brandonlenz.iso8583.definitions.fields.VliFieldDefinition;
 import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
-import com.brandonlenz.iso8583.structure.content.ContentType;
-import com.brandonlenz.iso8583.structure.encoding.Encoding;
+import com.brandonlenz.generic.structure.content.ContentType;
+import com.brandonlenz.generic.structure.encoding.Encoding;
 import java.util.HashMap;
 import java.util.Map;
 
