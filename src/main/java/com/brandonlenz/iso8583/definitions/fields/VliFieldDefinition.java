@@ -1,12 +1,12 @@
 package com.brandonlenz.iso8583.definitions.fields;
 
 import com.brandonlenz.iso8583.building.fields.VliDataFieldBuilder;
-import com.brandonlenz.iso8583.definitions.names.FieldName;
+import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
 import com.brandonlenz.iso8583.fields.VliField;
 import com.brandonlenz.iso8583.parsing.fields.VliFieldParser;
-import com.brandonlenz.iso8583.structure.content.ContentType;
-import com.brandonlenz.iso8583.structure.encoding.Encoding;
-import com.brandonlenz.iso8583.structure.format.Format;
+import com.brandonlenz.generic.structure.content.ContentType;
+import com.brandonlenz.generic.structure.encoding.Encoding;
+import com.brandonlenz.generic.structure.format.Format;
 import java.util.ArrayList;
 import java.util.List;
 

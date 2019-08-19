@@ -1,7 +1,7 @@
 package com.brandonlenz.iso8583.fields;
 
 import com.brandonlenz.iso8583.definitions.fields.BitmapDefinition;
-import com.brandonlenz.iso8583.structure.encoding.Encoding;
+import com.brandonlenz.generic.structure.encoding.Encoding;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,6 +86,15 @@ public class Bitmap extends DataField {
         return 8 - ((dataFieldNumber - startFieldIndex) % 8);
     }
 
+    public boolean isEmpty() {
+        for (byte b : getRawData()) {
+            if ((b & 0xFF) != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public List<Integer> getSetBits() {
         List<Integer> bits = new ArrayList<>();
         byte[] bytes = getRawData();
@@ -127,6 +136,10 @@ public class Bitmap extends DataField {
     @Override
     public String toString() {
         return getHexRepresentation();
+    }
+
+    public static Bitmap initializeEmptyBitmap(BitmapDefinition bitmapDefinition) {
+        return bitmapDefinition.getDataFieldBuilder().build(new byte[bitmapDefinition.getByteLength()]);
     }
 
 }

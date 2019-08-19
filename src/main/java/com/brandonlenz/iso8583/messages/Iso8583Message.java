@@ -1,27 +1,47 @@
 package com.brandonlenz.iso8583.messages;
 
+import com.brandonlenz.generic.messages.Message;
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
 import com.brandonlenz.iso8583.fields.Bitmap;
 import com.brandonlenz.iso8583.fields.DataField;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class Iso8583Message implements Message {
 
     private final Iso8583MessageDefinition definition;
-    private Bitmap primaryBitmap;
     private DataField messageTypeIndicator;
-    private final Map<Integer, DataField> dataFields = new HashMap<>();
+    private Bitmap primaryBitmap;
+    private final SortedMap<Integer, DataField> dataFields;
 
-    public Iso8583Message(Iso8583MessageDefinition definition) {
+    Iso8583Message(Iso8583MessageDefinition definition) {
         this.definition = definition;
-        this.primaryBitmap = definition.getPrimaryBitmapDefinition().getDataFieldBuilder()
-                .build(new byte[definition.getPrimaryBitmapDefinition().getLength()]);
+        this.dataFields = new TreeMap<>();
+    }
+
+    void setMessageTypeIndicator(DataField messageTypeIndicator) {
+        this.messageTypeIndicator = messageTypeIndicator;
+    }
+
+    void setPrimaryBitmap(Bitmap primaryBitmap) {
+        this.primaryBitmap = primaryBitmap;
+    }
+
+    void setField(int fieldNumber, DataField dataField) {
+        dataFields.put(fieldNumber, dataField);
+    }
+
+    void removeField(int fieldNumber) {
+        dataFields.remove(fieldNumber);
+    }
+
+    @Override
+    public Iso8583MessageDefinition getDefinition() {
+        return definition;
     }
 
     @Override
@@ -29,10 +49,8 @@ public class Iso8583Message implements Message {
         try (ByteArrayOutputStream bytes = new ByteArrayOutputStream()) {
             bytes.write(messageTypeIndicator.getRawData());
             bytes.write(primaryBitmap.getRawData());
-            for (Bitmap bitmap : getActiveBitmaps()) {
-                for (int fieldIndex : bitmap.getSetBits()) {
-                    bytes.write(dataFields.get(fieldIndex).getRawData());
-                }
+            for (DataField dataField : dataFields.values()) {
+                bytes.write(dataField.getRawData());
             }
             return (bytes).toByteArray();
         } catch (IOException e) {
@@ -47,31 +65,65 @@ public class Iso8583Message implements Message {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(messageTypeIndicator.getData());
         stringBuilder.append(primaryBitmap.getData());
-        for (Bitmap bitmap : getActiveBitmaps()) {
-            for (int fieldIndex : bitmap.getSetBits()) {
-                stringBuilder.append(dataFields.get(fieldIndex).getData());
-            }
+        for (DataField dataField : dataFields.values()) {
+            stringBuilder.append(dataField.getData());
         }
         return stringBuilder.toString();
     }
 
-    private List<Bitmap> getActiveBitmaps() {
-        List<Bitmap> bitmaps = new ArrayList<>();
+    public DataField getMessageTypeIndicator() {
+        return messageTypeIndicator;
+    }
 
-        bitmaps.add(primaryBitmap);
-        if (secondaryBitmapBitIsSet()) {
-            bitmaps.add(getSecondaryBitmap());
-        }
-        if (tertiaryBitmapBitIsSet()) {
-            bitmaps.add(getTertiaryBitmap());
-        }
+    public Bitmap getPrimaryBitmap() {
+        return primaryBitmap;
+    }
 
-        return bitmaps;
+    public boolean dataFieldIsSet(int fieldNumber) {
+        return dataFields.containsKey(fieldNumber);
+    }
+
+    public boolean dataFieldBitIsSet(int fieldNumber) {
+        Optional<Bitmap> bitmap = getCorrespondingBitmap(fieldNumber);
+        return bitmap.isPresent() && bitmap.get().bitIsSet(fieldNumber);
+    }
+
+    private Optional<Bitmap> getCorrespondingBitmap(int fieldNumber) {
+        if (definition.primaryBitmapGovernsBit(fieldNumber)) {
+            return Optional.of(primaryBitmap);
+        } else if (definition.secondaryBitmapGovernsBit(fieldNumber)) {
+            return getSecondaryBitmap();
+        } else if (definition.tertiaryBitmapGovernsBit(fieldNumber)) {
+            return getTertiaryBitmap();
+        } else {
+            throw new IllegalArgumentException(
+                    "DataField number " + fieldNumber + " is not governed by any defined bitmap");
+        }
+    }
+
+    Optional<Bitmap> getSecondaryBitmap() {
+        return getBitmapField(definition.getSecondaryBitmapFieldNumber());
+    }
+
+    Optional<Bitmap> getTertiaryBitmap() {
+        return getBitmapField(definition.getTertiaryBitmapFieldNumber());
+    }
+
+    private Optional<Bitmap> getBitmapField(int bitmapFieldNumber) {
+        if (dataFields.containsKey(bitmapFieldNumber)) {
+            return Optional.of((Bitmap) getDataField(bitmapFieldNumber));
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Override
-    public Iso8583MessageDefinition getDefinition() {
-        return definition;
+    public DataField getDataField(int fieldNumber) {
+        if (dataFields.containsKey(fieldNumber)) {
+            return dataFields.get(fieldNumber);
+        } else {
+            throw new IllegalArgumentException("DataField " + fieldNumber + " is not set");
+        }
     }
 
     @Override
@@ -79,125 +131,16 @@ public class Iso8583Message implements Message {
         return dataFields;
     }
 
-    public DataField getMessageTypeIndicator() {
-        return messageTypeIndicator;
-    }
-
-    public void setMessageTypeIndicator(DataField messageTypeIndicator) {
-        this.messageTypeIndicator = messageTypeIndicator;
-    }
-
-    public Bitmap getPrimaryBitmap() {
-        return primaryBitmap;
-    }
-
-    public void setPrimaryBitmap(Bitmap primaryBitmap) {
-        this.primaryBitmap = primaryBitmap;
-    }
-
-    public Bitmap getSecondaryBitmap() {
-        return (Bitmap) getDataField(definition.getSecondaryBitmapFieldNumber());
-    }
-
-    public Bitmap getTertiaryBitmap() {
-        return (Bitmap) getDataField(definition.getTertiaryBitmapFieldNumber());
-    }
-
-    public boolean secondaryBitmapBitIsSet() {
-        return dataFieldBitIsSet(definition.getSecondaryBitmapFieldNumber());
-    }
-
-    public boolean tertiaryBitmapBitIsSet() {
-        return dataFieldBitIsSet(definition.getTertiaryBitmapFieldNumber());
-    }
-
-    public boolean dataFieldBitIsSet(int dataFieldNumber) {
-        Bitmap bitmap = getCorrespondingBitmap(dataFieldNumber);
-        return bitmap !=null
-                && bitmap.getRawData() != null && !bitmap.getData().isEmpty() && bitmap.bitIsSet(dataFieldNumber);
-    }
-
-    @Override
-    public DataField getDataField(int dataFieldNumber) {
-        return dataFields.get(dataFieldNumber);
-    }
-
-    public void setDataField(int dataFieldNumber, DataField dataField) {
-        if (!definition.getFieldDefinitions().containsKey(dataFieldNumber)) {
-            throw new IllegalArgumentException(
-                    "DataField number " + dataFieldNumber + " is not defined for this Message");
-        }
-
-
-        //recursively set bitmaps as necessary
-        if (primaryBitmap.governsBit(dataFieldNumber)) {
-            primaryBitmap.setBit(dataFieldNumber);
-        } else if (definition.getSecondaryBitmapDefinition().governsBit(dataFieldNumber)) {
-            if (dataFields.containsKey(definition.getSecondaryBitmapFieldNumber())) {
-                getSecondaryBitmap().setBit(dataFieldNumber);
-            } else {
-                Bitmap secondaryBitmap = definition.getSecondaryBitmapDefinition().getDataFieldBuilder()
-                        .build(new byte[definition.getSecondaryBitmapDefinition().getByteLength()]);
-                secondaryBitmap.setBit(dataFieldNumber);
-                setDataField(definition.getSecondaryBitmapFieldNumber(), secondaryBitmap);
-            }
-        } else if (definition.getTertiaryBitmapDefinition().governsBit(dataFieldNumber)) {
-            if (dataFields.containsKey(definition.getTertiaryBitmapFieldNumber())) {
-                getTertiaryBitmap().setBit(dataFieldNumber);
-            } else {
-                Bitmap tertiaryBitmap = definition.getTertiaryBitmapDefinition().getDataFieldBuilder()
-                        .build(new byte[definition.getTertiaryBitmapDefinition().getByteLength()]);
-                tertiaryBitmap.setBit(dataFieldNumber);
-                setDataField(definition.getTertiaryBitmapFieldNumber(), tertiaryBitmap);
-            }
-        } else {
-            throw new IllegalArgumentException(
-                    "DataField number " + dataFieldNumber + " is not governed by any defined bitmap");
-        }
-
-        dataFields.put(dataFieldNumber, dataField);
-    }
-
-    public void removeDataField(int dataFieldNumber) {
-        if (!dataFields.containsKey(dataFieldNumber)) {
-            throw new IllegalArgumentException(
-                    "Message does not contain DataField number " + dataFieldNumber);
-        }
-
-        Bitmap bitmap = getCorrespondingBitmap(dataFieldNumber);
-        dataFields.remove(dataFieldNumber);
-        bitmap.unsetBit(dataFieldNumber);
-        if (!bitmap.equals(primaryBitmap) && bitmap.getSetBits().isEmpty()) {
-            Optional<Integer> bitmapFieldNumber = dataFields
-                    .entrySet()
-                    .stream()
-                    .filter(e ->  bitmap.equals(e.getValue()))
-                    .map(Map.Entry::getKey)
-                    .findFirst();
-            bitmapFieldNumber.ifPresent(this::removeDataField);
-        }
-    }
-
-    /**
-     * gets the bitmap that governs the bit for a given data field number
-     *
-     * @param dataFieldNumber the number of the data field to get the "parent" bitmap of
-     * @return the "parent" bitmap
-     */
-    private Bitmap getCorrespondingBitmap(int dataFieldNumber) {
-        if (dataFieldNumber < definition.getSecondaryBitmapDefinition().getStartFieldIndex()) {
-            return getPrimaryBitmap();
-        } else if (dataFieldNumber < definition.getTertiaryBitmapDefinition().getStartFieldIndex()) {
-            return getSecondaryBitmap();
-        } else if (dataFieldNumber <= definition.getTertiaryBitmapDefinition().getEndFieldIndex()) {
-            return getTertiaryBitmap();
-        } else {
-            throw new IllegalArgumentException("ISO8583Messages do not support field number: " + dataFieldNumber);
-        }
-    }
-
     @Override
     public String toString() {
         return getData();
+    }
+
+    public static Iso8583MessageBuilder builder(Iso8583MessageDefinition definition, DataField messageTypeIndicator) {
+        return new Iso8583MessageBuilder(definition, messageTypeIndicator);
+    }
+
+    public static Iso8583MessageParser parser(Iso8583MessageDefinition definition) {
+        return new Iso8583MessageParser(definition);
     }
 }

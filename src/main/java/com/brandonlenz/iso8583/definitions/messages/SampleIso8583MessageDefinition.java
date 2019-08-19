@@ -5,9 +5,9 @@ import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
 import com.brandonlenz.iso8583.definitions.fields.FixedFieldDefinition;
 import com.brandonlenz.iso8583.definitions.fields.VliDefinition;
 import com.brandonlenz.iso8583.definitions.fields.VliFieldDefinition;
-import com.brandonlenz.iso8583.definitions.names.FieldName;
-import com.brandonlenz.iso8583.structure.content.ContentType;
-import com.brandonlenz.iso8583.structure.encoding.Encoding;
+import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
+import com.brandonlenz.generic.structure.content.ContentType;
+import com.brandonlenz.generic.structure.encoding.Encoding;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +24,7 @@ public class SampleIso8583MessageDefinition extends Iso8583MessageDefinition {
     }
 
     private static FieldDefinition getSampleIso8583MessageTypeIndicatorDefinition() {
-        return new FixedFieldDefinition(FieldName.MTI, 4, NUMERIC_FIELD_ENCODING, ContentType.NUMERIC);
+        return new FixedFieldDefinition(FieldName.MESSAGE_TYPE_INDICATOR, 4, NUMERIC_FIELD_ENCODING, ContentType.NUMERIC);
     }
 
     private static BitmapDefinition getSampleIso8583PrimaryBitmapDefinition() {

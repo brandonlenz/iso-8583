@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.brandonlenz.iso8583.definitions.fields.BitmapDefinition;
-import com.brandonlenz.iso8583.definitions.names.FieldName;
-import com.brandonlenz.iso8583.structure.encoding.Encoding;
+import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
+import com.brandonlenz.generic.structure.encoding.Encoding;
 import java.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
