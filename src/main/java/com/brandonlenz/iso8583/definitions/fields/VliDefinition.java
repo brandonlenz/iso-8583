@@ -1,8 +1,8 @@
 package com.brandonlenz.iso8583.definitions.fields;
 
 import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
-import com.brandonlenz.iso8583.structure.content.ContentType;
-import com.brandonlenz.iso8583.structure.encoding.Encoding;
+import com.brandonlenz.generic.structure.content.ContentType;
+import com.brandonlenz.generic.structure.encoding.Encoding;
 
 public final class VliDefinition extends FixedFieldDefinition {
 
