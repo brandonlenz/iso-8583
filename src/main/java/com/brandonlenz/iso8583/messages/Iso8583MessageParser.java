@@ -24,6 +24,7 @@ public class Iso8583MessageParser implements MessageParser {
         return parseMessageFromStream(inputStream);
     }
 
+    @Override
     public Iso8583Message parseMessageFromStream(InputStream messageStream) {
 
         message.setMessageTypeIndicator(definition.getMessageTypeIndicatorDefinition().getDataFieldParser()
