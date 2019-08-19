@@ -1,11 +1,9 @@
-package com.brandonlenz.iso8583.parsing;
+package com.brandonlenz.iso8583.messages;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.brandonlenz.iso8583.definitions.messages.SampleIso8583MessageDefinition;
-import com.brandonlenz.iso8583.messages.Iso8583Message;
-import com.brandonlenz.iso8583.messages.Iso8583MessageParser;
 import java.util.Arrays;
 import javax.xml.bind.DatatypeConverter;
 import org.junit.jupiter.api.Test;
