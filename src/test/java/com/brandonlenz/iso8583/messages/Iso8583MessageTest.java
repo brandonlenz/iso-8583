@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
 import com.brandonlenz.iso8583.definitions.messages.SampleIso8583MessageDefinition;
 import com.brandonlenz.iso8583.fields.DataField;
-import com.brandonlenz.iso8583.messages.Iso8583Message.Builder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,11 +31,11 @@ class Iso8583MessageTest {
     private final DataField messageTypeIndicator = messageDefinition.getMessageTypeIndicatorDefinition()
             .getDataFieldBuilder()
             .build("0100");
-    private Builder iso8583MessageBuilder;
+    private Iso8583MessageBuilder iso8583MessageBuilder;
 
     @BeforeEach
     void setUp() {
-        this.iso8583MessageBuilder = new Iso8583Message.Builder(messageDefinition, messageTypeIndicator);
+        this.iso8583MessageBuilder = Iso8583Message.builder(messageDefinition, messageTypeIndicator);
     }
 
     @Test
@@ -128,7 +127,8 @@ class Iso8583MessageTest {
     }
 
     private Iso8583Message getTestMessage() {
-        return new Iso8583Message.Builder(messageDefinition, messageTypeIndicator)
+        return Iso8583Message
+                .builder(messageDefinition, messageTypeIndicator)
                 .setField(PAN_FIELD_NUMBER, PAN_FIELD_DATA)
                 .setField(AMOUNT_FIELD_NUMBER, AMOUNT_FIELD_DATA)
                 .setField(TIMESTAMP_FIELD_NUMBER, TIMESTAMP_FIELD_DATA)

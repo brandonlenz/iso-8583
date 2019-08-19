@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.brandonlenz.iso8583.definitions.messages.SampleIso8583MessageDefinition;
 import com.brandonlenz.iso8583.messages.Iso8583Message;
-import com.brandonlenz.iso8583.parsing.messages.Iso8583MessageParser;
+import com.brandonlenz.iso8583.messages.Iso8583MessageParser;
 import java.util.Arrays;
 import javax.xml.bind.DatatypeConverter;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 class Iso8583MessageParserTest {
 
     private static final byte[] RAW_MESSAGE_DATA = getRawMessageData();
-    private final Iso8583MessageParser iso8583MessageParser = new Iso8583MessageParser(new SampleIso8583MessageDefinition());
+    private final Iso8583MessageParser parser = Iso8583Message.parser(new SampleIso8583MessageDefinition());
 
     private static  byte[] getRawMessageData() {
         //TODO: Add secondary bitmap field for test now that its supported
@@ -37,7 +37,7 @@ class Iso8583MessageParserTest {
 
     @Test
     void parseMessageFromRawData() {
-        Iso8583Message parsedMessage = iso8583MessageParser.parseMessageFromRawData(RAW_MESSAGE_DATA);
+        Iso8583Message parsedMessage = parser.parseMessageFromRawData(RAW_MESSAGE_DATA);
 
         assertEquals("0100", parsedMessage.getMessageTypeIndicator().getData());
         assertEquals("5200020000000200", parsedMessage.getPrimaryBitmap().getData());
