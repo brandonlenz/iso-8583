@@ -32,6 +32,19 @@ class Iso8583MessageTest {
             .getDataFieldBuilder()
             .build("0100");
     private Iso8583MessageBuilder iso8583MessageBuilder;
+    private final Iso8583Message iso8583Message = getTestMessage();
+
+    private Iso8583Message getTestMessage() {
+        return Iso8583Message
+                .builder(messageDefinition, messageTypeIndicator)
+                .setField(PAN_FIELD_NUMBER, PAN_FIELD_DATA)
+                .setField(AMOUNT_FIELD_NUMBER, AMOUNT_FIELD_DATA)
+                .setField(TIMESTAMP_FIELD_NUMBER, TIMESTAMP_FIELD_DATA)
+                .setField(PSN_FIELD_NUMBER, PSN_FIELD_DATA)
+                .setField(ICC_DATA_FIELD_NUMBER, ICC_DATA_FIELD_DATA)
+                .setField(SETTLEMENT_CODE_FIELD_NUMBER, SETTLEMENT_CODE_FIELD_DATA)
+                .build();
+    }
 
     @BeforeEach
     void setUp() {
@@ -95,46 +108,56 @@ class Iso8583MessageTest {
     }
 
     @Test
-    void mainTestRENAMEME() {
-        Iso8583Message iso8583Message = getTestMessage();
-
+    void messageTypeIndicatorValid() {
         assertEquals("0100", iso8583Message.getMessageTypeIndicator().getData());
+    }
 
+    @Test
+    void primaryBitmapValid() {
         assertEquals("D200020000000200", iso8583Message.getPrimaryBitmap().getData());
+    }
 
+    @Test
+    void secondaryBitmapValid() {
         assertTrue(iso8583Message.dataFieldBitIsSet(SECONDARY_BITMAP_FIELD_NUMBER));
         assertEquals("4000000000000000", iso8583Message.getDataField(SECONDARY_BITMAP_FIELD_NUMBER).getData());
+    }
 
+    @Test
+    void primaryAccountNumberValid() {
         assertTrue(iso8583Message.dataFieldBitIsSet(PAN_FIELD_NUMBER));
         String expectedPanData = "16" + PAN_FIELD_DATA;
         assertEquals(expectedPanData, iso8583Message.getDataField(PAN_FIELD_NUMBER).getData());
+    }
 
+    @Test
+    void amountValid() {
         assertTrue(iso8583Message.dataFieldBitIsSet(AMOUNT_FIELD_NUMBER));
         assertEquals(AMOUNT_FIELD_DATA, iso8583Message.getDataField(AMOUNT_FIELD_NUMBER).getData());
+    }
 
+    @Test
+    void tiemstampValid() {
         assertTrue(iso8583Message.dataFieldBitIsSet(TIMESTAMP_FIELD_NUMBER));
         assertEquals(TIMESTAMP_FIELD_DATA, iso8583Message.getDataField(TIMESTAMP_FIELD_NUMBER).getData());
+    }
 
+    @Test
+    void panSequenceNumberValid() {
         assertTrue(iso8583Message.dataFieldBitIsSet(PSN_FIELD_NUMBER));
         assertEquals(PSN_FIELD_DATA, iso8583Message.getDataField(PSN_FIELD_NUMBER).getData());
+    }
 
+    @Test
+    void iccDataValid() {
         assertTrue(iso8583Message.dataFieldBitIsSet(ICC_DATA_FIELD_NUMBER));
         String expectedIccData = "015" + ICC_DATA_FIELD_DATA;
         assertEquals(expectedIccData, iso8583Message.getDataField(ICC_DATA_FIELD_NUMBER).getData());
-
-        assertTrue(iso8583Message.dataFieldBitIsSet(SETTLEMENT_CODE_FIELD_NUMBER));
-        assertEquals(SETTLEMENT_CODE_FIELD_DATA, iso8583Message.getDataField(SETTLEMENT_CODE_FIELD_NUMBER).getData());
     }
 
-    private Iso8583Message getTestMessage() {
-        return Iso8583Message
-                .builder(messageDefinition, messageTypeIndicator)
-                .setField(PAN_FIELD_NUMBER, PAN_FIELD_DATA)
-                .setField(AMOUNT_FIELD_NUMBER, AMOUNT_FIELD_DATA)
-                .setField(TIMESTAMP_FIELD_NUMBER, TIMESTAMP_FIELD_DATA)
-                .setField(PSN_FIELD_NUMBER, PSN_FIELD_DATA)
-                .setField(ICC_DATA_FIELD_NUMBER, ICC_DATA_FIELD_DATA)
-                .setField(SETTLEMENT_CODE_FIELD_NUMBER, SETTLEMENT_CODE_FIELD_DATA)
-                .build();
+    @Test
+    void settlementCodeValid() {
+        assertTrue(iso8583Message.dataFieldBitIsSet(SETTLEMENT_CODE_FIELD_NUMBER));
+        assertEquals(SETTLEMENT_CODE_FIELD_DATA, iso8583Message.getDataField(SETTLEMENT_CODE_FIELD_NUMBER).getData());
     }
 }
