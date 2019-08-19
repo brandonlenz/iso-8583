@@ -18,7 +18,7 @@ Brands and acquirers generally implement different flavors of ISO-8583 to build 
  * Creation and building of ISO-8583 messages
  * Validation of created/parsed ISO-8583 messages
  
- At the moment this library easiest "point-of-entry" is to run the simple CLI interface in the [Main](src/main/java/com/brandonlenz/iso8583/Main.java) class. 
+ At the moment this library easiest "point-of-entry" is to run the simple CLI interface in the [Demo](src/main/java/com/brandonlenz/iso8583/Demo.java) class. 
  This simple application can be used to demo the library as well as the messaging specification.
  
  #### Notes:
