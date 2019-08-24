@@ -1,7 +1,5 @@
-package com.brandonlenz.iso8583.parsing.fields;
+package com.brandonlenz.iso8583.fields;
 
-import com.brandonlenz.iso8583.definitions.fields.FixedFieldDefinition;
-import com.brandonlenz.iso8583.fields.FixedField;
 import java.io.InputStream;
 
 public class FixedFieldParser extends DataFieldParser<FixedField> {

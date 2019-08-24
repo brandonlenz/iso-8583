@@ -1,6 +1,6 @@
 package com.brandonlenz.iso8583.messages;
 
-import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
+import com.brandonlenz.iso8583.fields.FieldDefinition;
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
 import com.brandonlenz.iso8583.fields.Bitmap;
 import com.brandonlenz.iso8583.fields.DataField;
@@ -19,7 +19,7 @@ public class Iso8583MessageParser implements MessageParser {
     }
 
     @Override
-    public Iso8583Message parseMessageFromRawData(byte[] rawData) {
+    public Iso8583Message parseMessage(byte[] rawData) {
         InputStream inputStream = new ByteArrayInputStream(rawData);
         return parseMessageFromStream(inputStream);
     }

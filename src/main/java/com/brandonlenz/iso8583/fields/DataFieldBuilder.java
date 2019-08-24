@@ -1,6 +1,5 @@
-package com.brandonlenz.iso8583.building.fields;
+package com.brandonlenz.iso8583.fields;
 
-import com.brandonlenz.iso8583.fields.DataField;
 import java.util.function.Supplier;
 
 public class DataFieldBuilder<F extends DataField> {
@@ -9,10 +8,6 @@ public class DataFieldBuilder<F extends DataField> {
 
     public DataFieldBuilder(Supplier<F> supplier) {
         this.supplier = supplier;
-    }
-
-    public F build() {
-        return supplier.get();
     }
 
     public F build(byte[] rawData) {

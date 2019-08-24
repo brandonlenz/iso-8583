@@ -2,7 +2,7 @@ package com.brandonlenz.iso8583.messages;
 
 import static com.brandonlenz.iso8583.fields.Bitmap.initializeEmptyBitmap;
 
-import com.brandonlenz.iso8583.definitions.fields.BitmapDefinition;
+import com.brandonlenz.iso8583.fields.BitmapDefinition;
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
 import com.brandonlenz.iso8583.fields.Bitmap;
 import com.brandonlenz.iso8583.fields.DataField;

@@ -35,7 +35,7 @@ class Iso8583MessageParserTest {
 
     @Test
     void parseMessageFromRawData() {
-        Iso8583Message parsedMessage = parser.parseMessageFromRawData(RAW_MESSAGE_DATA);
+        Iso8583Message parsedMessage = parser.parseMessage(RAW_MESSAGE_DATA);
 
         assertEquals("0100", parsedMessage.getMessageTypeIndicator().getData());
         assertEquals("5200020000000200", parsedMessage.getPrimaryBitmap().getData());

@@ -1,7 +1,5 @@
 package com.brandonlenz.iso8583.fields;
 
-import com.brandonlenz.iso8583.definitions.fields.VliFieldDefinition;
-
 public class VliField extends DataField {
 
     private final VliFieldDefinition definition;

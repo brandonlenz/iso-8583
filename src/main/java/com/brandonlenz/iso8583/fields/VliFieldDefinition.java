@@ -1,14 +1,12 @@
-package com.brandonlenz.iso8583.definitions.fields;
+package com.brandonlenz.iso8583.fields;
 
-import com.brandonlenz.iso8583.building.fields.VliDataFieldBuilder;
 import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
-import com.brandonlenz.iso8583.fields.VliField;
-import com.brandonlenz.iso8583.parsing.fields.VliFieldParser;
 import com.brandonlenz.generic.structure.content.ContentType;
 import com.brandonlenz.generic.structure.encoding.Encoding;
 import com.brandonlenz.generic.structure.format.Format;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public final class VliFieldDefinition extends FieldDefinition<VliField> {
 
@@ -16,6 +14,7 @@ public final class VliFieldDefinition extends FieldDefinition<VliField> {
     private final VliDefinition vliDefinition;
     private final Integer minimumLength;
     private final Integer maximumLength;
+    private final Supplier<VliField> vliFieldSupplier = () -> new VliField(this);
 
     public VliFieldDefinition(FieldName name,
                               Encoding encoding,
@@ -75,8 +74,8 @@ public final class VliFieldDefinition extends FieldDefinition<VliField> {
     }
 
     @Override
-    public VliDataFieldBuilder getDataFieldBuilder() {
-        return new VliDataFieldBuilder(() -> new VliField(this));
+    public VliFieldBuilder getDataFieldBuilder() {
+        return new VliFieldBuilder(vliFieldSupplier);
     }
 
     @Override

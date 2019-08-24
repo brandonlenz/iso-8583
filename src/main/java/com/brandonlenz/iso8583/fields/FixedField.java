@@ -1,8 +1,6 @@
 package com.brandonlenz.iso8583.fields;
 
-import com.brandonlenz.iso8583.definitions.fields.FixedFieldDefinition;
-
-public class FixedField extends DataField {
+public class FixedField extends AbstractFixedField {
 
     private final FixedFieldDefinition definition;
 

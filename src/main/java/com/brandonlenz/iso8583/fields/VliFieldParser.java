@@ -1,14 +1,12 @@
-package com.brandonlenz.iso8583.parsing.fields;
+package com.brandonlenz.iso8583.fields;
 
-import com.brandonlenz.iso8583.definitions.fields.VliFieldDefinition;
-import com.brandonlenz.iso8583.fields.VliField;
 import java.io.InputStream;
 
 public class VliFieldParser extends DataFieldParser<VliField> {
 
     private final VliFieldDefinition fieldDefinition;
 
-    public VliFieldParser(VliFieldDefinition fieldDefinition) {
+    VliFieldParser(VliFieldDefinition fieldDefinition) {
         this.fieldDefinition = fieldDefinition;
     }
 

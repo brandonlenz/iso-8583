@@ -1,11 +1,10 @@
 package com.brandonlenz.iso8583.fields;
 
-import com.brandonlenz.iso8583.definitions.fields.BitmapDefinition;
 import com.brandonlenz.generic.structure.encoding.Encoding;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Bitmap extends DataField {
+public class Bitmap extends AbstractFixedField {
 
     private final BitmapDefinition definition;
     private final int startFieldIndex;
@@ -23,6 +22,7 @@ public class Bitmap extends DataField {
         return definition;
     }
 
+    //TODO: Delete these unused methods
     public int getStartFieldIndex() {
         return startFieldIndex;
     }
@@ -54,10 +54,6 @@ public class Bitmap extends DataField {
             throw new IllegalArgumentException(
                     "Bit corresponding to field number " + dataFieldNumber + " is not yet set");
         }
-    }
-
-    public boolean governsBit(int dataFieldNumber) {
-        return definition.governsBit(dataFieldNumber);
     }
 
     public boolean bitIsSet(int dataFieldNumber) {

@@ -1,7 +1,5 @@
-package com.brandonlenz.iso8583.parsing.fields;
+package com.brandonlenz.iso8583.fields;
 
-import com.brandonlenz.iso8583.definitions.fields.BitmapDefinition;
-import com.brandonlenz.iso8583.fields.Bitmap;
 import java.io.InputStream;
 
 public class BitmapParser extends DataFieldParser<Bitmap> {

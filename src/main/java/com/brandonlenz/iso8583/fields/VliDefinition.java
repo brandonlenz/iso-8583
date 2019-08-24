@@ -1,4 +1,4 @@
-package com.brandonlenz.iso8583.definitions.fields;
+package com.brandonlenz.iso8583.fields;
 
 import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
 import com.brandonlenz.generic.structure.content.ContentType;

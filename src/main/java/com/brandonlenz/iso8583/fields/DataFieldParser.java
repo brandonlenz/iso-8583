@@ -1,4 +1,4 @@
-package com.brandonlenz.iso8583.parsing.fields;
+package com.brandonlenz.iso8583.fields;
 
 import com.brandonlenz.iso8583.fields.DataField;
 import java.io.IOException;

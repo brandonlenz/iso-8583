@@ -1,7 +1,7 @@
-package com.brandonlenz.iso8583.building.fields;
+package com.brandonlenz.iso8583.fields;
 
-import com.brandonlenz.iso8583.definitions.fields.VliDefinition;
-import com.brandonlenz.iso8583.definitions.fields.VliFieldDefinition;
+import com.brandonlenz.iso8583.fields.VliDefinition;
+import com.brandonlenz.iso8583.fields.VliFieldDefinition;
 import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
 import com.brandonlenz.iso8583.fields.VliField;
 import com.brandonlenz.generic.structure.content.ContentType;
@@ -9,7 +9,7 @@ import com.brandonlenz.generic.structure.encoding.Encoding;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class VliDataFieldBuilderTest {
+class VliFieldBuilderTest {
 
     @Test
     void setHex() {

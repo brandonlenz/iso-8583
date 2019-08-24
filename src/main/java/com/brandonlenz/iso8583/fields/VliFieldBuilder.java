@@ -1,12 +1,10 @@
-package com.brandonlenz.iso8583.building.fields;
+package com.brandonlenz.iso8583.fields;
 
-import com.brandonlenz.iso8583.definitions.fields.VliDefinition;
-import com.brandonlenz.iso8583.fields.VliField;
 import java.util.function.Supplier;
 
-public class VliDataFieldBuilder extends DataFieldBuilder<VliField> {
+public class VliFieldBuilder extends DataFieldBuilder<VliField> {
 
-    public VliDataFieldBuilder(Supplier<VliField> supplier) {
+    public VliFieldBuilder(Supplier<VliField> supplier) {
         super(supplier);
     }
 
