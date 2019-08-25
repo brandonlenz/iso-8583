@@ -13,7 +13,6 @@ public final class LLVarDefinition extends VariableLengthIndicatedFieldDefinitio
                            ContentType contentType,
                            Encoding vliEncoding,
                            ContentType vliContentType) {
-        super(name, encoding, contentType,
-                new VariableLengthIndicatorDefinition(2, vliEncoding, vliContentType));
+        super(name, encoding, contentType, new VariableLengthIndicatorDefinition(2, vliEncoding, vliContentType));
     }
 }

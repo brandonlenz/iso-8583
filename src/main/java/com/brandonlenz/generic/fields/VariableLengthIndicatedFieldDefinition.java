@@ -15,44 +15,62 @@ public class VariableLengthIndicatedFieldDefinition extends FieldDefinition<Vari
     private final Integer maximumLength;
 
     public VariableLengthIndicatedFieldDefinition(FieldName name,
-                              Encoding encoding,
-                              ContentType contentType,
-                              VariableLengthIndicatorDefinition variableLengthIndicatorDefinition) {
+                                                  Encoding encoding,
+                                                  ContentType contentType,
+                                                  VariableLengthIndicatorDefinition variableLengthIndicatorDefinition) {
         this(name, encoding, contentType, variableLengthIndicatorDefinition, new ArrayList<>());
     }
 
     public VariableLengthIndicatedFieldDefinition(FieldName name,
-                              Integer maximumLength,
-                              Encoding encoding,
-                              ContentType contentType,
-                              VariableLengthIndicatorDefinition variableLengthIndicatorDefinition) {
-        this(name, DEFAULT_MINIMUM_LENGTH, maximumLength, encoding, contentType, variableLengthIndicatorDefinition, new ArrayList<>());
+                                                  Integer maximumLength,
+                                                  Encoding encoding,
+                                                  ContentType contentType,
+                                                  VariableLengthIndicatorDefinition variableLengthIndicatorDefinition) {
+        this(name,
+             DEFAULT_MINIMUM_LENGTH,
+             maximumLength,
+             encoding,
+             contentType,
+             variableLengthIndicatorDefinition,
+             new ArrayList<>());
     }
 
     public VariableLengthIndicatedFieldDefinition(FieldName name,
-                              Integer minimumLength,
-                              Integer maximumLength,
-                              Encoding encoding,
-                              ContentType contentType,
-                              VariableLengthIndicatorDefinition variableLengthIndicatorDefinition) {
-        this(name, minimumLength, maximumLength, encoding, contentType, variableLengthIndicatorDefinition, new ArrayList<>());
+                                                  Integer minimumLength,
+                                                  Integer maximumLength,
+                                                  Encoding encoding,
+                                                  ContentType contentType,
+                                                  VariableLengthIndicatorDefinition variableLengthIndicatorDefinition) {
+        this(name,
+             minimumLength,
+             maximumLength,
+             encoding,
+             contentType,
+             variableLengthIndicatorDefinition,
+             new ArrayList<>());
     }
 
     public VariableLengthIndicatedFieldDefinition(FieldName name,
-                              Encoding encoding,
-                              ContentType contentType,
-                              VariableLengthIndicatorDefinition variableLengthIndicatorDefinition,
-                              List<FieldDefinition> subfieldDefinitions) {
-        this(name, DEFAULT_MINIMUM_LENGTH, Integer.MAX_VALUE, encoding, contentType, variableLengthIndicatorDefinition, subfieldDefinitions);
+                                                  Encoding encoding,
+                                                  ContentType contentType,
+                                                  VariableLengthIndicatorDefinition variableLengthIndicatorDefinition,
+                                                  List<FieldDefinition> subfieldDefinitions) {
+        this(name,
+             DEFAULT_MINIMUM_LENGTH,
+             Integer.MAX_VALUE,
+             encoding,
+             contentType,
+             variableLengthIndicatorDefinition,
+             subfieldDefinitions);
     }
 
     public VariableLengthIndicatedFieldDefinition(FieldName name,
-                              Integer minimumLength,
-                              Integer maximumLength,
-                              Encoding encoding,
-                              ContentType contentType,
-                              VariableLengthIndicatorDefinition variableLengthIndicatorDefinition,
-                              List<FieldDefinition> subfieldDefinitions) {
+                                                  Integer minimumLength,
+                                                  Integer maximumLength,
+                                                  Encoding encoding,
+                                                  ContentType contentType,
+                                                  VariableLengthIndicatorDefinition variableLengthIndicatorDefinition,
+                                                  List<FieldDefinition> subfieldDefinitions) {
         super(name, Format.VARIABLE_LENGTH_INDICATED, encoding, contentType, subfieldDefinitions);
         this.variableLengthIndicatorDefinition = variableLengthIndicatorDefinition;
         this.minimumLength = minimumLength;
