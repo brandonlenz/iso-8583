@@ -7,7 +7,7 @@ import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
 import com.brandonlenz.generic.fields.Bitmap;
 import com.brandonlenz.generic.fields.DataField;
 
-public class Iso8583MessageBuilder {
+public final class Iso8583MessageBuilder {
 
     private final Iso8583MessageDefinition definition;
     private final Iso8583Message message;

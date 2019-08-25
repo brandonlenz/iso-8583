@@ -4,7 +4,7 @@ import com.brandonlenz.generic.structure.content.ContentType;
 import com.brandonlenz.generic.structure.encoding.Encoding;
 import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
 
-public class VariableLengthIndicatorDefinition extends AbstractFixedFieldDefinition<VariableLengthIndicator> {
+public final class VariableLengthIndicatorDefinition extends AbstractFixedFieldDefinition<VariableLengthIndicator> {
 
     public VariableLengthIndicatorDefinition(int length, Encoding encoding, ContentType contentType) {
         //TODO: only allow initialization of VliDefinition with Numeric or Bytes ContentTypes

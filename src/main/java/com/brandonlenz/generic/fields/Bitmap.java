@@ -4,7 +4,7 @@ import com.brandonlenz.generic.structure.encoding.Encoding;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Bitmap extends AbstractFixedField {
+public final class Bitmap extends AbstractFixedField {
 
     private final BitmapDefinition definition;
     private final int startFieldIndex;

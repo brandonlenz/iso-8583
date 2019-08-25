@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-public class Iso8583Message implements Message {
+public final class Iso8583Message implements Message {
 
     private final Iso8583MessageDefinition definition;
     private DataField messageTypeIndicator;

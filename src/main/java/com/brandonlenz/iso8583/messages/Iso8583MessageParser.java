@@ -9,7 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
 
-public class Iso8583MessageParser implements MessageParser {
+public final class Iso8583MessageParser implements MessageParser {
     private final Iso8583Message message;
     private final Iso8583MessageDefinition definition;
 
