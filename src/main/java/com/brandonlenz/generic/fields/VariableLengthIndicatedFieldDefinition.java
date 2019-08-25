@@ -96,7 +96,7 @@ public class VariableLengthIndicatedFieldDefinition extends FieldDefinition<Vari
 
     @Override
     public DataFieldParser<VariableLengthIndicatedField> getDataFieldParser() {
-        return new VariableLengthIndicatedField.Parser(this);
+        return VariableLengthIndicatedField.parser(this);
     }
 
     @Override
