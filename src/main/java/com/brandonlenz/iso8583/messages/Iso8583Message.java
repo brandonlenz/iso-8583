@@ -2,8 +2,8 @@ package com.brandonlenz.iso8583.messages;
 
 import com.brandonlenz.generic.messages.Message;
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
-import com.brandonlenz.iso8583.fields.Bitmap;
-import com.brandonlenz.iso8583.fields.DataField;
+import com.brandonlenz.generic.fields.Bitmap;
+import com.brandonlenz.generic.fields.DataField;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;

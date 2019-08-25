@@ -1,14 +1,13 @@
-package com.brandonlenz.iso8583.fields;
+package com.brandonlenz.generic.fields;
 
-import com.brandonlenz.iso8583.fields.DataField;
 import java.io.IOException;
 import java.io.InputStream;
 
-public abstract class DataFieldParser<F extends DataField> {
+public interface DataFieldParser<F extends DataField> {
 
-    public abstract F parseFromStream(InputStream is);
+    F parseFromStream(InputStream is);
 
-    byte[] parseBytesFromStream(InputStream is, int bytesToRead) {
+    default byte[] parseBytesFromStream(InputStream is, int bytesToRead) {
         byte[] bytes = new byte[bytesToRead];
 
         try {

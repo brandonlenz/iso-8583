@@ -2,7 +2,7 @@ package com.brandonlenz.iso8583.messages;
 
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
 import com.brandonlenz.iso8583.definitions.messages.SampleIso8583MessageDefinition;
-import com.brandonlenz.iso8583.fields.DataField;
+import com.brandonlenz.generic.fields.DataField;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

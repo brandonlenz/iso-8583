@@ -1,16 +1,14 @@
-package com.brandonlenz.iso8583.fields;
+package com.brandonlenz.generic.fields;
 
 import com.brandonlenz.generic.structure.content.ContentType;
 import com.brandonlenz.generic.structure.encoding.Encoding;
 import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
-import java.util.function.Supplier;
 
 public final class BitmapDefinition extends AbstractFixedFieldDefinition<Bitmap> {
 
     private static final int DEFAULT_START_INDEX = 1;
     private final int startFieldIndex;
     private final int endFieldIndex;
-    private final Supplier<Bitmap> bitmapSupplier = () -> new Bitmap(this);
 
     public BitmapDefinition(FieldName name, int length, Encoding encoding, int startFieldIndex) {
         super(name, length, encoding, ContentType.BYTES);
@@ -36,11 +34,11 @@ public final class BitmapDefinition extends AbstractFixedFieldDefinition<Bitmap>
 
     @Override
     public DataFieldBuilder<Bitmap> getDataFieldBuilder() {
-        return new DataFieldBuilder<>(bitmapSupplier);
+        return Bitmap.builder(this);
     }
 
     @Override
-    public BitmapParser getDataFieldParser() {
-        return new BitmapParser(this);
+    public DataFieldParser<Bitmap> getDataFieldParser() {
+        return Bitmap.parser(this);
     }
 }

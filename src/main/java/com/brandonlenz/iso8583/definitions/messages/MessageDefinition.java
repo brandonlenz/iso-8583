@@ -1,6 +1,6 @@
 package com.brandonlenz.iso8583.definitions.messages;
 
-import com.brandonlenz.iso8583.fields.FieldDefinition;
+import com.brandonlenz.generic.fields.FieldDefinition;
 import java.util.Map;
 
 public interface MessageDefinition {

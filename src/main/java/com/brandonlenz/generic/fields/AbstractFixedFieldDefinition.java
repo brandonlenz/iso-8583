@@ -1,4 +1,4 @@
-package com.brandonlenz.iso8583.fields;
+package com.brandonlenz.generic.fields;
 
 import com.brandonlenz.generic.structure.content.ContentType;
 import com.brandonlenz.generic.structure.encoding.Encoding;

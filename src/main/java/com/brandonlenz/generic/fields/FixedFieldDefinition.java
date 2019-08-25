@@ -1,15 +1,12 @@
-package com.brandonlenz.iso8583.fields;
+package com.brandonlenz.generic.fields;
 
 import com.brandonlenz.generic.structure.content.ContentType;
 import com.brandonlenz.generic.structure.encoding.Encoding;
 import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class FixedFieldDefinition extends AbstractFixedFieldDefinition<FixedField> {
-
-    private final Supplier<FixedField> fixedFieldSupplier = () -> new FixedField(this);
 
     public FixedFieldDefinition(FieldName name,
                                 int length,
@@ -28,12 +25,12 @@ public class FixedFieldDefinition extends AbstractFixedFieldDefinition<FixedFiel
 
     @Override
     public DataFieldBuilder<FixedField> getDataFieldBuilder() {
-        return new DataFieldBuilder<>(fixedFieldSupplier);
+        return FixedField.builder(this);
     }
 
     @Override
-    public FixedFieldParser getDataFieldParser() {
-        return new FixedFieldParser(this);
+    public DataFieldParser<FixedField> getDataFieldParser() {
+        return FixedField.parser(this);
     }
 
     @Override

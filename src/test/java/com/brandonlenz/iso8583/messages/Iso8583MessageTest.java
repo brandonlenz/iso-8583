@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
 import com.brandonlenz.iso8583.definitions.messages.SampleIso8583MessageDefinition;
-import com.brandonlenz.iso8583.fields.DataField;
+import com.brandonlenz.generic.fields.DataField;
 import org.junit.jupiter.api.Test;
 
 class Iso8583MessageTest {

@@ -1,9 +1,8 @@
-package com.brandonlenz.iso8583.fields;
+package com.brandonlenz.generic.fields;
 
 import com.brandonlenz.generic.structure.format.Format;
 import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
 
-//TODO: Move to generic (including subclasses?)
 public abstract class DataField {
 
     private final FieldDefinition definition;
@@ -21,9 +20,7 @@ public abstract class DataField {
         return definition.getFormat();
     }
 
-    public FieldDefinition getDefinition() {
-        return definition;
-    }
+    public abstract FieldDefinition getDefinition();
 
     public byte[] getRawData() {
         return this.rawData;
@@ -35,10 +32,6 @@ public abstract class DataField {
 
     public String getData() {
         return definition.getEncoding().decode(rawData);
-    }
-
-    public static <F extends DataField> DataFieldBuilder<F> builder(FieldDefinition<F> fieldDefinition) {
-        return fieldDefinition.getDataFieldBuilder();
     }
 
     @Override

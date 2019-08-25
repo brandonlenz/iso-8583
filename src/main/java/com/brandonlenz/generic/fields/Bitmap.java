@@ -1,4 +1,4 @@
-package com.brandonlenz.iso8583.fields;
+package com.brandonlenz.generic.fields;
 
 import com.brandonlenz.generic.structure.encoding.Encoding;
 import java.util.ArrayList;
@@ -10,11 +10,23 @@ public class Bitmap extends AbstractFixedField {
     private final int startFieldIndex;
     private final int endFieldIndex;
 
-    public Bitmap(BitmapDefinition fieldDefinition) {
+    private Bitmap(BitmapDefinition fieldDefinition) {
         super(fieldDefinition);
         this.definition = fieldDefinition;
         startFieldIndex = fieldDefinition.getStartFieldIndex();
         endFieldIndex = fieldDefinition.getEndFieldIndex();
+    }
+
+    public static Bitmap initializeEmptyBitmap(BitmapDefinition bitmapDefinition) {
+        return builder(bitmapDefinition).build(new byte[bitmapDefinition.getByteLength()]);
+    }
+
+    public static Builder builder(BitmapDefinition definition) {
+        return new Builder(definition);
+    }
+
+    public static Parser parser(BitmapDefinition definition) {
+        return new Parser(definition);
     }
 
     @Override
@@ -134,8 +146,17 @@ public class Bitmap extends AbstractFixedField {
         return getHexRepresentation();
     }
 
-    public static Bitmap initializeEmptyBitmap(BitmapDefinition bitmapDefinition) {
-        return bitmapDefinition.getDataFieldBuilder().build(new byte[bitmapDefinition.getByteLength()]);
+    static class Builder extends AbstractFixedFieldBuilder<Bitmap> {
+
+        private Builder(BitmapDefinition definition) {
+            super(new Bitmap(definition));
+        }
     }
 
+    public static class Parser extends AbstractFixedFieldParser<Bitmap> {
+
+        Parser(BitmapDefinition definition) {
+            super(new Bitmap(definition));
+        }
+    }
 }
