@@ -6,7 +6,7 @@ import com.brandonlenz.generic.structure.encoding.Encoding;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class VariableLengthIndicatedFieldBuilderTest {
+class VariableLengthIndicatedFieldTest {
 
     @Test
     void setHex() {
@@ -16,8 +16,8 @@ class VariableLengthIndicatedFieldBuilderTest {
                 ContentType.NUMERIC,
                 new VariableLengthIndicatorDefinition(2, Encoding.HEXADECIMAL_ASCII, ContentType.NUMERIC));
 
-        VariableLengthIndicatedField variableLengthIndicatedField = definition.getDataFieldBuilder().build("1234567890123456");
-        Assertions.assertEquals("16", variableLengthIndicatedField.getVli().getData());
+        VariableLengthIndicatedField vliField = definition.getDataFieldBuilder().build("1234567890123456");
+        Assertions.assertEquals("16", vliField.getVli().getData());
     }
 
     @Test
@@ -28,8 +28,8 @@ class VariableLengthIndicatedFieldBuilderTest {
                 ContentType.NUMERIC,
                 new VariableLengthIndicatorDefinition(3, Encoding.HEXADECIMAL_ASCII, ContentType.NUMERIC));
 
-        VariableLengthIndicatedField variableLengthIndicatedField = definition.getDataFieldBuilder().build("1234567890123456");
-        Assertions.assertEquals("016", variableLengthIndicatedField.getVli().getData());
+        VariableLengthIndicatedField vliField = definition.getDataFieldBuilder().build("1234567890123456");
+        Assertions.assertEquals("016", vliField.getVli().getData());
     }
 
     @Test
@@ -40,8 +40,8 @@ class VariableLengthIndicatedFieldBuilderTest {
                 ContentType.NUMERIC,
                 new VariableLengthIndicatorDefinition(1, Encoding.BCD, ContentType.NUMERIC));
 
-        VariableLengthIndicatedField variableLengthIndicatedField = definition.getDataFieldBuilder().build("123456789");
-        Assertions.assertEquals("09", variableLengthIndicatedField.getVli().getData());
+        VariableLengthIndicatedField vliField = definition.getDataFieldBuilder().build("123456789");
+        Assertions.assertEquals("09", vliField.getVli().getData());
     }
 
     @Test
@@ -52,8 +52,8 @@ class VariableLengthIndicatedFieldBuilderTest {
                 ContentType.NUMERIC,
                 new VariableLengthIndicatorDefinition(3, Encoding.BCD, ContentType.NUMERIC));
 
-        VariableLengthIndicatedField variableLengthIndicatedField = definition.getDataFieldBuilder().build("123456789");
-        Assertions.assertEquals("0009", variableLengthIndicatedField.getVli().getData());
+        VariableLengthIndicatedField vliField = definition.getDataFieldBuilder().build("123456789");
+        Assertions.assertEquals("0009", vliField.getVli().getData());
     }
 
     @Test
@@ -64,8 +64,8 @@ class VariableLengthIndicatedFieldBuilderTest {
                 ContentType.NUMERIC,
                 new VariableLengthIndicatorDefinition(1, Encoding.BINARY, ContentType.BYTES));
 
-        VariableLengthIndicatedField variableLengthIndicatedField = definition.getDataFieldBuilder().build("1234567890123456");
-        Assertions.assertEquals("10", variableLengthIndicatedField.getVli().getData());
+        VariableLengthIndicatedField vliField = definition.getDataFieldBuilder().build("1234567890123456");
+        Assertions.assertEquals("10", vliField.getVli().getData());
     }
 
     @Test
@@ -76,7 +76,7 @@ class VariableLengthIndicatedFieldBuilderTest {
                 ContentType.NUMERIC,
                 new VariableLengthIndicatorDefinition(2, Encoding.BINARY, ContentType.BYTES));
 
-        VariableLengthIndicatedField variableLengthIndicatedField = definition.getDataFieldBuilder().build("1234567890123456");
-        Assertions.assertEquals("0010", variableLengthIndicatedField.getVli().getData());
+        VariableLengthIndicatedField vliField = definition.getDataFieldBuilder().build("1234567890123456");
+        Assertions.assertEquals("0010", vliField.getVli().getData());
     }
 }
