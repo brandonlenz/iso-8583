@@ -1,21 +1,32 @@
-package com.brandonlenz.iso8583.fields;
+package com.brandonlenz.generic.fields;
 
-import com.brandonlenz.iso8583.definitions.fields.BitmapDefinition;
 import com.brandonlenz.generic.structure.encoding.Encoding;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Bitmap extends DataField {
+public final class Bitmap extends AbstractFixedField {
 
     private final BitmapDefinition definition;
     private final int startFieldIndex;
     private final int endFieldIndex;
 
-    public Bitmap(BitmapDefinition fieldDefinition) {
+    private Bitmap(BitmapDefinition fieldDefinition) {
         super(fieldDefinition);
         this.definition = fieldDefinition;
         startFieldIndex = fieldDefinition.getStartFieldIndex();
         endFieldIndex = fieldDefinition.getEndFieldIndex();
+    }
+
+    public static Bitmap initializeEmptyBitmap(BitmapDefinition bitmapDefinition) {
+        return builder(bitmapDefinition).build(new byte[bitmapDefinition.getByteLength()]);
+    }
+
+    public static Builder builder(BitmapDefinition definition) {
+        return new Builder(definition);
+    }
+
+    public static Parser parser(BitmapDefinition definition) {
+        return new Parser(definition);
     }
 
     @Override
@@ -23,6 +34,7 @@ public class Bitmap extends DataField {
         return definition;
     }
 
+    //TODO: Delete these unused methods
     public int getStartFieldIndex() {
         return startFieldIndex;
     }
@@ -54,10 +66,6 @@ public class Bitmap extends DataField {
             throw new IllegalArgumentException(
                     "Bit corresponding to field number " + dataFieldNumber + " is not yet set");
         }
-    }
-
-    public boolean governsBit(int dataFieldNumber) {
-        return definition.governsBit(dataFieldNumber);
     }
 
     public boolean bitIsSet(int dataFieldNumber) {
@@ -138,8 +146,17 @@ public class Bitmap extends DataField {
         return getHexRepresentation();
     }
 
-    public static Bitmap initializeEmptyBitmap(BitmapDefinition bitmapDefinition) {
-        return bitmapDefinition.getDataFieldBuilder().build(new byte[bitmapDefinition.getByteLength()]);
+    static class Builder extends AbstractFixedFieldBuilder<Bitmap> {
+
+        private Builder(BitmapDefinition definition) {
+            super(new Bitmap(definition));
+        }
     }
 
+    public static class Parser extends AbstractFixedFieldParser<Bitmap> {
+
+        Parser(BitmapDefinition definition) {
+            super(new Bitmap(definition));
+        }
+    }
 }

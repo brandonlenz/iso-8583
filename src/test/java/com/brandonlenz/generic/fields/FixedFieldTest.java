@@ -1,6 +1,5 @@
-package com.brandonlenz.iso8583.fields;
+package com.brandonlenz.generic.fields;
 
-import com.brandonlenz.iso8583.definitions.fields.FixedFieldDefinition;
 import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
 import com.brandonlenz.generic.structure.content.ContentType;
 import com.brandonlenz.generic.structure.encoding.Encoding;

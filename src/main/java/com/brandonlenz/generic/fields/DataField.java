@@ -1,8 +1,7 @@
-package com.brandonlenz.iso8583.fields;
+package com.brandonlenz.generic.fields;
 
-import com.brandonlenz.iso8583.definitions.fields.FieldDefinition;
-import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
 import com.brandonlenz.generic.structure.format.Format;
+import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
 
 public abstract class DataField {
 
@@ -21,15 +20,13 @@ public abstract class DataField {
         return definition.getFormat();
     }
 
-    public FieldDefinition getDefinition() {
-        return definition;
-    }
+    public abstract FieldDefinition getDefinition();
 
     public byte[] getRawData() {
         return this.rawData;
     }
 
-    public void setRawData(byte[] rawData) {
+    void setRawData(byte[] rawData) {
         this.rawData = rawData;
     }
 

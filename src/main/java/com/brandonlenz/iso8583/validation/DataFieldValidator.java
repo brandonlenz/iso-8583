@@ -1,6 +1,6 @@
 package com.brandonlenz.iso8583.validation;
 
-import com.brandonlenz.iso8583.fields.DataField;
+import com.brandonlenz.generic.fields.DataField;
 
 public class DataFieldValidator {
 

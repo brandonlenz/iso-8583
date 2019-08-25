@@ -1,12 +1,9 @@
-package com.brandonlenz.iso8583.definitions.fields;
+package com.brandonlenz.generic.fields;
 
-import com.brandonlenz.iso8583.building.fields.DataFieldBuilder;
-import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
-import com.brandonlenz.iso8583.fields.DataField;
-import com.brandonlenz.iso8583.parsing.fields.DataFieldParser;
 import com.brandonlenz.generic.structure.content.ContentType;
 import com.brandonlenz.generic.structure.encoding.Encoding;
 import com.brandonlenz.generic.structure.format.Format;
+import com.brandonlenz.iso8583.definitions.fields.names.FieldName;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,15 +15,15 @@ public abstract class FieldDefinition<F extends DataField> {
     private final ContentType contentType;
     private final List<FieldDefinition> subfieldDefinitions;
 
-    public FieldDefinition(FieldName name, Format format, Encoding encoding, ContentType contentType) {
+    FieldDefinition(FieldName name, Format format, Encoding encoding, ContentType contentType) {
         this(name, format, encoding, contentType, new ArrayList<>());
     }
 
     FieldDefinition(FieldName name,
-            Format format,
-            Encoding encoding,
-            ContentType contentType,
-            List<FieldDefinition> subfieldDefinitions) {
+                    Format format,
+                    Encoding encoding,
+                    ContentType contentType,
+                    List<FieldDefinition> subfieldDefinitions) {
         this.name = name;
         this.format = format;
         this.encoding = encoding;

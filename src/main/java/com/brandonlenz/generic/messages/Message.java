@@ -1,7 +1,7 @@
 package com.brandonlenz.generic.messages;
 
 import com.brandonlenz.iso8583.definitions.messages.MessageDefinition;
-import com.brandonlenz.iso8583.fields.DataField;
+import com.brandonlenz.generic.fields.DataField;
 import java.util.Map;
 
 

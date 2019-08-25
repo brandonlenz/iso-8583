@@ -2,8 +2,8 @@ package com.brandonlenz.iso8583.messages;
 
 import com.brandonlenz.generic.messages.Message;
 import com.brandonlenz.iso8583.definitions.messages.Iso8583MessageDefinition;
-import com.brandonlenz.iso8583.fields.Bitmap;
-import com.brandonlenz.iso8583.fields.DataField;
+import com.brandonlenz.generic.fields.Bitmap;
+import com.brandonlenz.generic.fields.DataField;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;
@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-public class Iso8583Message implements Message {
+public final class Iso8583Message implements Message {
 
     private final Iso8583MessageDefinition definition;
     private DataField messageTypeIndicator;
